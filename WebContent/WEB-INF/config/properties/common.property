@@ -1,0 +1,13 @@
+# server(development , production)
+build.type=production
+
+# file upload folder
+file.path=/home/thub/www/upfiles
+
+# ipin
+IPIN.SITECODE=H451
+IPIN.SITEPW=60831851
+IPIN.CERT.URL=https://cert.vno.co.kr/ipin.cb
+#IPIN.RETURN.URL=http://localhost/member/join/ipinProcess.do
+IPIN.RETURN.URL=http://localhost/mobile/member/ipinProcess.do
+IPIN.RETURN.URL2=http://localhost/member/join/ipinProcess.do

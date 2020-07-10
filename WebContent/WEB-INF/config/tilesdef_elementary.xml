@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<!-- default layout -->
+	<definition name="base_layout" template="/WEB-INF/views/layout/base_layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/include/header.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp"/>
+	</definition>
+	
+	<!-- error page -->
+	<definition name="error/*" template="/WEB-INF/views/error/{1}.jsp"/>
+	
+	<!-- common file handler -->
+	<definition name="fileHandler" template="/WEB-INF/views/commons/fileHandler.jsp"/>
+	
+	<!-- common login result -->
+	<definition name="front/thub/loginDone" template="/WEB-INF/views/front/thub/loginDone.jsp"/>
+	
+	<!-- ############# 티칭허브 초등부 새메인 레이아웃 설정 -->
+	<definition name="thub_elementary" template="/WEB-INF/views/front/elementary/layout/elementarymain.jsp">
+		<put-attribute name="head" value="/WEB-INF/views/front/elementary/include/elementaryhead.jsp"/>
+		<put-attribute name="top" value="/WEB-INF/views/front/elementary/include/elementarytop.jsp"/>
+		<put-attribute name="quick" value="/WEB-INF/views/front/elementary/include/elementaryquick.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/front/elementary/include/elementaryfooter.jsp"/>
+	</definition>
+	<definition name="front/elementary/main" extends="thub_elementary">
+		<put-attribute name="body" value="/WEB-INF/views/front/elementary/main.jsp"/>
+	</definition>
+		
+	
+	<!-- ############# 티칭허브 초등 Master 레이아웃 설정 -->
+	<definition name="thub_elementary_master" template="/WEB-INF/views/front/elementary/layout/elementaymaster.jsp">
+		<put-attribute name="head" value="/WEB-INF/views/front/elementary/include/elementaryhead.jsp"/>
+		<put-attribute name="top" value="/WEB-INF/views/front/elementary/include/elementarytop.jsp"/>
+		<put-attribute name="quick" value="/WEB-INF/views/front/elementary/include/elementaryquick.jsp"/>
+		<put-attribute name="location" value="/WEB-INF/views/front/elementary/include/elementarylocation.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/front/elementary/include/elementaryfooter.jsp"/>
+	</definition>
+	
+	<!-- ############# 티칭허브 초등 View Mapping -->
+	<definition name="front/thub/popup/scrapFolder" template="/WEB-INF/views/front/thub/popup/scrapFolder.jsp"/>
+	<definition name="front/thub/popup/scrapFolderManager" template="/WEB-INF/views/front/thub/popup/scrapFolderManager.jsp"/>	
+	<definition name="front/thub/popup/popCdView" template="/WEB-INF/views/front/thub/popup/popCdView.jsp"/>
+	<definition name="front/thub/popup/popDataView" template="/WEB-INF/views/front/thub/popup/popDataView.jsp"/>
+	<definition name="front/thub/popup/popChasiView" template="/WEB-INF/views/front/thub/popup/popChasiView.jsp"/>
+	<definition name="front/thub/*/ajax/*" template="/WEB-INF/views/front/thub/{1}/ajax/{2}.jsp"/>
+	<definition name="front/board/*/*" template="/WEB-INF/views/front/board/{1}/{2}.jsp"/>
+	
+	<definition name="front/elementary/*/*" extends="thub_elementary_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/elementary/{1}/{2}.jsp"/>
+	</definition>
+	
+	<definition name="front/elementary/*/*/*" extends="thub_elementary_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/elementary/{1}/{2}/{3}.jsp"/>
+	</definition>
+	
+	<definition name="front/elementary/*/*/*/*" extends="thub_elementary_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/elementary/{1}/{2}/{3}/{4}.jsp"/>
+	</definition>
+	
+	<!-- 티칭허브 Sidebar -->
+	<definition name="elementarySidebarFreestudy" template="/WEB-INF/views/front/elementary/include/elementarySidebarFreestudy.jsp"/>
+	<definition name="elementarySidebarHappy" template="/WEB-INF/views/front/elementary/include/elementarySidebarHappy.jsp"/>
+	<definition name="elementarySidebarCommunication" template="/WEB-INF/views/front/elementary/include/elementarySidebarCommunication.jsp"/>
+	
+	<definition name="sitemapLayer" template="/WEB-INF/views/front/thub/include/sitemapLayer.jsp"/>
+
+
+</tiles-definitions>

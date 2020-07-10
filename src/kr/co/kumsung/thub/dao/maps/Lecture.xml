@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Lecture">
+	<!-- 강연관리 리스트 Mapper -->
+	<resultMap id="LectureListMap" class="kr.co.kumsung.thub.domain.Lecture">
+		<result column="lecture_id" property="lectureId" />
+		<result column="title" property="title" />
+		<result column="category" property="category" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="hits" property="hits" />
+		<result column="category_name" property="categoryName" />
+	</resultMap>
+	
+	<!-- 강연관리 상세 보기  Mapper -->
+	<resultMap id="LectureMap" class="kr.co.kumsung.thub.domain.Lecture">
+		<result column="lecture_id" property="lectureId" />
+		<result column="category" property="category" />
+		<result column="title" property="title" />
+		<result column="summary_contents" property="summaryContents" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="link_url" property="linkUrl" />
+		<result column="contents" property="contents" />
+		<result column="origin_code" property="originCode" />
+		<result column="origin_text" property="originText" />
+	</resultMap>
+
+	<!-- 공감! 강연관리 리스트  -->
+	<select id="getLectureList" resultMap="LectureListMap">
+	<![CDATA[
+	SELECT
+		lecture_id,
+		title,
+		category,
+		thumbnail,
+		reg_id,
+		date_format(reg_date, '%Y-%m-%d') as reg_date,
+		hits,
+		lecture_id as category_name
+	FROM
+		th_lecture A
+	WHERE
+		1=1
+	]]>	
+	<isNotEmpty property="findStartDate" prepend="AND">
+	date_format(A.reg_date, '%Y-%m-%d') <![CDATA[>=]]> #findStartDate#
+	</isNotEmpty>
+	<isNotEmpty property="findEndDate" prepend="AND">
+	date_format(A.reg_date, '%Y-%m-%d') <![CDATA[<=]]> #findEndDate#
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="ft">
+			A.title LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			A.modify_id LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fc">
+			A.contents LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	ORDER BY
+		A.reg_date desc
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 공감! 강연관리 게시글 수 -->
+	<select id="getLectureTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(lecture_id) as cnt
+	FROM
+		th_lecture A
+	WHERE
+		1=1
+	]]>
+	<isNotEmpty property="findStartDate" prepend="AND">
+	date_format(A.reg_date, '%Y-%m-%d') <![CDATA[>=]]> #findStartDate#
+	</isNotEmpty>
+	<isNotEmpty property="findEndDate" prepend="AND">
+	date_format(A.reg_date, '%Y-%m-%d') <![CDATA[<=]]> #findEndDate#
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="ft">
+			A.title LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			A.modify_id LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fc">
+			A.contents LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	ORDER BY
+		A.reg_date desc
+	</select>
+	
+	<!-- 공감! 강연관리 상세 보기 -->
+	<select id="getLectureDetail" resultMap="LectureMap">
+	SELECT
+		lecture_id,
+		category,
+		title,
+		summary_contents,
+		thumbnail,
+		link_url,
+		contents,
+		origin_code,
+		origin_text
+	FROM
+		th_lecture
+	WHERE
+		lecture_id = #lectureId#	
+	</select>
+	
+	<!-- 공감! 강연관리 입력 -->
+	<insert id="insertLecture">
+	INSERT INTO th_lecture
+	(
+		title,
+		category,
+		summary_contents,
+		thumbnail,
+		link_url,
+		contents,
+		origin_code,
+		origin_text,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date
+	)
+	VALUES
+	(
+		#title#,
+		#category#,
+		#summaryContents#,
+		#thumbnail#,
+		#linkUrl#,
+		#contents#,
+		#originCode#,
+		#originText#,
+		#regId#,
+		NOW(),
+		#modifyId#,
+		NOW()
+	)	
+	</insert>
+	
+	<!-- 공감! 강연관리 수정 -->
+	<update id="updateLecture">
+	<![CDATA[
+	UPDATE
+		th_lecture
+	SET
+		title = #title#,
+		category = #category#,
+		summary_contents = #summaryContents#,
+		thumbnail = #thumbnail#,
+		link_url = #linkUrl#,
+		contents = #contents#,
+		origin_code = #originCode#,
+		origin_text = #originText#,
+		modify_id = #modifyId#,
+		modify_date = NOW()
+	WHERE
+		lecture_id = #lectureId#
+	]]>
+	</update>
+	
+	<!-- 공감! 강연관리 삭제 -->
+	<delete id="deleteLecture">
+	<![CDATA[
+	DELETE FROM
+		th_lecture
+	WHERE
+		lecture_id = #lectureId#
+	]]>
+	</delete>
+	
+	<!-- 공감! 강연관리 이미지 가져오기 -->
+	
+	<select id="getLectureDetailThumbnail" resultClass="String">
+	<![CDATA[
+	SELECT
+		thumbnail
+	FROM
+		th_lecture
+	WHERE
+		lecture_id = #lectureId#
+	]]>
+	</select>
+</sqlMap>

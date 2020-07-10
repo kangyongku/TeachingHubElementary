@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>티칭허브</title>
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/sub.css">
+
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/html5shiv.js"></script>
+
+    <script type="text/javascript" src="js/common.js"></script>
+
+    <script>
+      $(function() {
+        $(".select_wrap").each(function() {
+          $(this).find("select").selectBox();
+        });
+      });
+    </script>
+
+  </head>
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <div id="header" class="header">
+        <header>
+
+        </header>
+      </div>
+      <!--// header -->
+
+      <!-- container -->
+      <div id="container" class="container">
+        <section>
+          <div class="inwrap">
+
+            <div class="location">
+              <span><img src="image/ico/ico_location_home.png" alt="HOME"></span>
+              <span>교수학습자료</span>
+              <span class="curr">고등 과학</span>
+            </div>
+
+            <div class="textbook_box">
+              <span class="bookimg"><img src="image/textboox_english.png" alt="영어"></span>
+              <div class="textbook_info">
+                <h2 class="book_tit">영어<span class="writer">(김경한)</span><em class="revision">9개정</em></h2>
+                <ul class="txtbook_link">
+                  <li class="enroll"><a href="#">내 교과서<br/>등록</a></li>
+                  <li class="preview"><a href="#">교과서<br/>미리보기</a></li>
+                  <li class="cdview"><a href="#">교사용<br/>CD보기</a></li>
+                  <li class="cddown"><a href="#pop_teacher_cd_download" onclick="modal_open($(this).attr('href'));return false;">교사용<br/>CD 다운</a></li> <!-- 비활성화시  class="disable" 추가 -->
+                </ul>
+              </div>
+              <div class="another_textbook">
+                <strong>다른 교과서 보기</strong>
+                <div class="select_wrap">
+                  <select>
+                    <option>고등 과학(안태인)</option>
+                    <option>고등 과학(안태인)</option>
+                    <option>고등 과학(안태인)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="inner_container">
+              <div class="nav_box">
+                <!-- 171211 추가 -->
+                <ul class="nav_tab">
+                  <li><a href="#">단원별 자료</a></li>
+                  <li class="on"><a href="#">특화 자료</a></li>
+                </ul>
+                <!--// 171211 추가 -->
+                <div class="chapter_item specialized">
+                  <!-- <p class="chap_tit"><a href="#">특화자료</a></p> -->
+                  <ul class="lnb">
+                    <li class="on"><a href="#">한자성어</a></li>
+                    <li><a href="#">한자어</a></li>
+                    <li><a href="#">주제별속담</a></li>
+                    <li><a href="#">관용어</a></li>
+                    <li><a href="#">동서양 고전목록</a></li>
+                  </ul>
+                </div>
+              </div> <!--// nav_box-->
+
+              <div class="sub_content">
+
+                <div class="chapter_databox normal_type">
+                  <h3 class="content_title">특화자료</h3>
+                  <div class="datalist_wrap">
+                    <ul class="data_tab">
+                      <li class="on"><a href="#">한자성어(10)</a></li>
+                      <li><a href="#">한자어(N)</a></li>
+                      <li><a href="#">주제별속담(N)</a></li>
+                      <li><a href="#">관용어(N)</a></li>
+                      <li><a href="#">동서양 고전목록(N)</a></li>
+                    </ul>
+                    <div class="tbl_data">
+                      <table>
+                        <colgroup>
+                          <col style="width:58px">
+                          <col style="*">
+                          <col style="width:125px">
+                        </colgroup>
+                        <tbody>
+                          <tr>
+                            <td><input type="checkbox" id="chapter_chk01" name="chapter_chkbox" class="css-checkbox"><label for="chapter_chk01" class="css-label"></label></td>
+                            <td class="data_tit"><span class="filename"><img src="image/ico/ico_filename_pdf.png" alt="PDF"></span>지도안-1.2단원(7차시)</td>
+                            <td>
+                              <div class="tbl_btn">
+                                <a href="#" class="icoBtn" title="미리보기"><img src="image/btn/btn_ico_datalist_expand.png" alt="미리보기"></a>
+                                <a href="#" class="icoBtn" title="스크랩"><img src="image/btn/btn_ico_datalist_scrap.png" alt="스크랩"></a>
+                                <a href="#" class="icoBtn" title="다운로드"><img src="image/btn/btn_ico_datalist_download.png" alt="다운로드"></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><input type="checkbox" id="chapter_chk02" name="chapter_chkbox" class="css-checkbox"><label for="chapter_chk02" class="css-label"></label></td>
+                            <td class="data_tit"><span class="filename"><img src="image/ico/ico_filename_pdf.png" alt="PDF"></span>지도안-1.2단원(8차시)</td>
+                            <td>
+                              <div class="tbl_btn">
+                                <a href="#" class="icoBtn" title="미리보기"><img src="image/btn/btn_ico_datalist_expand.png" alt="미리보기"></a>
+                                <a href="#" class="icoBtn" title="스크랩"><img src="image/btn/btn_ico_datalist_scrap.png" alt="스크랩"></a>
+                                <a href="#" class="icoBtn" title="다운로드"><img src="image/btn/btn_ico_datalist_download.png" alt="다운로드"></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><input type="checkbox" id="chapter_chk03" name="chapter_chkbox" class="css-checkbox"><label for="chapter_chk03" class="css-label"></label></td>
+                            <td class="data_tit"><span class="filename"><img src="image/ico/ico_filename_pdf.png" alt="PDF"></span>지도안-1.2단원(9차시)</td>
+                            <td>
+                              <div class="tbl_btn">
+                                <a href="#" class="icoBtn" title="미리보기"><img src="image/btn/btn_ico_datalist_expand.png" alt="미리보기"></a>
+                                <a href="#" class="icoBtn" title="스크랩"><img src="image/btn/btn_ico_datalist_scrap.png" alt="스크랩"></a>
+                                <a href="#" class="icoBtn" title="다운로드"><img src="image/btn/btn_ico_datalist_download.png" alt="다운로드"></a>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="box_area">
+                      <div class="l_box">
+                        <a href="#" class="btn allselectBtn"><span>전체선택</span></a>
+                        <a href="#" class="btn scrapBtn"><span>스크랩</span></a>
+                        <a href="#" class="btn downloadBtn"><span>다운로드</span></a>
+                      </div>
+                      <div class="r_box">
+                        <a href="#" class="btn"><img src="image/btn/btn_move_up.png"></a>
+                        <a href="#" class="btn"><img src="image/btn/btn_move_down.png"></a>
+                      </div>
+                    </div>
+                  </div>
+                </div> <!--// chapter_databox -->
+
+                <!-- 페이징 -->
+                <div class="paging_wrap">
+                  <a href="#" class="arrow prev"><img src="image/btn/btn_paging_prev.png" alt="이전"></a>
+                  <ul>
+                    <li><a href="#">1</a></li>
+                    <li class="on"><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                  </ul>
+                  <a href="#" class="arrow next"><img src="image/btn/btn_paging_next.png" alt="다음"></a>
+                </div>
+
+              </div> <!--// sub_content -->
+            </div> <!--// inner_container -->
+
+          </div>
+        </section>
+      </div>
+      <!--// container -->
+
+      <!-- footer -->
+      <div id="footer">
+        <footer>
+        </footer>
+      </div>
+      <!--// footer -->
+
+    </div>
+
+    <!-- 교사용 CD 다운 레이어 팝업 -->
+    <div class="modal">
+      <div class="modal-dim"></div>
+
+      <div id="pop_teacher_cd_download" class="modal_popup cddownload">
+        <div class="pop_header">
+          <h5>도서명(저자명) 교육과정명 교사용 CD 다운로드</h5>
+          <a href="#pop_teacher_cd_download" class="btn_pop_close" onclick="modal_close($(this).attr('href'));return false;"><img src="image/btn/btn_pop_close.png" alt="닫기"></a>
+        </div>
+        <div class="pop_content">
+          <div class="textbook_area">
+            <img src="image/pop_textboox_english.png" alt="영어">
+          </div>
+          <div class="txt_area">
+            <strong class="tit">영어(김경한) 9개정</strong>
+            <div class="select_wrap">
+              <select>
+                <option>단원 바로가기</option>
+                <option>단원 바로가기</option>
+                <option>단원 바로가기</option>
+                <option>단원 바로가기</option>
+                <option>단원 바로가기</option>
+                <option>단원 바로가기</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn_wrap">
+            <a href="#" class="btn downloadBtn"><span>다운로드</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--// 교사용 CD 다운 레이어 팝업 -->
+  </body>
+</html>

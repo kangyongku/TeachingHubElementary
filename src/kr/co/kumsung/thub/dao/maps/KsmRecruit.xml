@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KsmRecruit">
+
+	<!-- 채용공고  리스트 -->
+	<resultMap id="RecruitListMap" class="kr.co.kumsung.thub.domain.KsmRecruit">
+		<result column="seq" property="seq" />		
+		<result column="title" property="title" />				
+		<result column="sdate" property="sdate" />
+		<result column="edate" property="edate" />
+	</resultMap>
+	
+	<!-- 채용공고  상세 보기 -->
+	<resultMap id="RecruitMap" class="kr.co.kumsung.thub.domain.KsmRecruit">
+		<result column="seq" property="seq" />		
+		<result column="title" property="title" />
+		<result column="content" property="content" />		
+	</resultMap>
+	
+	<!-- 채용공고 리스트 -->
+	<select id="getRecruitList" resultMap="RecruitListMap">
+	<![CDATA[
+	SELECT														
+			seq,											
+			title,			
+			sdate,
+			edate
+	 	FROM recruit														
+	 	WHERE status = '1'
+		    and date_format(edate, '%Y%m%d') >= date_format(now(),'%Y%m%d')
+ 		    and online = 'Y'
+	        and listChk = 'Y'
+		ORDER BY seq DESC
+		LIMIT 5			
+	]]>	 
+		
+	</select>
+	
+	<!-- 채용공고 총 카운트 -->
+	<select id="getRecruitTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+			count(0)
+		FROM recruit														
+		WHERE status = '1'
+ 			and date_format(edate, '%Y%m%d') >= date_format(now(),'%Y%m%d')
+	 		and online = 'Y'
+ 			and listChk = 'Y'
+	]]>	
+	</select>
+	
+	
+	<!-- 채용공고 상세보기 -->
+	<select id="getRecruitDetail" resultMap="RecruitMap">
+	<![CDATA[
+	SELECT														
+			seq,												
+			title,												
+			content			
+		FROM recruit			
+		WHERE seq = #seq#
+	]]>
+	</select>
+	
+</sqlMap>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MainDisplay">
+
+<!-- 	<cacheModel id="main-cache" type="LRU">
+		<flushInterval hours="2"/>
+		<flushOnExecute statement="MainDisplay.insertPopup"/>
+		<flushOnExecute statement="MainDisplay.updatePopup"/>
+		<flushOnExecute statement="MainDisplay.deletePopup"/>
+		<property name="size" value="100"/>
+	</cacheModel> -->
+
+	<!-- 메인화면 설정 mapper -->
+	<resultMap id="DispConfMap" class="kr.co.kumsung.thub.domain.MainData">
+		<result column="disp_code" property="dispCd" />
+		<result column="disp_title" property="dispTitle" />
+		<result column="disp_path" property="dispPath" />
+		<result column="disp_limit" property="dispLimit" />
+		<result column="disp_width" property="dispWidth" />
+		<result column="disp_height" property="dispHeight" />
+		<result column="disp_sort" property="dispSort" />
+	</resultMap>
+	
+	<!-- 메인화면 리스트 mapper -->
+	<resultMap id="DisplayMap" class="kr.co.kumsung.thub.domain.MainData">
+		<result column="disp_id" property="dispId" />
+		<result column="disp_code" property="dispCd" />
+		<result column="disp_subject" property="dispSubj" />
+		<result column="disp_link" property="dispLink" />
+		<result column="disp_img" property="imgurl" />
+		<result column="disp_target" property="dispTarget" />
+		<result column="disp_ranking" property="dispRanking" />
+		<result column="user_id" property="userId" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- 메인화면 리스트 mapper -->
+	<resultMap id="selectDisplayMap" class="kr.co.kumsung.thub.domain.MainData">
+		<result column="disp_select" property="dispSelect" />
+		<result column="disp_code" property="dispCd" />
+	</resultMap>
+	
+	<!-- 메인화면 최대값 mapper -->
+	<resultMap id="selectMaxDisplayMap" class="kr.co.kumsung.thub.domain.MainData">
+		<result column="disp_select" property="dispSelect" />
+		<result column="disp_id" property="dispId" />
+	</resultMap>
+
+		
+	<!-- 화면 설정 가져오기  -->
+	<select id="getDispConf" resultMap="DispConfMap">
+	<![CDATA[
+	SELECT
+		disp_code,
+		disp_title,
+		disp_path,
+		disp_limit, 
+		disp_width,
+		disp_height,
+		disp_sort
+	FROM
+		th_main_display_conf A
+	WHERE
+		disp_code = #dispCd#
+	]]>	
+	</select>
+
+	
+	<!-- 설정에 맞는 데이터 가져오기 -->
+	<!-- disp_code = #dispCd# -->
+	<select id="getDispList" resultMap="DisplayMap">
+	<![CDATA[
+	SELECT
+		disp_id,
+		disp_code,
+		disp_subject,
+		disp_link,
+		disp_img,
+		disp_target,
+		disp_ranking,
+		user_id,
+		reg_date
+	FROM
+		th_main_display A
+	WHERE
+		disp_code = #dispCd#
+		
+	]]>
+	<isNotEmpty prepend=" " property="dispSort"> 
+	<!-- order by disp_id $dispSort$ --> 
+	<!-- order by disp_id -->
+	<!-- order BY disp_id DESC, disp_ranking is not NULL, disp_ranking ASC-->
+	<!-- order BY CASE WHEN disp_ranking = '' THEN '9' END, disp_ranking asc --> 
+	order by disp_select asc
+	</isNotEmpty>	
+	<isGreaterThan prepend="LIMIT" property="dispLimit" compareValue="0">
+	 #dispLimit#
+	</isGreaterThan>
+	</select>
+	
+	<!-- 특정 데이터 가져오기  -->
+	<select id="getDispDetail" resultMap="DisplayMap">
+	<![CDATA[
+	SELECT
+		disp_id,
+		disp_code,
+		disp_subject,
+		disp_link,
+		disp_img,
+		disp_target,
+		user_id,
+		reg_date
+	FROM
+		th_main_display A
+	WHERE
+		disp_id = #dispId#
+	]]>	
+	</select>
+	
+	
+	<!-- 데이터 입력 -->
+	<insert id="insertDisplay">
+	INSERT INTO th_main_display
+	(
+		disp_code,
+		disp_subject,
+		disp_link,
+		disp_img,
+		disp_target,
+		user_id,
+		disp_select,
+		disp_ranking,
+		reg_date
+	)
+	VALUES
+	(
+		#dispCd#,
+		#dispSubj#,
+		#dispLink#,
+		#imgurl#,
+		#dispTarget#,
+		#userId#,
+		#dispSelect#,
+		#dispRanking#,
+		NOW()
+	)	
+	</insert>
+	
+	<!-- 데이터 업데이트 -->
+	<update id="updateDisplay">
+	UPDATE th_main_display SET 
+		disp_subject = #dispSubj# ,
+		disp_target = #dispTarget#,
+		disp_link = #dispLink#,
+		disp_ranking = #dispRanking#,
+		user_id = #userId#,
+		reg_date = NOW()
+	WHERE
+		disp_id = #dispId# 		
+	</update>
+	
+	<!-- 배너 랭킹 데이터 업데이트 -->
+	<update id="updateDisplayRanking">
+	UPDATE th_main_display SET 
+		disp_ranking = #dispRanking#,
+		user_id = #userId#,
+		reg_date = NOW()
+	WHERE
+		disp_id = #dispId# 		
+	</update>
+	
+	<!-- 데이터 삭제 -->
+	<delete id="deleteDisplay">
+	<![CDATA[
+	DELETE FROM
+		th_main_display
+	WHERE
+		disp_id = #dispId#
+	]]>
+	</delete>
+
+	<!-- 데이터 현재 정렬  -->
+	<select id="initChkDisplay" resultMap="selectDisplayMap">
+	<![CDATA[
+	SELECT
+		disp_select,
+		disp_code
+	FROM
+		th_main_display 
+	WHERE
+		disp_id = #dispId#
+	]]>	
+	</select>
+	
+	<!-- 데이터 현재 정렬  -->
+	<select id="initChkMaxDisplay" resultMap="selectMaxDisplayMap">
+	<![CDATA[
+	SELECT
+		disp_select,
+		disp_id
+	FROM
+		th_main_display 
+	WHERE
+		disp_code = #dispCd#
+	    order by disp_select desc
+		limit 1
+	]]>	
+	</select>
+	
+	<select id="initStepUpDisplay" resultMap="selectMaxDisplayMap">
+	<![CDATA[
+	SELECT
+	   disp_select ,
+		disp_id
+	FROM
+		th_main_display
+	WHERE 
+		disp_select < #dispId#
+		AND disp_code = #dispCd#
+		AND disp_select IS NOT null
+		AND disp_select <> '0'
+		ORDER BY disp_select desc
+   	LIMIT 1
+	]]>	
+	</select>
+	
+	<!-- 데이터정렬 DOWN -->
+	<select id="initStepDwDisplay" resultMap="selectMaxDisplayMap">
+	<![CDATA[
+	SELECT
+	   disp_select ,
+		disp_id
+	FROM
+		th_main_display
+	WHERE 
+		disp_select > #dispId#
+		AND disp_code = #dispCd#
+		AND disp_select IS NOT null
+		AND disp_select <> '0'
+		ORDER BY disp_select asc
+   	LIMIT 1
+	]]>	
+	</select>
+	
+	<!-- 데이터 정렬 초기화 -->
+	<update id="initDisplay">
+	<![CDATA[
+	update
+		th_main_display
+		set
+		disp_select = 0
+	WHERE
+		disp_id = #dispId#
+	]]>
+	</update>
+	
+	<!-- 데이터 변경(up) 초기화 -->
+	<update id="initStepUpdate">
+	<![CDATA[
+	update
+		th_main_display
+		set
+		disp_select = #dispSelect#
+	WHERE
+		disp_id = #dispId#
+	]]>
+	</update>
+		
+	<!-- 데이터 변경 2차(up) 초기화 -->
+	<update id="initStep3update">
+	<![CDATA[
+	update
+		th_main_display
+		set
+		disp_select = #dispSelect#
+	WHERE
+		disp_id = #dispId#
+	]]>
+	</update>
+	
+</sqlMap>

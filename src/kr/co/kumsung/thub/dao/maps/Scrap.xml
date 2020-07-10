@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Scrap">
+	
+	<!-- FolderMap -->
+	<resultMap id="FolderMap" class="kr.co.kumsung.thub.domain.Folder">
+		<result column="folder_id" property="folderId" />
+		<result column="user_id" property="userId" />
+		<result column="name" property="name" />
+		<result column="reg_date" property="regDate" />
+		<result column="scrap_count" property="scrapCount" />
+	</resultMap>
+	
+	<!-- ScrapMap -->
+	<resultMap id="ScrapMap" class="kr.co.kumsung.thub.domain.Scrap">
+		<result column="scrap_id" property="scrapId" />
+		<result column="user_id" property="userId" />
+		<result column="scrap_type" property="scrapType" />
+		<result column="reg_date" property="regDate" />
+		<result column="title" property="title" />
+		<result column="category_path" property="categoryPath" />
+		<result column="data_file" property="dataFile" />
+		<result column="ext_img" property="extImg" />
+		<result column="link_type" property="linkType" />
+		<result column="relation_id" property="relationId" />
+		<result column="category_id" property="categoryId" />
+		<result column="category" property="category" />
+		<result column="book_id" property="bookId" />	
+	</resultMap> 
+	
+	<!-- 폴더 리스트를 가지고 온다. -->
+	<select id="getFolderList" resultMap="FolderMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT COUNT(1) FROM th_scrap WHERE folder_id = A.folder_id AND user_id = A.user_id) as scrap_count
+		FROM th_scrap_folder A
+		WHERE user_id = #userId#
+		ORDER BY folder_id ASC
+	]]>
+	</select>
+	
+	<!-- 폴더를 가지고 온다. -->
+	<select id="getFolder" resultMap="FolderMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT COUNT(1) FROM th_scrap WHERE folder_id = A.folder_id AND user_id = A.user_id) as scrap_count
+		FROM th_scrap_folder A
+		WHERE folder_id = #folderId#
+			AND user_id = #userId#
+	]]>
+	</select>
+	
+	<!-- 풀더를 생성한다. -->
+	<insert id="insertFolder">
+	<![CDATA[
+	INSERT INTO th_scrap_folder
+	(
+		user_id ,
+		name ,
+		reg_date
+	)
+	VALUES
+	(
+		#userId# ,
+		#name# ,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as folder_id
+	</selectKey>
+	</insert>
+	
+	<!-- 폴더를 수정한다. -->
+	<update id="updateFolder">
+	<![CDATA[
+	UPDATE th_scrap_folder
+		SET
+			name = #name#
+		WHERE
+			folder_id = #folderId#
+			AND user_id = #userId#
+	]]>
+	</update>
+	
+	<!-- 폴더를 삭제한다. -->
+	<delete id="deleteFolder">
+	<![CDATA[
+	DELETE FROM th_scrap_folder
+		WHERE folder_id = #folderId#
+			AND user_id = #userId#
+	]]>
+	</delete>
+
+	<!-- 스크랩의 총갯수를 구한다. -->	
+	<select id="getScrapListCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1) 
+		FROM th_scrap
+		WHERE user_id = #userId#
+	]]>
+		<isGreaterThan property="findFolder" compareValue="0">
+		AND folder_id = #findFolder#
+		</isGreaterThan>
+	</select>
+	
+	<!-- 스크랩의 리스트를 구한다. -->
+	<select id="getScrapList" resultMap="ScrapMap">
+	<![CDATA[
+	SELECT
+			TMP.* ,
+			get_ext_img(TMP.data_file) AS ext_img
+	FROM
+	( 
+		SELECT
+				A.scrap_id ,
+				A.reg_date ,
+				A.user_id ,
+				A.scrap_type ,
+				A.relation_id ,
+				B.title ,
+				B.book_id,
+				B.category,
+				get_category_path(B.category) AS category_path,	
+				A.scrap_id as category_id,	
+				CASE 
+					WHEN B.mm_id > 0 THEN
+						(SELECT data_file FROM th_multimedia WHERE mm_id = B.mm_id)
+					ELSE
+						B.data_file
+				END data_file ,
+				CASE
+					WHEN B.mm_id > 0 && LOCATE('D006' , B.data_type) != 1 THEN
+						'POPUP'
+					WHEN LOCATE('D003' , B.data_type) = 1 THEN
+						'VIEW'
+					WHEN LOCATE('D004' , B.data_type)  = 1 THEN
+						'DIRECT'
+					WHEN LOCATE('D005' , B.data_type) = 1 THEN
+						'POPUP'
+					WHEN LOCATE('D006' , B.data_type) = 1 THEN
+						'CHASI'						
+					ELSE
+						'DIRECT'
+				END AS link_type
+			FROM th_scrap A , th_learning_data B
+			WHERE A.user_id = #userId#
+				AND A.scrap_type = 'DATA'
+	]]>
+				<isGreaterThan property="findFolder" compareValue="0">
+				AND folder_id = #findFolder#
+				</isGreaterThan>
+	<![CDATA[				
+				AND A.relation_id = B.data_id
+	UNION
+		SELECT
+				C.scrap_id ,
+				C.reg_date ,
+				C.user_id ,
+				C.scrap_type ,
+				C.relation_id ,
+				D.title ,
+				0 as book_id,
+				'' as category,
+				get_category_path(D.category) AS category_path ,
+				C.scrap_id as category_id,
+				CASE
+					WHEN LOCATE(D.category , 'E003') = 1 OR LOCATE(D.category , 'E005') = 1 THEN
+						data_file
+					ELSE
+						CONCAT('/open/multimedia/detail.do?mmId=' , C.relation_id , '&findMaster=' , SUBSTRING(D.category , 1 , 4))
+				END AS data_file ,
+				CASE
+					WHEN LOCATE(D.category , 'E003') = 1 THEN
+						'DIRECT'
+					WHEN LOCATE(D.category , 'E005') = 1 THEN
+						'POPUP'
+					ELSE
+						'LINK'
+				END AS link_type
+			FROM th_scrap C , th_multimedia D
+			WHERE C.user_id = #userId#
+				AND C.scrap_type = 'MULTIMEDIA'
+	]]>
+				<isGreaterThan property="findFolder" compareValue="0">
+				AND folder_id = #findFolder#
+				</isGreaterThan>
+	<![CDATA[
+				AND C.relation_id = D.mm_id
+	UNION
+		SELECT
+				E.scrap_id ,
+				E.reg_date ,
+				E.user_id ,
+				E.scrap_type ,
+				E.relation_id ,
+				F.subject ,	
+				0 as book_id,
+				'' as category,		
+				(SELECT board_name FROM th_board_config WHERE board_id = F.board_id) AS category_path ,		
+				F.category_id ,			
+				F.board_id AS data_file ,
+				CASE 
+					WHEN F.link_url IS NULL OR F.link_url = '' THEN
+						'ARTICLE'
+					ELSE
+						'POPUP'
+				END AS link_type
+			FROM th_scrap E , th_board_master F
+			WHERE E.user_id = #userId#
+				AND E.scrap_type = 'ARTICLE'
+	]]>
+				<isGreaterThan property="findFolder" compareValue="0">
+				AND folder_id = #findFolder#
+				</isGreaterThan>
+	<![CDATA[
+				AND E.relation_id = F.article_id
+	UNION
+		SELECT
+				G.scrap_id ,
+				G.reg_date ,
+				G.user_id ,
+				G.scrap_type ,
+				G.relation_id ,
+				0 as book_id,
+				'' as category,				
+				H.title AS SUBJECT ,				
+				get_category_path(H.category) AS category_path ,
+				  G.scrap_id as category_id,
+				CONCAT('/open/outer/historyDetail.do?headwordId=', relation_id) AS data_file ,
+				'LINK' AS link_type
+			FROM th_scrap G , th_smart_headword H
+			WHERE G.user_id = #userId#
+				AND G.scrap_type = 'HEADWORD'
+	]]>
+				<isGreaterThan property="findFolder" compareValue="0">
+				AND folder_id = #findFolder#
+				</isGreaterThan>
+	<![CDATA[
+				AND G.relation_id = H.headword_id	
+	UNION
+		SELECT
+				I.scrap_id ,
+				I.reg_date ,
+				I.user_id ,
+				I.scrap_type ,
+				I.relation_id ,
+				J.title ,
+				0 as book_id,
+				J.category,
+				'' AS category_path,	
+				I.scrap_id as category_id,	
+				J.data_file ,
+				'SDATA' AS link_type
+			FROM th_scrap I , th_learning_spcdata J
+			WHERE I.user_id = #userId#
+				AND I.scrap_type = 'SDATA'				
+	]]>
+				<isGreaterThan property="findFolder" compareValue="0">
+				AND folder_id = #findFolder#
+				</isGreaterThan>
+	<![CDATA[
+				AND I.relation_id = J.sdata_id
+	) AS TMP
+	ORDER BY scrap_id DESC 
+	LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 중복 스크랩이 되었는지 체크한다. -->
+	<select id="isDuplicated" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_scrap
+		WHERE user_id = #userId#
+			AND scrap_type = #scrapType#
+			AND relation_id = #relationId#
+	]]>
+	</select>
+	
+	<!-- 스크랩을 진행한다. -->
+	<insert id="insertScrap">
+	<![CDATA[
+	INSERT th_scrap
+	(
+		folder_id ,
+		user_id ,
+		scrap_type , 
+		relation_id ,
+		reg_date
+	)
+	VALUES
+	(
+		#folderId# ,
+		#userId# ,
+		#scrapType# ,
+		#relationId# ,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 스크랩을 삭제한다. -->
+	<delete id="deleteScrap">
+	<![CDATA[
+	DELETE FROM th_scrap 
+		WHERE scrap_id = #scrapId#
+			AND user_id = #userId#
+	]]>
+	</delete>
+	
+	<!-- 스크랩 폴더를 변경한다. -->
+	<update id="moveScrapFolder">
+	<![CDATA[
+	UPDATE th_scrap
+		SET
+			folder_id = #folderId#
+		WHERE
+			scrap_id = #scrapId#
+			AND user_id = #userId#
+	]]>
+	</update>
+	
+</sqlMap>

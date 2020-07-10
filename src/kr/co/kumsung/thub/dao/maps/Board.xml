@@ -1,0 +1,1075 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Board">
+	
+	<cacheModel id="board-config-cache" type="LRU">
+		<flushInterval minutes="10"/>
+		<flushOnExecute statement="Board.insertBoard"/>
+		<flushOnExecute statement="Board.updateBoard"/>
+		<property name="size" value="100"/>
+	</cacheModel>
+	
+<!-- 	<cacheModel id="article-cache" type="LRU">
+		<flushInterval minutes="3"/> 
+		<flushOnExecute statement="Board.insertArticle"/>
+		<flushOnExecute statement="Board.updateArticle"/>
+		<flushOnExecute statement="Board.deleteArticle"/>
+		<flushOnExecute statement="Board.updateArticleHits"/>
+		<flushOnExecute statement="Board.insertRecommendLog"/>
+		<property name="size" value="100"/>
+	</cacheModel> -->
+	
+<!-- 	<cacheModel id="comment-cache" type="LRU">
+		<flushInterval minutes="10"/>
+		<flushOnExecute statement="Board.insertComment"/>
+		<flushOnExecute statement="Board.deleteComment"/>
+		<property name="size" value="100"/>
+	</cacheModel> -->
+	
+	<cacheModel id="category-cache" type="LRU">
+		<flushInterval minutes="10"/>
+		<flushOnExecute statement="Board.insertBoardCategory"/>
+		<flushOnExecute statement="Board.updateBoardCategory"/>
+		<flushOnExecute statement="Board.deleteBoardCategory"/>
+		<property name="size" value="100"/>
+	</cacheModel>
+	
+	<!-- BoardConfig -->
+	<resultMap id="BoardConfigListMap" class="kr.co.kumsung.thub.domain.BoardConfig">
+		<result column="board_id" property="boardId" />
+		<result column="board_name" property="boardName" />
+		<result column="board_type" property="boardType" />
+		<result column="board_flag" property="boardFlag" />
+		<result column="reg_date" property="regDate" />
+		<result column="reg_id" property="regId" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="modify_id" property="modifyId" />
+		<result column="total_articles" property="totalArticles" />
+	</resultMap>
+	
+	<resultMap id="BoardConfigMap" class="kr.co.kumsung.thub.domain.BoardConfig">
+		<result column="board_id"         property="boardId" />
+		<result column="board_name"       property="boardName" />
+		<result column="board_type"       property="boardType" />
+		<result column="board_flag"       property="boardFlag" />
+		<result column="header_section"   property="headerSection" nullValue=""/>
+		<result column="footer_section"   property="footerSection" nullValue=""/>
+		<result column="use_category"     property="useCategory" />
+		<result column="use_write"        property="useWrite" />
+		<result column="use_reply"        property="useReply" />
+		<result column="use_file_upload"  property="useFileUpload" />
+		<result column="use_comment"      property="useComment" />
+		<result column="use_movie"        property="useMovie" />
+		<result column="use_link"         property="useLink" />
+		<result column="use_recommend"    property="useRecommend" />
+		<result column="use_sns"          property="useSns" />
+		<result column="use_annms_list"   property="useAnnmsList" />
+		<result column="use_annms_view"   property="useAnnmsView" />
+		<result column="allow_file_types" property="allowFileTypes" />
+		<result column="allow_file_count" property="allowFileCount" />
+		<result column="allow_file_size"  property="allowFileSize" />
+		<result column="reg_date"         property="regDate" />
+		<result column="reg_id"           property="regId" />
+		<result column="modify_date"      property="modifyDate" />
+		<result column="modify_id"        property="modifyId" />
+		<result column="modifyregdate"    property="modifyRegDate" />
+	</resultMap>
+	
+	<!-- BoardArticle -->
+	<resultMap id="ArticleListMap" class="kr.co.kumsung.thub.domain.Article">
+		<result column="article_id" property="articleId" />
+		<result column="board_id" property="boardId" />
+		<result column="category_id" property="categoryId" />
+		<result column="category_name" property="categoryName" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="group_id" property="groupId" />
+		<result column="steps" property="steps" />
+		<result column="link_url" property="linkUrl" />
+		<result column="movie_url" property="movieUrl" />		
+		<result column="introduce" property="introduce" />
+		<result column="etc" property="etc" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="thumbnail_path" property="thumbnailPath" />
+		<result column="subject" property="subject" />
+		<result column="contents" property="contents" />		
+		<result column="recommend" property="recommend" />
+		<result column="comments" property="comments" />	
+		<result column="attachment" property="attachment" />		
+		<result column="reg_date" property="regDate" />			
+		<result column="hits" property="hits" />
+		<result column="is_notice" property="isNotice" />
+		<result column="is_secret" property="isSecret" />
+	</resultMap>
+	
+	<resultMap id="ArticleMap" class="kr.co.kumsung.thub.domain.Article">
+		<result column="article_id"     property="articleId" />
+		<result column="board_id"       property="boardId" />
+		<result column="category_id"    property="categoryId" />
+		<result column="category_name"  property="categoryName" />
+		<result column="user_id"        property="userId" />
+		<result column="user_name"      property="userName" />
+		<result column="group_id"       property="groupId" />
+		<result column="steps"          property="steps" />
+		<result column="link_url"       property="linkUrl" />
+		<result column="movie_url"      property="movieUrl" />
+		<result column="etc"            property="etc" />
+		<result column="introduce"      property="introduce" />
+		<result column="thumbnail"      property="thumbnail" />
+		<result column="thumbnail_path" property="thumbnailPath" />
+		<result column="subject"        property="subject" />
+		<result column="contents"       property="contents" />
+		<result column="attachment"     property="attachment" />
+		<result column="keywords"       property="keywords" />
+		<result column="recommend"      property="recommend" />
+		<result column="comments"       property="comments" />	
+		<result column="reg_date"       property="regDate" />		
+		<result column="remote_ip"      property="remoteIp" />
+		<result column="hits"           property="hits" />
+		<result column="is_notice"      property="isNotice" />
+		<result column="is_secret"      property="isSecret" />
+		<result column="sub_category"   property="sub_category" />
+		<result column="is_use"      	property="isUse" />
+	</resultMap>
+	
+	<resultMap id="ArticleMoreMap" class="kr.co.kumsung.thub.domain.Article">
+		<result column="article_id" property="articleId" />
+		<result column="subject" property="subject" />
+	</resultMap>
+	
+	<!-- Attachment File Map -->
+	<resultMap id="FileInfoMap" class="kr.co.kumsung.thub.domain.FileInfo">
+		<result column="file_id" property="fileId"/>
+		<result column="file_path" property="filePath"/>
+		<result column="file_name" property="fileName"/>
+		<result column="origin_name" property="originName"/>
+		<result column="absolute_path" property="absolutePath"/>
+		<result column="hits" property="hits"/>
+		<result column="reg_date" property="regDate"/>	
+	</resultMap>
+	
+	<!-- Board Category -->
+	<resultMap id="BoardCategoryMap" class="kr.co.kumsung.thub.domain.BoardCategory">
+		<result column="category_id" property="categoryId" />
+		<result column="board_id" property="boardId" />
+		<result column="name" property="name" />
+		<result column="seq" property="seq" />
+		<result column="reg_date" property="regDate" />
+		<result column="article_count" property="articleCount" />
+	</resultMap>
+	
+	<!-- Comment Map -->
+	<resultMap id="CommentMap" class="kr.co.kumsung.thub.domain.Comment">
+		<result column="comment_id" property="commentId" />
+		<result column="board_id" property="boardId" />
+		<result column="article_id" property="articleId" />
+		<result column="group_id" property="groupId" />
+		<result column="depth" property="depth" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" nullValue="탈퇴회원"/>
+		<result column="is_admin" property="isAdmin" nullValue="0"/>
+		<result column="comment" property="comment" />
+		<result column="reg_date" property="regDate" />
+		<result column="remote_ip" property="remoteIp" />
+		<result column="is_del" property="isDel" />
+	</resultMap>
+	
+	<resultMap id="getsub_category" class="kr.co.kumsung.thub.domain.Article">
+		<result column="code"   property="code" />
+		<result column="codenm" property="codenm" />
+	</resultMap>	
+	
+	<!-- 게시글의 리스트 갯수를 가지고 온다. -->
+	<select id="getTotalArticle" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1) as cnt
+		FROM th_board_master
+		WHERE board_id = #boardId#
+	]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="si">
+			replace(user_id, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+			<isEqual property="findMethod" compareValue="ss">
+			replace(subject, ' ', '') LIKE CONCAT('%',#findStr#,'%')		
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			<isGreaterThan property="findCategory" compareValue="0">
+			category_id = #findCategory#
+			</isGreaterThan>
+		</isNotEmpty>
+	</select>
+	
+	<!-- 게시글의 리스트를 가지고 온다. -->
+	<!-- <select id="getArticleList" resultMap="ArticleListMap" cacheModel="article-cache"> -->
+	<select id="getArticleList" resultMap="ArticleListMap">
+	<![CDATA[
+	SELECT
+			article_id ,			 
+			board_id ,
+			group_id ,
+			category_id ,
+			(SELECT name FROM th_board_category WHERE category_id = A.category_id) as category_name ,
+			steps ,
+			subject ,
+			user_id ,
+			thumbnail , 
+			(SELECT absolute_path FROM th_board_files WHERE file_id = A.thumbnail) as thumbnail_path ,
+			introduce ,
+			contents ,
+			movie_url ,
+			link_url ,
+			is_notice , 
+			is_secret ,
+			attachment ,
+			recommend ,
+			reg_date ,
+			hits ,
+			etc ,
+			is_secret,
+			(SELECT COUNT(1) FROM th_board_comment WHERE board_id = A.board_id AND article_id = A.article_id) as comments ,
+			(SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name
+		FROM th_board_master A
+		WHERE board_id = #boardId#
+		AND is_use = 'Y'
+	]]>
+	
+		<isNotEmpty property="userId" prepend="OR">
+			is_use ='N'
+		</isNotEmpty>
+		<isNotEmpty property="findType" prepend="AND">
+			is_secret  = #findType#
+		</isNotEmpty>
+		
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="si">
+			replace(user_id, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+			<isEqual property="findMethod" compareValue="ss">
+			replace(subject, ' ', '') LIKE CONCAT('%',#findStr#,'%')		
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+		</isNotEmpty>
+		
+		<isNotEmpty property="findCategory" prepend="AND">
+			<isGreaterThan property="findCategory" compareValue="0">
+			category_id = #findCategory#
+			</isGreaterThan>
+		</isNotEmpty>
+		
+		<isNotEmpty property="sub_category" prepend="AND">
+			<isGreaterThan property="sub_category" compareValue="0">
+			sub_category = #sub_category#
+			</isGreaterThan>
+		</isNotEmpty>		
+		
+		<isEqual property="findIsNotice" compareValue="Y" prepend="AND">
+			is_notice = #findIsNotice#
+		</isEqual>
+		<isNotEmpty property="findSort">
+			<!-- 180410 수정 전 날짜순으로 변경
+			<isEqual property="findSort" compareValue="articleId">
+			      ORDER BY group_id DESC , steps ASC  
+			</isEqual>
+			-->
+			<isEqual property="findSort" compareValue="articleId">
+			ORDER BY reg_date desc
+			</isEqual>
+			<isEqual property="findSort" compareValue="recommend">
+			ORDER BY recommend DESC
+			</isEqual>
+		</isNotEmpty>
+		<!-- 180410 수정 전 날짜순으로 변경
+		<isEmpty property="findSort">
+			ORDER BY group_id DESC , steps ASC
+		</isEmpty>
+		-->
+		<isEmpty property="findSort">
+			ORDER BY reg_date desc
+		</isEmpty>
+	<isNotEmpty property="skip">
+		LIMIT #skip# , #pageSize#
+	</isNotEmpty>
+	</select>
+	
+	<!-- 
+		통합검색을 위한 게시글의 리스트를 가지고 온다.
+		// 검색에 대한 카테고리 값은 게시판명으로 대체한다.
+	-->
+	<!-- <select id="getArticleSearchList" resultMap="ArticleListMap" cacheModel="article-cache"> -->
+	<select id="getArticleSearchList" resultMap="ArticleListMap">
+		<![CDATA[
+			SELECT  article_id 
+			      , board_id 
+			      , group_id 
+			      , category_id 
+			      , (SELECT board_name FROM th_board_config WHERE board_id = A.board_id) as category_name 
+			      , steps 
+			      , subject 
+			      , user_id 
+			      , thumbnail 
+			      , (SELECT absolute_path FROM th_board_files WHERE file_id = A.thumbnail) as thumbnail_path 
+			      , introduce 
+			      , contents 
+			      , movie_url 
+			      , link_url 
+			      , is_notice 
+			      , is_secret 
+			      , attachment 
+			      , recommend 
+			      , reg_date 
+			      , hits 
+			      , etc 
+			      , (SELECT COUNT(1) FROM th_board_comment WHERE board_id = A.board_id AND article_id = A.article_id) as comments 
+			      , (SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name
+			  FROM th_board_master A
+			 WHERE board_id IN ( '3', '16', '18', '42', '43', '44', '45', '46', '47', '48', '54', '55', '62', '63', '64', '66')
+			   AND user_id <> 'text04'
+		]]>
+			<isNotEmpty property="findStr" prepend="AND">
+				<isEqual property="findMethod" compareValue="si">
+				replace(user_id, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+				</isEqual>
+				<isEqual property="findMethod" compareValue="ss">
+				replace(subject, ' ', '') LIKE CONCAT('%',#findStr#,'%')		
+				</isEqual>
+				<isEqual property="findMethod" compareValue="sc">
+				replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+				</isEqual>
+				<isEqual property="findMethod" compareValue="sk">
+				( 
+					replace(subject, ' ', '') LIKE CONCAT('%',#findStr#,'%')							
+						OR replace(keywords, ' ', '') LIKE CONCAT('%',#findStr#,'%')       					
+				)
+				</isEqual>				
+			</isNotEmpty>			
+			<isNotEmpty property="findCategory" prepend="AND">
+				<isGreaterThan property="findCategory" compareValue="0">
+				category_id = #findCategory#
+				</isGreaterThan>
+			</isNotEmpty>
+			<isEqual property="findIsNotice" compareValue="Y" prepend="AND">
+				is_notice = #findIsNotice#
+			</isEqual>
+		<![CDATA[
+			ORDER BY group_id DESC , steps ASC
+		]]>
+		<isNotEmpty property="skip">
+			LIMIT #skip# , #pageSize#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 독도사랑 -->
+	<select id = "getArticleSearchListLove" resultMap="ArticleListMap">
+	<!-- <select id = "getArticleSearchListLove" resultMap="ArticleListMap" cacheModel="article-cache"> -->
+		<![CDATA[
+		SELECT
+				article_id ,			 
+				board_id ,
+				group_id ,
+				category_id ,
+				(SELECT board_name FROM th_board_config WHERE board_id = A.board_id) as category_name ,
+				steps ,
+				subject ,
+				user_id ,
+				thumbnail , 
+				(SELECT absolute_path FROM th_board_files WHERE file_id = A.thumbnail) as thumbnail_path ,
+				introduce ,
+				contents ,
+				movie_url ,
+				link_url ,
+				is_notice , 
+				is_secret ,
+				attachment ,
+				recommend ,
+				reg_date ,
+				hits ,
+				etc ,
+				(SELECT COUNT(1) FROM th_board_comment WHERE board_id = A.board_id AND article_id = A.article_id) as comments ,
+				(SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name
+			FROM th_board_master A
+			WHERE board_id NOT IN (16,18,19)
+			AND user_id = 'text04'
+		]]>
+		
+		<isNotEmpty property="findStr" prepend="AND">
+				<isEqual property="findMethod" compareValue="si">
+				replace(user_id, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+				</isEqual>
+				<isEqual property="findMethod" compareValue="ss">
+				replace(subject, ' ', '') LIKE CONCAT('%',#findStr#,'%')		
+				</isEqual>
+				<isEqual property="findMethod" compareValue="sc">
+				replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+				</isEqual>
+			</isNotEmpty>			
+			<isNotEmpty property="findCategory" prepend="AND">
+				<isGreaterThan property="findCategory" compareValue="0">
+				category_id = #findCategory#
+				</isGreaterThan>
+			</isNotEmpty>
+			<isEqual property="findIsNotice" compareValue="Y" prepend="AND">
+				is_notice = #findIsNotice#
+			</isEqual>
+		<![CDATA[
+			ORDER BY group_id DESC , steps ASC
+		]]>
+		<isNotEmpty property="skip">
+			LIMIT #skip# , #pageSize#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 게시글을 가지고 온다. -->
+	<!-- <select id="getArticle" resultMap="ArticleMap" cacheModel="article-cache"> -->
+	<select id="getArticle" resultMap="ArticleMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT absolute_path FROM th_board_files WHERE file_id = A.thumbnail) as thumbnail_path ,
+			(SELECT name FROM th_board_category WHERE category_id = A.category_id) as category_name ,
+			(SELECT COUNT(1) FROM th_board_comment WHERE board_id = A.board_id AND article_id = A.article_id) as comments ,
+			(SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name
+		FROM th_board_master A
+		WHERE article_id = #articleId#
+	]]>
+	</select>
+	
+	
+	<!-- 게시글의 이전글를 가지고 온다. -->
+	<!-- <select id="getPrevArticle" resultMap="ArticleMoreMap" cacheModel="article-cache"> -->
+	<select id="getPrevArticle" resultMap="ArticleMoreMap">
+	<![CDATA[
+	SELECT
+			A.article_id ,
+			A.subject
+		FROM th_board_master A
+		WHERE board_id = #boardId#
+	]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="si">
+			replace(user_id, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+			<isEqual property="findMethod" compareValue="ss">
+			replace(subject, ' ', '') LIKE CONCAT('%',#findStr#,'%')		
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			<isGreaterThan property="findCategory" compareValue="0">
+			category_id = #findCategory#
+			</isGreaterThan>
+		</isNotEmpty>
+	<![CDATA[
+			AND article_id > #articleId#
+		ORDER BY article_id ASC
+		LIMIT 1
+	]]>
+	</select>
+	
+	<!-- 게시글의 다음금을 가지고 온다. -->
+	<!-- <select id="getNextArticle" resultMap="ArticleMoreMap" cacheModel="article-cache"> -->
+	<select id="getNextArticle" resultMap="ArticleMoreMap">
+	<![CDATA[
+	SELECT
+			A.article_id ,
+			A.subject
+		FROM th_board_master A
+		WHERE board_id = #boardId#
+	]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="si">
+			replace(user_id, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+			<isEqual property="findMethod" compareValue="ss">
+			replace(subject, ' ', '') LIKE CONCAT('%',#findStr#,'%')		
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			<isGreaterThan property="findCategory" compareValue="0">
+			category_id = #findCategory#
+			</isGreaterThan>
+		</isNotEmpty>
+	<![CDATA[
+			AND article_id < #articleId#
+		ORDER BY article_id DESC
+		LIMIT 1
+	]]>
+	</select>
+	
+	<!-- 게시글의 죄회수를 증가한다. -->
+	<update id="updateArticleHits">
+	<![CDATA[
+	UPDATE th_board_master
+		SET hits = hits + 1
+		WHERE article_id = #articleId#
+	]]>
+	</update>
+	
+	<!-- 게시글을 이미 추천하였는지 체크한다. -->
+	<select id="getRecommendLogCount" resultClass="int">
+	<![CDATA[
+	SELECT COUNT(1)
+		FROM th_board_recommend_log
+		WHERE article_id = #articleId#
+			AND user_id = #userId#
+	]]>
+	</select>
+	
+	<!-- 게시글 추천 -->
+	<insert id="insertRecommendLog">
+	<![CDATA[
+	INSERT INTO th_board_recommend_log
+	(
+		article_id ,
+		user_id ,
+		reg_date ,
+		remote_ip
+	)
+	VALUES
+	(
+		#articleId# ,
+		#userId# ,
+		NOW() ,
+		#remoteIp#
+	)
+	]]>
+<!--  	<selectKey type="post">
+	UPDATE th_board_master SET recommend = recommend + 1 WHERE article_id = #articleId#
+	</selectKey>  -->
+	</insert>
+	
+	<!-- 게시글의 추천수를 증가한다. -->
+	<update id="updateArticleRecommend">
+	<![CDATA[
+	UPDATE th_board_master
+		SET recommend = recommend + 1
+		WHERE article_id = #articleId#
+	]]>
+	</update>
+	
+	<!-- 가장 큰 group id를 가지고 온다. -->
+	<select id="getMaxGroupId" resultClass="int">
+	<![CDATA[
+	SELECT 
+			IFNULL(MAX(group_id) + 1 , 1) 
+		FROM th_board_master
+		WHERE board_id = #boardId#
+	]]>
+	</select>
+	
+	<!-- 가장 큰 steps를 가지고 온다. -->
+	<select id="getMaxSteps" resultClass="String">
+	<![CDATA[
+	SELECT 
+			MAX(steps)
+		FROM th_board_master
+		WHERE 
+			board_id = #boardId#
+			AND group_id = #groupId#
+			AND steps LIKE CONCAT(#steps# , '%')
+			AND LENGTH(steps) > #stepsCount#
+	]]>
+	</select>
+	
+	<insert id="insertArticle">
+		<![CDATA[
+		INSERT 
+		  INTO th_board_master
+		(
+			  board_id 
+			, category_id 
+			, user_id 
+			, group_id 
+			, steps 
+			, link_url 
+			, movie_url 
+			, introduce 
+			, thumbnail  
+			, subject 
+			, contents 
+			, attachment 
+			, etc 
+			, keywords 
+			, reg_date 
+			, remote_ip 
+			, is_notice 
+			, is_secret
+			, sub_category
+			, is_use
+		)
+		VALUES
+		(
+			  #boardId# 
+			, #categoryId# 
+			, #userId# 
+			, #groupId# 
+			, #steps# 
+			, #linkUrl# 
+			, #movieUrl# 
+			, #introduce# 
+			, #thumbnail# 
+			, #subject# 
+			, #contents# 
+			, #attachment# 
+			, #etc# 
+			, #keywords# 
+			, NOW() 
+			, #remoteIp# 
+			, #isNotice# 
+			, #isSecret#
+			, #sub_category#
+			, #isUse#
+		)
+		]]>
+	</insert>
+	
+	<!-- 게시글을 갱신한다. -->
+	<update id="updateArticle">
+		<![CDATA[
+			UPDATE th_board_master
+			   SET  category_id  = #categoryId# 
+			      , link_url     = #linkUrl# 
+			      , movie_url    = #movieUrl# 
+			      , introduce    = #introduce# 
+			      , thumbnail    = #thumbnail# 
+			      , subject      = #subject# 
+			      , contents     = #contents# 
+			      , attachment   = #attachment# 
+			      , etc          = #etc# 
+			      , keywords     = #keywords# 
+			      , is_notice    = #isNotice# 
+			      , is_secret    = #isSecret#
+				  , sub_category = #sub_category#
+				  , is_use		 = #isUse#
+			WHERE article_id     = #articleId#
+		]]>
+	</update>
+	
+	<!-- 게시글을 삭제한다. -->
+	<delete id="deleteArticle">
+	<![CDATA[
+	DELETE FROM th_board_master
+		WHERE article_id = #articleId#
+			AND board_id = #boardId#
+	]]>
+	</delete>
+	
+	<!-- 게시판의 리스트를 가지고 온다.board_yn DESC,  -->
+	<select id="getBoardList" resultMap="BoardConfigListMap" cacheModel="board-config-cache">
+	<![CDATA[
+	SELECT
+			board_id,
+			board_name,
+			board_type,
+			board_flag, 
+			reg_date,
+			reg_id,
+			modify_date,
+			modify_id,
+			(SELECT COUNT(1) FROM th_board_master WHERE board_id = A.board_id) as total_articles
+		FROM th_board_config A
+		ORDER BY board_flag ASC , board_id ASC
+	]]>
+	</select>
+	
+	<!-- 게시판의 데이타를 모두 가지고 온다. -->
+	<select id="getBoardConfig" resultMap="BoardConfigMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_board_config
+		WHERE board_id = #boardId#
+	]]>
+	</select>
+	
+	<!-- 게시판을 생성한다. -->
+	<insert id="insertBoard">
+	<![CDATA[
+	INSERT INTO th_board_config
+	(
+		board_name ,
+		board_type ,
+		board_flag ,
+		header_section , 
+		footer_section ,
+		use_write ,
+		use_reply ,
+		use_file_upload ,
+		use_comment ,
+		use_movie ,
+		use_link ,
+		use_recommend ,
+		use_sns ,
+		use_annms_list ,
+		use_annms_view ,
+		allow_file_types ,
+		allow_file_count ,
+		allow_file_size ,
+		reg_date ,
+		reg_id ,
+		modify_date ,
+		modify_id,
+		modifyregdate
+	)
+	VALUES
+	(
+		#boardName# ,
+		#boardType# ,
+		#boardFlag# ,
+		#headerSection# ,
+		#footerSection# ,
+		#useWrite# ,
+		#useReply# ,
+		#useFileUpload# ,
+		#useComment# ,
+		#useMovie# ,
+		#useLink# ,
+		#useRecommend# ,
+		#useSns# ,
+		#useAnnmsList# ,
+		#useAnnmsView# ,
+		#allowFileTypes# ,
+		#allowFileCount# ,
+		#allowFileSize# ,
+		NOW() ,
+		#regId# ,
+		NOW() ,
+		#modifyId#,
+		#modifyRegDate#
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as board_id
+	</selectKey>
+	</insert>
+	
+	<!-- 게시판 설정 갱신 -->
+	<update id="updateBoard">
+	<![CDATA[
+	UPDATE th_board_config
+		SET
+			board_name = #boardName#,
+			board_type = #boardType#,
+			board_flag = #boardFlag#,
+			header_section = #headerSection#,
+			footer_section = #footerSection#,
+			use_category = #useCategory#,
+			use_write = #useWrite#,
+			use_reply = #useReply#,
+			use_recommend = #useRecommend#,
+			use_comment = #useComment#,
+			use_movie = #useMovie#,
+			use_link = #useLink#,
+			use_sns = #useSns#,
+			modifyRegDate = #modifyRegDate#,
+			use_annms_list = #useAnnmsList#,
+			use_annms_view = #useAnnmsView#,
+			use_file_upload = #useFileUpload#,
+			allow_file_count = #allowFileCount#,
+			allow_file_types = #allowFileTypes#,
+			allow_file_size = #allowFileSize#,
+			modify_date = NOW() ,
+			modify_id = #modifyId#,
+			modifyregdate = #modifyRegDate#
+		WHERE
+			board_id = #boardId#
+	]]>
+	</update>
+	
+	<!-- 게시판 카테고리 리스트 가지고 오기 -->
+	<select id="getBoardCategoryList" resultMap="BoardCategoryMap" cacheModel="category-cache">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT COUNT(1) FROM th_board_master WHERE board_id = A.board_id AND category_id = A.category_id) as article_count
+		FROM th_board_category A
+		WHERE board_id = #boardId#
+		ORDER BY seq ASC
+	]]>
+	</select>
+	
+	<!-- 신규 게시판 카테고리 등록 -->
+	<insert id="insertBoardCategory">
+	<![CDATA[
+	INSERT INTO th_board_category
+	(
+		board_id ,
+		name ,
+		seq ,
+		reg_date
+	) 
+	VALUES
+	(
+		#boardId# ,
+		#name# ,
+		#seq# ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 게시판 카테고리 갱신 -->
+	<update id="updateBoardCategory">
+	<![CDATA[
+	UPDATE th_board_category
+		SET
+			name = #name# ,
+			seq = #seq#
+		WHERE
+			category_id = #categoryId# 
+			AND board_id = #boardId#
+	]]>
+	</update>
+	
+	<!-- 게시판 카테고리 삭제 -->
+	<delete id="deleteBoardCategory">
+	<![CDATA[
+	DELETE FROM th_board_category
+		WHERE category_id = #categoryId#
+			AND board_id = #boardId#
+	]]>
+	</delete>
+	
+	<!-- 댓글의 그룹 아이디를 가지고 온다. -->
+	<select id="getCommentGroupId" resultClass="int">
+	<![CDATA[
+	SELECT
+			IFNULL(MAX(group_id) + 1 , 1)
+		FROM th_board_comment
+		WHERE board_id = #boardId#
+	]]>
+	</select>
+	
+	<!-- 댓글을 리스트업 한다. -->
+	<select id="getCommentList" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			A.* , 
+			(SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name, 
+			0 as is_admin
+		FROM th_board_comment A
+		WHERE board_id = #boardId#
+			AND article_id = #articleId#
+		ORDER BY comment_id DESC, group_id ASC , depth ASC
+	]]>
+	</select>
+	
+	<!-- 댓글을 가지고 온다. -->
+	<select id="getComment" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			 A.*,
+			 A.event_id,
+			 (SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name , 
+			 0 as is_admin
+		FROM th_board_comment A
+		WHERE comment_id = #commentId#
+	]]>
+	</select>
+	
+	<!-- 댓글의 자식 노드가 있는지 체크한다. -->
+	<select id="getIsChildeNode" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_board_comment
+		WHERE group_id = (SELECT group_id FROM th_board_comment WHERE comment_id = #commentId#)
+			AND depth = '2'
+	]]>
+	</select>
+	
+	<!-- 현재 노드의 삭제처리를 한다. -->
+	<update id="updateCommentToDelete">
+	<![CDATA[
+	UPDATE th_board_comment
+		SET is_del = 'Y'
+		WHERE comment_id = #commentId#
+	]]>
+	</update>
+	
+	<!-- 댓글을 입력한다. -->
+	<insert id="insertComment">
+	<![CDATA[
+	INSERT INTO th_board_comment
+	(
+		board_id ,
+		article_id ,
+		group_id ,
+		depth ,
+		user_id ,
+		comment ,
+		reg_date ,
+		remote_ip,
+		event_id
+		
+	)
+	VALUES
+	(
+		#boardId# ,
+		#articleId# ,
+		#groupId# ,
+		#depth# ,
+		#userId# ,
+		#comment# ,
+		NOW() ,
+		#remoteIp#,
+		#eventId#
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 댓글을 삭제한다 -->
+	<delete id="deleteComment">
+	<![CDATA[
+	DELETE FROM th_board_comment
+		WHERE comment_id = #commentId#
+	]]>
+	</delete>
+	
+	<!-- 파일의 정보를 가지고 온다. -->
+	<select id="getFileInfo" resultMap="FileInfoMap">
+	<![CDATA[
+	SELECT
+			A.file_id ,
+			A.file_path ,
+			A.file_name ,
+			A.origin_name ,
+			A.absolute_path ,
+			A.hits ,
+			A.reg_date
+		FROM th_board_files A
+		WHERE A.file_id = #fileId#
+	]]>
+	</select>
+	
+	<!-- 다운로드 수를 가지고 업데이트한다. -->
+	<update id="updateFileHits">
+	<![CDATA[
+	UPDATE th_board_files SET hits = hits + 1 WHERE file_id = #fileId#
+	]]>
+	</update>
+	
+	<!-- 게시판의 댓글 리스트 카운트를 가지고 온다. -->
+	<select id="getTotalCommentListCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_board_comment
+		WHERE is_del = 'N'
+	]]>
+	<isGreaterThan property="findBoardId" compareValue="0" prepend="AND">
+		 board_id = #findBoardId#
+	</isGreaterThan>
+	</select>	
+	
+	<!-- 게시판의 댓글 리스트를 가지고 온다. -->
+	<select id="getTotalCommentList" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			A.* , 
+			(SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name,
+			0 as is_admin
+		FROM th_board_comment A
+		WHERE is_del = 'N'
+		 AND board_id <> '41'
+	]]>
+		<isGreaterThan property="findBoardId" compareValue="0" prepend="AND">
+		board_id = #findBoardId#
+		</isGreaterThan>
+	<![CDATA[ 
+		ORDER BY comment_id DESC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 현재 그룹의 코멘트 카운트를 가지고 온다. -->
+	<select id="getGroupCommentCount" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1) 
+		FROM th_board_comment 
+		WHERE article_id = #articleId#
+			AND group_id = #groupId#
+	]]>
+	</select>
+	
+	<!-- 마지막 노드의 코멘트를 가지고 온다. -->
+	<select id="getLastCommentData" resultMap="CommentMap">
+	<![CDATA[
+	SELECT 
+			*  ,
+			(SELECT if(fgclass = '11' || fgclass = '9','관리자',name) as name FROM Member WHERE userid = A.user_id) as user_name,
+			0 as is_admin
+		FROM th_board_comment A
+		WHERE article_id = #articleId#
+			AND group_id = #groupId#
+			AND depth = 1
+			AND is_del = 'Y'
+	]]>
+	</select>
+	
+	
+	<!-- 게시판 카테고리 리스트 가지고 오기 -->
+	<select id="getsub_category" resultMap="getsub_category">
+		<![CDATA[
+			SELECT  A.CODE
+			      , A.CODENM
+			  FROM(
+					SELECT '' AS CODE, '선택안함' AS CODENM
+					UNION ALL
+					SELECT '001' AS CODE, '수업자료' AS CODENM
+					UNION ALL
+					SELECT '002' AS CODE, '서식자료' AS CODENM
+			       ) AS A
+		]]>
+	</select>	
+	
+	<select id="his_getBoardConfig" resultMap="BoardConfigMap">
+		<![CDATA[
+			SELECT   '99999'                                          board_id
+			       , '역사전시관'                                     board_name
+			       , 'GALLERY'                                        board_type
+			       , 'M2'                                             board_flag
+			       , ''                                               header_section
+			       , ''                                               footer_section
+			       , 'Y'                                              use_category
+			       , 'Y'                                              use_write
+			       , 'Y'                                              use_reply
+			       , 'Y'                                              use_file_upload
+			       , 'Y'                                              use_comment
+			       , 'N'                                              use_movie
+			       , 'Y'                                              use_link
+			       , 'Y'                                              use_recommend
+			       , 'Y'                                              use_sns
+			       , 'Y'                                              use_annms_list
+			       , 'N'                                              use_annms_view
+			       , 'jpg,gif,png,hwp,zip,xls,xlsx,doc,docx,ppt,pptx' allow_file_types
+			       , '5'                                              allow_file_count
+			       , '2048'                                           allow_file_size
+			       , '2018-05-14 오전 11:32:56'                       reg_date
+			       , 'mikelim'                                        reg_id
+			       , '2018-06-08 오전 11:57:49'                       modify_date
+			       , 'mikelim'                                        modify_id
+			       , ''												  modifyregdate
+			  FROM dual
+		]]>
+	</select>	
+	
+	
+</sqlMap>

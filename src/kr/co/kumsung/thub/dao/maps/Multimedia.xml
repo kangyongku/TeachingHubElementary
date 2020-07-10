@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Multimedia">
+	<!-- Multimedia ListMapper -->
+	<resultMap id="MultimediaListMap" class="kr.co.kumsung.thub.domain.Multimedia">
+		<result column="mm_id" property="mmId" />
+		<result column="category" property="category" />
+		<result column="title" property="title" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="file_name" property="fileName" />
+		<result column="data_file" property="dataFile" />
+		<result column="contents" property="contents" />
+		<result column="keyword" property="keyword" />
+		<result column="origin_code" property="originCode" nullValue=""/>
+		<result column="origin_txt" property="originTxt" nullValue=""/>
+		<result column="is_use" property="isUse" />
+		<result column="reg_date" property="regDate" />
+		<result column="reg_id" property="regId" />
+		<result column="user_name" property="userName" />
+		<result column="category_name" property="categoryName" />
+		<result column="category_path" property="categoryPath" />
+	</resultMap>
+	
+	<!-- Detail Mapper -->
+	<resultMap id="MultimediaDetailMap" class="kr.co.kumsung.thub.domain.Multimedia">
+		<result column="mm_id" property="mmId" />
+		<result column="category" property="category" />
+		<result column="title" property="title" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="file_name" property="fileName" />
+		<result column="data_file" property="dataFile" />
+		<result column="contents" property="contents" />
+		<result column="keyword" property="keyword" />
+		<result column="origin_code" property="originCode" />
+		<result column="origin_txt" property="originTxt" />
+		<result column="is_use" property="isUse" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="depth" property="depth" />
+		<result column="user_name" property="userName" />
+		<result column="dn_url" property="dnUrl" nullValue=""/>
+	</resultMap>
+	
+	<!-- Category Mapper -->
+	<resultMap id="CategoryMap" class="kr.co.kumsung.thub.domain.Category">
+		<result column="category" property="category" /> 
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="depth" property="depth" />
+		<result column="reg_date" property="regDate" />
+		<result column="children" property="children" />
+	</resultMap>
+	
+	<!-- 멀티미디어 등록 -->
+	<insert id="insertMultimedia">
+	<![CDATA[
+	INSERT INTO th_multimedia
+	(
+		category,
+		title,
+		thumbnail,
+		file_name,
+		data_file,
+		contents,
+		keyword,
+		origin_code,
+		origin_txt,
+		dn_url ,
+		is_use,
+		reg_id,
+		reg_date
+	)
+	VALUES
+	(
+		#category#,
+		#title#,
+		#thumbnail#,
+		#fileName#,
+		#dataFile#,
+		#contents#,
+		#keyword#,
+		#originCode#,
+		#originTxt#,
+		#dnUrl#,
+		#isUse#,
+		#regId#,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as mn_id
+	</selectKey>
+	</insert>
+	
+	<!-- 멀티미디어 리스트 -->
+	<select id="getMultimediaList" resultMap="MultimediaListMap">
+	<![CDATA[
+	SELECT
+		A.mm_id,
+		A.category,
+		A.title,
+		A.thumbnail,
+		A.file_name, 
+		A.data_file,
+		A.contents,
+		A.keyword,
+		A.origin_code,
+		(SELECT name FROM th_category WHERE category = A.origin_code) as origin_txt,
+		A.is_use,
+		A.reg_id,
+		date_format(A.reg_date, '%Y-%m-%d')as reg_date,
+		B.name as category_name,
+		get_category_path(A.category) as category_path ,
+		(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+	FROM
+		th_multimedia A,
+		th_category B
+	WHERE
+		A.category = B.category
+	]]>
+	<isNotEmpty property="findStartDate" prepend="AND">
+		SUBSTRING(A.reg_date, 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="sa">
+			( 
+				replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')							
+					OR replace(A.keyword, ' ', '') LIKE CONCAT('%',#findStr#,'%')       					
+			)
+		</isEqual>
+		<isEqual property="findMethod" compareValue="st">
+		replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sc">
+		replace(A.contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findCategory" prepend="AND">
+		A.category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		A.is_use LIKE CONCAT('%' , #findIsUse# , '%')
+	</isNotEmpty>
+	ORDER BY A.reg_date desc 
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 멀티미디어 총 글 개수-->
+	<select id="getTotalMultimedia" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1) cnt
+	FROM
+		th_multimedia A
+	]]>
+	WHERE
+		1=1
+	<isNotEmpty property="findStartDate" prepend="AND">
+		SUBSTRING(A.reg_date, 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="sa">
+			( 
+				replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')							
+					OR replace(A.keyword, ' ', '') LIKE CONCAT('%',#findStr#,'%')       					
+			)
+		</isEqual>
+		<isEqual property="findMethod" compareValue="st">
+		replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sc">
+		replace(A.contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%') 
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		is_use LIKE CONCAT('%' , #findIsUse# , '%')
+	</isNotEmpty>
+	</select>
+	
+	<!-- 멀티미디어 상세보기 -->
+	<select id="getMultimediaDetail" resultMap="MultimediaDetailMap">
+	<![CDATA[
+	SELECT
+		A.mm_id,
+		A.category,
+		A.title,
+		ifnull(A.thumbnail,'')as thumbnail,
+		ifnull(A.file_name,'')as file_name,
+		ifnull(A.data_file,'')as data_file,
+		A.contents,
+		A.keyword,
+		A.origin_code,
+		(SELECT name FROM th_category WHERE category = A.origin_code) as origin_txt,
+		A.is_use,
+		A.reg_id,
+		A.reg_date,
+		B.depth ,
+		(SELECT name FROM Member WHERE userid = A.reg_id) as user_name ,
+		dn_url
+	FROM
+		th_multimedia A,
+		th_category B
+	WHERE
+		mm_id = #mmId#
+	AND
+		A.category = B.category
+	]]>
+	</select>
+	
+	<!-- 이전 멀티미디어 데이타를 보여준다. -->
+	<select id="getPrevMultimedia" resultMap="MultimediaDetailMap">
+	<![CDATA[
+	SELECT
+		A.mm_id,
+		A.category,
+		A.title,
+		A.thumbnail,
+		A.file_name,
+		A.data_file,
+		A.contents,
+		A.keyword,
+		A.origin_code,
+		(SELECT name FROM th_category WHERE category = A.origin_code) as origin_txt,
+		A.is_use,
+		A.reg_id,
+		A.reg_date,
+		B.depth ,
+		(SELECT name FROM Member WHERE userid = A.reg_id) as user_name ,
+		dn_url
+	FROM
+		th_multimedia A,
+		th_category B
+	WHERE
+		A.mm_id > #mmId#
+		AND A.category = B.category
+	]]>
+	<isNotEmpty property="findStartDate" prepend="AND">
+		SUBSTRING(A.reg_date, 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="sk">
+		replace(A.keyword, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="st">
+		replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findCategory" prepend="AND">
+		A.category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		A.is_use LIKE CONCAT('%' , #findIsUse# , '%')
+	</isNotEmpty>
+	<![CDATA[
+	ORDER BY A.mm_id ASC
+	LIMIT 1
+	]]>
+	</select>
+	
+	<!-- 다음 멀티미디어 데이타를 보여준다. -->
+	<select id="getNextMultimedia" resultMap="MultimediaDetailMap">
+	<![CDATA[
+	SELECT
+		A.mm_id,
+		A.category,
+		A.title,
+		A.thumbnail,
+		A.file_name,
+		A.data_file,
+		A.contents,
+		A.keyword,
+		A.origin_code,
+		(SELECT name FROM th_category WHERE category = A.origin_code) as origin_txt,
+		A.is_use,
+		A.reg_id,
+		A.reg_date,
+		B.depth ,
+		(SELECT name FROM Member WHERE userid = A.reg_id) as user_name ,
+		dn_url
+	FROM
+		th_multimedia A,
+		th_category B
+	WHERE
+		A.mm_id < #mmId#
+		AND A.category = B.category
+	]]>
+	<isNotEmpty property="findStartDate" prepend="AND">
+		SUBSTRING(A.reg_date, 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="sk">
+		replace(A.keyword, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="st">
+		replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findCategory" prepend="AND">
+		A.category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		A.is_use LIKE CONCAT('%' , #findIsUse# , '%')
+	</isNotEmpty>
+	<![CDATA[
+	ORDER BY A.mm_id DESC
+	LIMIT 1
+	]]>
+	</select>
+	
+	<update id="updateMultimedia">
+	<![CDATA[
+	UPDATE
+		th_multimedia
+	SET
+		category = #category#,
+		title = #title#,
+		contents = #contents#,
+		keyword = #keyword#,
+		origin_code = #originCode#,
+		origin_txt = #originTxt#,
+		is_use = #isUse#,
+		file_name = #fileName#,
+		data_file = #dataFile#,
+		dn_url = #dnUrl# , 
+		thumbnail = #thumbnail# 
+	WHERE
+		mm_id = #mmId#
+	]]>
+	</update>
+	
+	<delete id="deleteMultimedia">
+	<![CDATA[
+	DELETE FROM
+		th_multimedia
+	WHERE
+		mm_id = #mmId#
+	]]>
+	</delete>
+	
+	<!-- 파일 삭제용  파일 주소 가져오기 -->
+	<select id="getDeleteTarget" resultClass="String">
+	SELECT
+		<isEqual property="type" compareValue="thumbnail">
+		thumbnail
+		</isEqual>
+		<isEqual property="type" compareValue="file">
+		data_file
+		</isEqual>
+	FROM
+		th_multimedia
+	WHERE
+		mm_id = #mmId#
+	</select>
+	
+	<!-- 글 삭제 -->
+	<delete id="multimediaDelete">
+	<![CDATA[
+	DELETE FROM
+		th_multimedia
+	WHERE
+		mm_id = #mmId#
+	]]>
+	</delete>
+	
+	<!-- 멀티미디어파일이 자료관리에 등록되어 있는지 확인 -->
+	<select id="getDataRefCount" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1) cnt
+	FROM
+		th_learning_data A
+	]]>
+	WHERE
+		mm_id = #mmId#
+
+	</select>
+</sqlMap>

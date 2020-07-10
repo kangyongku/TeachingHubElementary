@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="File">
+	
+	<cacheModel id="file-cache" type="LRU">
+		<flushInterval minutes="10"/>
+		<flushOnExecute statement="File.insert"/>
+		<flushOnExecute statement="File.delete"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<!-- File Result Map -->
+	<resultMap id="FileMap" class="kr.co.kumsung.thub.domain.FileInfo">
+		<result column="file_id" property="fileId" />
+		<result column="file_path" property="filePath" />
+		<result column="file_name" property="fileName" />
+		<result column="origin_name" property="originName" />
+		<result column="absolute_path" property="absolutePath" />
+		<result column="mime_type" property="mimeType" />
+		<result column="file_size" property="fileSize" />
+		<result column="hits" property="hits" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- 게시글의 첨부파일 리스트를 가지고 온다. -->
+	<select id="getBoardFiles" resultMap="FileMap" cacheModel="file-cache">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_board_files
+		WHERE file_id IN ($attachment$)
+	]]>
+	</select>
+	
+	<!-- 파일 정보를 가지고 온다. -->
+	<select id="getFile" resultMap="FileMap" cacheModel="file-cache">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_board_files
+		WHERE file_id = #fileId#
+	]]>
+	</select>
+	
+	<!-- 파일을 등록한다. -->
+	<insert id="insert">
+	<![CDATA[
+	INSERT INTO th_board_files
+	(
+		file_path ,
+		board_id , 
+		file_name ,
+		origin_name ,
+		mime_type ,
+		absolute_path ,
+		file_size ,
+		reg_date		
+	)
+	VALUES
+	(
+		#filePath# ,
+		#boardId# ,
+		#fileName# ,
+		#originName# ,
+		#mimeType# ,
+		#absolutePath# ,
+		#fileSize# ,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as board_id
+	</selectKey>
+	</insert>
+	
+	<!-- delete file -->
+	<delete id="delete">
+	<![CDATA[
+	DELETE FROM th_board_files WHERE file_id = #fileId#
+	]]>
+	</delete>
+	
+</sqlMap>

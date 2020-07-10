@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<!-- default layout -->
+	<definition name="base_layout" template="/WEB-INF/views/layout/base_layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/include/header.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp"/>
+	</definition>
+	
+	<!-- error page -->
+	<definition name="error/*" template="/WEB-INF/views/error/{1}.jsp"/>
+	
+	<!-- common file handler -->
+	<definition name="fileHandler" template="/WEB-INF/views/commons/fileHandler.jsp"/>
+	
+	<!-- common login result -->
+	<definition name="front/thub/loginDone" template="/WEB-INF/views/front/thub/loginDone.jsp"/>
+	
+	<!-- ############# 티칭허브 새메인 레이아웃 설정 201909 -->
+ 	<definition name="thub_newmain" template="/WEB-INF/views/front/thub/layout/newmain.jsp">
+		<put-attribute name="head" value="/WEB-INF/views/front/thub/include/newhead.jsp"/>
+		<put-attribute name="top" value="/WEB-INF/views/front/thub/include/newtop.jsp"/>
+		<put-attribute name="quick" value="/WEB-INF/views/front/thub/include/2017quick.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/front/thub/include/2017footer.jsp"/>
+	</definition>
+	<definition name="front/thub/new_main" extends="thub_newmain">
+		<put-attribute name="body" value="/WEB-INF/views/front/thub/new_main.jsp"/>
+	</definition> 
+	
+	<!-- ############# 티칭허브 Master 레이아웃 설정 -->
+	<definition name="thub_master" template="/WEB-INF/views/front/thub/layout/master.jsp">
+		<put-attribute name="head" value="/WEB-INF/views/front/thub/include/newhead.jsp"/>
+		<put-attribute name="top" value="/WEB-INF/views/front/thub/include/newtop.jsp"/>
+		<put-attribute name="quick" value="/WEB-INF/views/front/thub/include/2017quick.jsp"/>
+		<put-attribute name="location" value="/WEB-INF/views/front/thub/include/location.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/front/thub/include/2017footer.jsp"/>
+	</definition>
+	
+	<!-- ############# 티칭허브 View Mapping -->
+	<definition name="front/thub/popup/scrapFolder" template="/WEB-INF/views/front/thub/popup/scrapFolder.jsp"/>
+	<definition name="front/thub/popup/scrapFolderManager" template="/WEB-INF/views/front/thub/popup/scrapFolderManager.jsp"/>	
+	<definition name="front/thub/popup/popCdView" template="/WEB-INF/views/front/thub/popup/popCdView.jsp"/>
+	<definition name="front/thub/popup/popDataView" template="/WEB-INF/views/front/thub/popup/popDataView.jsp"/>
+	<definition name="front/thub/popup/popChasiView" template="/WEB-INF/views/front/thub/popup/popChasiView.jsp"/>
+	<definition name="front/thub/*/ajax/*" template="/WEB-INF/views/front/thub/{1}/ajax/{2}.jsp"/>
+	<definition name="front/board/*/*" template="/WEB-INF/views/front/board/{1}/{2}.jsp"/>
+	
+	<definition name="front/thub/*/*" extends="thub_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/thub/{1}/{2}.jsp"/>
+	</definition>
+	
+	<definition name="front/thub/*/*/*" extends="thub_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/thub/{1}/{2}/{3}.jsp"/>
+	</definition>
+	
+	<definition name="front/thub/*/*/*/*" extends="thub_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/thub/{1}/{2}/{3}/{4}.jsp"/>
+	</definition>
+	
+	<!-- 티칭허브 Sidebar -->
+	<definition name="sidebarActivity" template="/WEB-INF/views/front/thub/include/sidebarActivity.jsp"/>
+	<definition name="sidebarOpen" template="/WEB-INF/views/front/thub/include/sidebarOpen.jsp"/>
+	<definition name="sidebarHappy" template="/WEB-INF/views/front/thub/include/sidebarHappy.jsp"/>
+	<definition name="sidebarCustomer" template="/WEB-INF/views/front/thub/include/sidebarCustomer.jsp"/>
+	
+	<!-- 고객센터 2018 left -->
+	<definition name="sidebarCustomer18" template="/WEB-INF/views/front/thub/include/sidebarCustomer18.jsp"/>
+	<definition name="sidebarMyhub" template="/WEB-INF/views/front/thub/include/sidebarMyhub.jsp"/>
+	<definition name="sidebarParticipation" template="/WEB-INF/views/front/thub/include/sidebarParticipation.jsp"/>
+	<definition name="sidebarFreestudy" template="/WEB-INF/views/front/thub/include/sidebarFreestudy.jsp"/>
+	<definition name="sidebarShare" template="/WEB-INF/views/front/thub/include/sidebarShare.jsp"/>
+	
+	<!-- 나눔 소통 -->
+	<definition name="sidebarCommunication" template="/WEB-INF/views/front/thub/include/sidebarCommunication.jsp"/>
+	<!-- 티칭허브 교수학습자료 교과서 -->
+	<definition name="detailBook" template="/WEB-INF/views/front/thub/include/detailBook.jsp"/>
+	<definition name="sitemapLayer" template="/WEB-INF/views/front/thub/include/sitemapLayer.jsp"/>
+
+	
+	
+	<!-- ############# 티칭백과 모바일 Master 레이아웃 설정 -->
+	<definition name="mobile_master" template="/WEB-INF/views/front/mobile/layout/master.jsp">
+		<put-attribute name="head" value="/WEB-INF/views/front/mobile/include/head.jsp"/>
+		<put-attribute name="top" value="/WEB-INF/views/front/mobile/include/top.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/front/mobile/include/footer.jsp"/>
+	</definition>
+	
+	<!-- ipin 인증 -->
+	<definition name="front/mobile/member/ipinProcess" template="/WEB-INF/views/front/mobile/member/ipinProcess.jsp"/>
+	
+	<definition name="front/mobile/*" extends="mobile_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/mobile/{1}.jsp"/>
+	</definition>
+	<definition name="front/mobile/*/*" extends="mobile_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/mobile/{1}/{2}.jsp"/>
+	</definition>
+	<definition name="front/mobile/*/*/*" extends="mobile_master">
+		<put-attribute name="body" value="/WEB-INF/views/front/mobile/{1}/{2}/{3}.jsp"/>
+	</definition>
+	
+
+	<!-- ############# Daum Editor -->
+	<definition name="daumeditor" template="/WEB-INF/views/daumeditor/init.jsp"/>
+	<definition name="daumeditor/multi" template="/WEB-INF/views/daumeditor/multi.jsp"/>
+	
+	<!-- ############# 팝업 레이아웃 설정 -->
+	<definition name="popup_master" template="/WEB-INF/views/admin/layout/popupMaster.jsp">
+		<put-attribute name="popupHead" value="/WEB-INF/views/admin/include/popupHead.jsp"/>
+		<put-attribute name="popupFooter" value="/WEB-INF/views/admin/include/popupFooter.jsp"/>
+	</definition>
+	
+	<!-- ############# Popup Page -->
+	<definition name="popup/*" extends="popup_master" >
+		<put-attribute name="popupBody" value="/WEB-INF/views/popup/{1}.jsp"/>
+	</definition>	
+	
+	
+	<!-- ############# Iframe 레이아웃 설정 -->
+	<definition name="iframe_master" template="/WEB-INF/views/admin/layout/iframeMaster.jsp">
+		<put-attribute name="iframeHead" value="/WEB-INF/views/admin/include/iframeHead.jsp"/>
+	</definition>
+	
+	<!-- ############# Iframe Page-->
+	<definition name="iframe/*" extends="iframe_master" >
+		<put-attribute name="iframeBody" value="/WEB-INF/views/iframe/{1}.jsp"/>
+	</definition>
+	
+</tiles-definitions>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>티칭허브</title>
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/sub.css">
+
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/html5shiv.js"></script>
+
+    <script type="text/javascript" src="js/common.js"></script>
+
+    <script>
+      $(function() {
+        $(".select_wrap").each(function() {
+          $(this).find("select").selectBox();
+        });
+      });
+    </script>
+
+  </head>
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <div id="header" class="header">
+        <header>
+
+        </header>
+      </div>
+      <!--// header -->
+
+      <!-- container -->
+      <div id="container" class="container">
+        <section>
+          <div class="inwrap">
+
+            <div class="location">
+              <span><img src="image/ico/ico_location_home.png" alt="HOME"></span>
+              <span>교수학습자료</span>
+              <span class="curr">고등 과학</span>
+            </div>
+
+            <div class="textbook_box">
+              <span class="bookimg"><img src="image/textboox_english.png" alt="영어"></span>
+              <div class="textbook_info">
+                <h2 class="book_tit">영어<span class="writer">(김경한)</span><em class="revision">9개정</em></h2>
+                <ul class="txtbook_link">
+                  <li class="enroll"><a href="#">내 교과서<br/>등록</a></li>
+                  <li class="preview"><a href="#">교과서<br/>미리보기</a></li>
+                  <li class="cdview"><a href="#">교사용<br/>CD보기</a></li>
+                  <li class="cddown disable"><a href="#pop_teacher_cd_download" onclick="modal_open($(this).attr('href'));return false;">교사용<br/>CD 다운</a></li> <!-- 비활성화시  class="disable" 추가 -->
+                </ul>
+              </div>
+              <div class="another_textbook">
+                <strong>다른 교과서 보기</strong>
+                <div class="select_wrap">
+                  <select>
+                    <option>고등 과학(안태인)</option>
+                    <option>고등 과학(안태인)</option>
+                    <option>고등 과학(안태인)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="inner_container">
+              <div class="nav_box">
+                <!-- 171211 추가 -->
+                <ul class="nav_tab">
+                  <li class="on"><a href="#">단원별 자료</a></li>
+                  <li><a href="#">특화 자료</a></li>
+                </ul>
+                <!--// 171211 추가 -->
+                <div class="chapter_item unit">
+                  <!-- <p class="chap_tit"><a href="#">단원별 자료</a></p> -->
+                  <ul class="lnb">
+                    <li> <!-- 선택된 리스트에 class="on" 추가 -->
+                      <a href="#">1. 우주의 기원과 진화</a>
+                      <ul class="sub_lnb">
+                        <li><a href="#">1. 우주의 기원</a></li> <!-- 선택된 하위 단원에 class="on" 추가 -->
+                        <li><a href="#">2. 우주의 진화</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#">2. 태양계와 지구</a>
+                      <ul class="sub_lnb">
+                        <li><a href="#">1. 태양계의 형성</a></li>
+                        <li><a href="#">2. 태양계의 운동</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#">3. 생명의 진화</a>
+                      <ul class="sub_lnb">
+                        <li><a href="#">1. 생명의 탄생과 진화</a></li>
+                        <li><a href="#">2. 생명의 연속성</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">4. 정보 통신과 신소재</a></li>
+                    <li><a href="#">5. 인류의 건강과 과학 기술</a></li>
+                    <li><a href="#">6. 에너지와 환경</a></li>
+                  </ul>
+                  <a href="#" class="unit_lnb_toggle close"><span>단원 펼치기</span></a> <!-- 접힌 상태일 때 class="close" 추가 -->
+                </div>
+                <!-- 171211 삭제
+                <div class="chapter_item specialized">
+                  <p class="chap_tit"><a href="#">특화자료</a></p>
+                </div> -->
+                <div class="chapter_item type">
+                  <p class="chap_tit"><a href="#">유형별 자료</a></p>
+                  <ul class="lnb">
+                    <li><a href="#">수업자료</a></li>
+                    <li><a href="#">평가자료</a></li>
+                    <li><a href="#">멀티미디어자료</a></li>
+                    <li><a href="#">웹링크자료</a></li>
+                    <li><a href="#">듣기자료</a></li>
+                    <li class="on"><a href="#">차시별 자료</a></li>
+                  </ul>
+                </div>
+              </div> <!--// nav_box-->
+
+              <div class="sub_content">
+
+                <div class="box_area">
+                  <div class="l_box">
+                    <h3 class="content_title">차시별자료</h3>
+                  </div>
+                  <div class="r_box">
+                    <div class="select_wrap">
+                      <select>
+                        <option>대단원</option>
+                        <option>대단원</option>
+                        <option>대단원</option>
+                        <option>대단원</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="element_data_wrap">
+                  <div class="element_list">
+                    <h3 class="content_title">1. 경쟁</h3>
+                    <a href="#" class="databox_toggle"><span class="ir">펼치기/숨기기</span></a> <!-- 숨김처리시에 class="close" 추가 -->
+                    <div class="datalist_wrap">
+                      <dl class="element_txtbox">
+                        <dt>01. 술래를 피해요</dt>
+                        <dd>
+                          <p class="ele_tit"><a href="#">자료유형 : 차시별자료 &gt; 차시제목</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">확인평가</a>
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                        <dd>
+                          <p class="ele_tit"><a href="#">[1차시] 생활 속 여가 활동 이해하기(156~161p)</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                        <dd>
+                          <p class="ele_tit"><a href="#">[2~4차시] 여가 자원 알아보기(162~165p)</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                      </dl>
+                      <dl class="element_txtbox">
+                        <dt>02. 공으로 게임을 해요</dt>
+                        <dd>
+                          <p class="ele_tit"><a href="#">자료유형 : 차시별자료 &gt; 차시제목</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                        <dd>
+                          <p class="ele_tit"><a href="#">[1차시] 생활 속 여가 활동 이해하기(156~161p)</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                        <dd>
+                          <p class="ele_tit"><a href="#">[2~4차시] 여가 자원 알아보기(162~165p)</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                      </dl>
+                    </div>
+                  </div> <!--// element_list -->
+
+                  <div class="element_list">
+                    <h3 class="content_title">2. 표현</h3>
+                    <a href="#" class="databox_toggle"><span class="ir">펼치기/숨기기</span></a> <!-- 숨김처리시에 class="close" 추가 -->
+                    <div class="datalist_wrap">
+                      <dl class="element_txtbox">
+                        <dt>01. 표현을 해요</dt>
+                        <dd>
+                          <p class="ele_tit"><a href="#">자료유형 : 차시별자료 &gt; 차시제목</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">확인평가</a>
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                        <dd>
+                          <p class="ele_tit"><a href="#">[1차시] 생활 속 여가 활동 이해하기(156~161p)</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                        <dd>
+                          <p class="ele_tit"><a href="#">[2~4차시] 여가 자원 알아보기(162~165p)</a></p>
+                          <div class="btn_area">
+                            <a href="#" class="txtBtn">확인평가</a>
+                            <a href="#" class="txtBtn">과정안</a>
+                            <a href="#" class="txtBtn">활동지</a>
+                          </div>
+                        </dd>
+                      </dl>
+                    </div>
+                  </div> <!--// element_list -->
+
+                </div> <!--// element_data_wrap -->
+
+
+              </div> <!--// sub_content -->
+            </div> <!--// inner_container -->
+
+          </div>
+        </section>
+      </div>
+      <!--// container -->
+
+      <!-- footer -->
+      <div id="footer">
+        <footer>
+        </footer>
+      </div>
+      <!--// footer -->
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Popup">
+
+	<cacheModel id="popup-cache" type="LRU">
+		<flushInterval hours="2"/>
+		<flushOnExecute statement="Popup.insertPopup"/>
+		<flushOnExecute statement="Popup.updatePopup"/>
+		<flushOnExecute statement="Popup.deletePopup"/>
+		<property name="size" value="100"/>
+	</cacheModel>
+
+	<!-- 팝업 리스트 mapper -->
+	<resultMap id="PopupListMap" class="kr.co.kumsung.thub.domain.Popup">
+		<result column="popup_id" property="popupId" />
+		<result column="title" property="title" />
+		<result column="target" property="target" />
+		<result column="type" property="type" />
+		<result column="is_use" property="isUse" />
+		<result column="reg_id" property="regId" />
+		<result column="contents" property="contents" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="reg_date" property="regDate" />
+		<result column="size_width" property="sizeWidth" />
+		<result column="size_height" property="sizeHeight" />
+		<result column="position_width" property="positionWidth" />
+		<result column="position_height" property="positionHeight" />
+	</resultMap>
+	
+	<!-- 팝업 상세보기 mapper -->
+	<resultMap id="PopupMap" class="kr.co.kumsung.thub.domain.Popup">
+		<result column="popup_id" property="popupId" />
+		<result column="title" property="title" />
+		<result column="target" property="target" />
+		<result column="type" property="type" />
+		<result column="is_use" property="isUse" />
+		<result column="reg_id" property="regId" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="reg_date" property="regDate" />
+		<result column="contents" property="contents" />
+		<result column="size_width" property="sizeWidth" />
+		<result column="size_height" property="sizeHeight" />
+		<result column="position_width" property="positionWidth" />
+		<result column="position_height" property="positionHeight" />
+	</resultMap>
+	
+	<!-- 팝업 목록 리스트  -->
+	<select id="getPopupList" resultMap="PopupListMap" cacheModel="popup-cache">
+	<![CDATA[
+	SELECT
+		popup_id,
+		title,
+		target,
+		type, 
+		is_use,
+		reg_id,
+		contents ,
+		date_format(start_date, '%Y-%m-%d')as start_date,
+		date_format(end_date, '%Y-%m-%d')as end_date,
+		date_format(reg_date, '%Y-%m-%d')as reg_date ,
+		size_width,
+		size_height,
+		position_width,
+		position_height
+	FROM
+		th_popup A
+	WHERE
+		1=1
+	]]>	
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="ft">
+			title LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fc">
+			contents LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			modify_id LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		is_use = #findIsUse#
+	</isNotEmpty>
+	<isNotEmpty property="findTarget" prepend="AND">
+		target = #findTarget#
+	</isNotEmpty>
+	<isNotEmpty property="findDate" prepend="AND">
+	<![CDATA[
+		start_date <= #findDate# AND end_date >= #findDate#
+	]]>
+	</isNotEmpty>
+	ORDER BY
+		A.reg_date desc
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 팝업 게시글 수 -->
+	<select id="getPopupTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1)as cnt
+	FROM
+		th_popup
+	WHERE
+		1=1
+	]]>	
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="ft">
+			title LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fc">
+			contents LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			modify_id LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse">
+		is_use = #findIsUse#
+	</isNotEmpty>
+	<isNotEmpty property="findDate">
+	<![CDATA[
+		SUBSTRING(start_date , 1 , 10) <= #findDate# AND SUBSTRING(end_date , 1, 10) >= #findDate#
+	]]>
+	</isNotEmpty>
+	</select>
+	
+	<!-- 팝업 상세 보기 -->
+	<select id="getPopupDetail" resultMap="PopupMap">
+	<![CDATA[
+	SELECT
+		popup_id,
+		title,
+		target,
+		type,
+		is_use,
+		reg_id,
+		start_date,
+		end_date,
+		reg_date,
+		contents,
+		size_width,
+		size_height,
+		position_width,
+		position_height
+	FROM
+		th_popup	
+	WHERE
+		popup_id=#popupId#
+	]]>
+	</select>
+	
+	<!-- 팝업 입력 -->
+	<insert id="insertPopup">
+	INSERT INTO th_popup
+	(
+		target,
+		title,
+		size_width,
+		size_height,
+		position_width,
+		position_height,
+		start_date,
+		end_date,
+		contents,
+		type,
+		is_use,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date
+	)
+	VALUES
+	(
+		#target#,
+		#title#,
+		#sizeWidth#,
+		#sizeHeight#,
+		#positionWidth#,
+		#positionHeight#,
+		#startDate#,
+		#endDate#,
+		#contents#,
+		#type#,
+		#isUse#,
+		#regId#,
+		NOW(),
+		#modifyId#,
+		NOW()
+	)	
+	</insert>
+	
+	<!-- 팝업 수정 -->
+	<update id="updatePopup">
+	<![CDATA[
+	UPDATE
+		th_popup
+	SET
+		target = #target#,
+		title = #title#,
+		size_width = #sizeWidth#,
+		size_height = #sizeHeight#,
+		position_width = #positionWidth#,
+		position_height = #positionHeight#,
+		start_date = #startDate#,
+		end_date = #endDate#,
+		contents = #contents#,
+		type = #type#,
+		is_use = #isUse#,
+		modify_id = #modifyId#,
+		modify_date = NOW()
+	WHERE
+		popup_id = #popupId#
+	]]>
+	</update>
+	
+	<!-- 팝업 삭제 -->
+	<delete id="deletePopup">
+	<![CDATA[
+	DELETE FROM
+		th_popup
+	WHERE
+		popup_id = #popupId#
+	]]>
+	</delete>
+	
+</sqlMap>

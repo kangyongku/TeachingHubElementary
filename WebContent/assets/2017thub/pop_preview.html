@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>티칭허브</title>
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/sub.css">
+
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/html5shiv.js"></script>
+
+    <!-- 이미지 확대/축소 플러그인 -->
+    <script type="text/javascript" src="js/imageviewer.js"></script>
+
+    <script type="text/javascript" src="js/common.js"></script>
+  </head>
+  <body>
+
+    <div class="popup_wrap">
+      <div class="pop_head">
+        <h4 class="p_title">영어1 본문 해석</h4>
+        <div class="p_location">
+          <span>분류</span>
+          <span>영어</span>
+          <span>1.2단원</span>
+        </div>
+        <div class="r_box">
+          <a href="#" class="btn scrapBtn"><span>스크랩</span></a>
+          <a href="#" class="btn downloadBtn"><span>다운로드</span></a>
+        </div>
+      </div>
+      <div class="pop_cont">
+
+        <div class="slideview_wrap">
+          <div class="slideview_nav">
+              <ul>
+                <li class="on"><a href="#"><img src="image/@thumb_preview_img01.jpg" alt="이미지1"></a></li>
+                <li><a href="#"><img src="image/@thumb_preview_img01.jpg" alt="이미지2"></a></li>
+                <li><a href="#"><img src="image/@thumb_preview_img01.jpg" alt="이미지3"></a></li>
+                <li><a href="#"><img src="image/@thumb_preview_img01.jpg" alt="이미지4"></a></li>
+                <li><a href="#"><img src="image/@thumb_preview_img01.jpg" alt="이미지5"></a></li>
+                <li><a href="#"><img src="image/@thumb_preview_img01.jpg" alt="이미지6"></a></li>
+              </ul>
+          </div>
+          <a href="#" class="btn_arrow prev"><span class="ir">이전</span></a>
+          <a href="#" class="btn_arrow next"><span class="ir">다음</span></a>
+        </div>
+
+        <div class="preview_img">
+          <img src="image/@thumb_preview_img01.jpg" alt="이미지1">
+        </div>
+
+     </div>
+   </div>
+
+    <script>
+      $(function() {
+
+        var slideWrap = $(".slideview_wrap"),
+          slideNav = slideWrap.find(".slideview_nav"),
+          slideList = slideNav.find("ul li"),
+          prevArrow = slideWrap.find(".btn_arrow.prev"),
+          nextArrow = slideWrap.find(".btn_arrow.next")
+          ListWidth = slideList.outerWidth(),
+          ListLen = slideList.length,
+          moveWidth = ListWidth+12,
+          offsetLeft = 0;
+
+        slideNav.find("ul").css("width", ListWidth*ListLen+(12*(ListLen-1)));
+        var maxScroll = slideNav.prop("scrollWidth") - slideNav.width(); // 최대 스크롤 값
+
+        nextArrow.on("click", function(e) {
+          e.preventDefault();
+          if ( slideNav.scrollLeft() < maxScroll ) {
+            offsetLeft = slideNav.scrollLeft() + moveWidth;
+            slideNav.animate({scrollLeft : offsetLeft});
+          };
+        });
+
+        prevArrow.on("click", function(e) {
+          e.preventDefault();
+          if ( slideNav.scrollLeft() > 0 ) {
+            offsetLeft = slideNav.scrollLeft() - moveWidth;
+            slideNav.animate({scrollLeft : offsetLeft});
+          };
+        });
+
+        $('.preview_img img').ImageViewer(); //이미지 확대/축소
+
+        slideList.each( function() {
+          var $target = $(this),
+           clickcurr = $target.find("a");
+
+          clickcurr.on("click", function(e) {
+            e.preventDefault();
+            slideList.removeClass("on");
+            clickcurr.parent().addClass("on");
+            var currImg = $(this).find("img").attr("src"),
+              currAlt = $(this).find("img").attr("alt");
+
+            $('.preview_img img').attr("src",currImg);
+            $('.preview_img img').attr("alt",currAlt);
+
+          });
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

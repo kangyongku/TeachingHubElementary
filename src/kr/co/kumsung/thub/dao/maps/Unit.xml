@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<!-- 스마트학생백과 -->
+<sqlMap namespace="Unit">
+	
+	<cacheModel id="unit-cache" type="LRU">
+		<flushInterval hours="24"/>
+		<flushOnExecute statement="Unit.insertUnit"/>
+		<flushOnExecute statement="Unit.updateUnit"/>
+		<flushOnExecute statement="Unit.deleteUnit"/>
+		<flushOnExecute statement="Unit.updateUnitSequence"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<!-- 단원 맵 -->
+	<resultMap id="UnitMap" class="kr.co.kumsung.thub.domain.Unit">
+		<result column="unit_id" property="unitId" />
+		<result column="category" property="category" />
+		<result column="book_id" property="bookId" />
+		<result column="group_id" property="groupId" />
+		<result column="name" property="name" />
+		<result column="depth" property="depth" />
+		<result column="parent_id" property="parentId" />
+		<result column="sequence" property="sequence" />
+		<result column="is_use" property="isUse" />
+		<result column="reg_date" property="regDate" /> 
+	</resultMap>
+		
+	<!-- 단원 리스트를 가지고 온다. -->
+	<select id="getUnitList" resultMap="UnitMap" cacheModel="unit-cache">
+	<![CDATA[
+	SELECT 
+			* 
+		FROM th_unit
+		WHERE book_id = #bookId#
+			AND category = #category#
+		ORDER BY depth ASC , sequence ASC
+	]]>
+	</select>
+	
+	<!-- 주어진 Depth의 단원 리스트를 가지고 온다. -->
+	<select id="getUnitDepthList" resultMap="UnitMap">
+	<![CDATA[
+	SELECT 
+			* 
+		FROM th_unit
+		WHERE book_id = #bookId#
+			AND category = #category#
+			AND depth = #depth#
+	]]>
+	<isGreaterThan property="depth" compareValue="1" prepend="AND">
+		parent_id = #parentId# 
+	</isGreaterThan>
+	<![CDATA[
+		ORDER BY sequence ASC
+	]]>
+	</select>
+	
+	<!-- 단원의 정보를 가지고 온다. -->
+	<select id="getUnit" resultMap="UnitMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_unit
+		WHERE unit_id = #unitId#
+			AND category = #category#
+	]]>
+	</select>
+	
+	<!-- 대단원의 그룹아이드를 가지고 온다. -->
+	<select id="getUnitGroupId" resultClass="int">
+	<![CDATA[
+	SELECT
+			IFNULL(group_id , 1)
+		FROM th_unit
+		WHERE book_id = #bookId#
+			AND unit_id = #parentId#
+			AND category = #category#
+	]]>
+	</select>
+	
+	<!-- 단원의 가장큰 순서 번호를 가지고 온다. -->
+	<select id="getMaxSequence" resultClass="int">
+	<![CDATA[
+	SELECT 
+			IFNULL(MAX(sequence) + 1 , 1)
+		FROM th_unit
+		WHERE	book_id = #bookId#
+			AND category = #category#
+	]]>
+		<isEqual property="depth" compareValue="1">
+		<![CDATA[
+			AND depth = 1
+		]]>
+		</isEqual>
+		<isEqual property="depth" compareValue="2">
+		<![CDATA[
+			AND parent_id = #parentId#
+			AND depth = 2
+		]]>
+		</isEqual>
+		<isEqual property="depth" compareValue="3">
+		<![CDATA[
+			AND parent_id = #parentId#
+			AND depth = 3
+		]]>
+		</isEqual>
+	</select>
+	
+	<!-- 가장 큰 그룹 코드를 가지고 온다. -->
+	<select id="getMaxGroupId" resultClass="int">
+	<![CDATA[
+	SELECT
+			IFNULL(MAX(group_id) + 1 , 1)
+		FROM th_unit
+		WHERE book_id = #bookId#
+			AND category = #category#
+	]]>
+	</select>
+	
+	<!-- 단원 등록 -->
+	<insert id="insertUnit">
+	<![CDATA[
+	INSERT INTO th_unit
+	(
+		book_id ,
+		category , 
+		group_id ,
+		name ,
+		depth ,
+		parent_id ,
+		sequence ,
+		reg_date
+	)	
+	VALUES
+	(
+		#bookId# ,
+		#category# ,
+		#groupId# ,
+		#name# ,
+		#depth# ,
+		#parentId# ,
+		#sequence# ,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as unit_id
+	</selectKey>
+	</insert>
+	
+	<!-- 단원의 정보를 갱신한다. -->
+	<update id="updateUnit">
+	<![CDATA[
+	UPDATE
+			th_unit
+		SET
+			name = #name#
+		WHERE
+			unit_id = #unitId#
+			AND category = #category#
+	]]>
+	</update>
+	
+	<!-- 단원을 삭제한다. -->
+	<delete id="deleteUnit">
+	<![CDATA[
+	DELETE
+			FROM th_unit
+			WHERE unit_id = #unitId#
+				AND category = #category#
+	]]>
+	</delete>
+	
+	<!-- 하위 단원의 갯수를 가지고 온다. -->
+	<select id="getChildrenCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_unit
+		WHERE parent_id = #unitId#
+			AND category = #category#
+	]]>
+	</select>
+	
+	<!-- 단원의 순서를 재정렬한다. -->
+	<update id="updateUnitSequence">
+	<![CDATA[
+	UPDATE
+			th_unit
+		SET
+			sequence = #sequence#
+		WHERE unit_id = #unitId#
+			AND category = #category#
+	]]>
+	</update>
+	
+	<!-- 자식 노드를 구한다. -->
+	<select id="getUnitChildren" resultMap="UnitMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_unit
+		WHERE book_id = #bookId#
+			AND category = #category#
+	]]>
+	<isEqual property="depth" compareValue="1">
+			AND depth = '1'
+	</isEqual>
+	<isGreaterThan property="depth" compareValue="1">
+			AND depth = #depth#
+			AND parent_id = #unitId#
+	</isGreaterThan>
+	<![CDATA[
+		ORDER BY sequence ASC
+	]]>
+	</select>
+	
+	<!-- 단원의 그룹 코드를 구한다. -->
+	<select id="getUnitGroupCode" resultClass="String">
+	<![CDATA[
+	SELECT 
+			IFNULL(MAX(group_code) , 0)
+		FROM th_unit
+		 WHERE category = #category#
+			AND book_id = #bookId#
+			AND group_id = #groupId#
+			AND depth = #depth#
+	]]>
+	</select>
+	
+	<!-- 대단원의 리스트를 가지고 온다. -->
+	<select id="getMasterUnitList" resultMap="UnitMap" cacheModel="unit-cache">
+	<![CDATA[
+	SELECT 
+			* 
+		FROM th_unit 
+		WHERE category = #category# 
+			AND book_id = #bookId# 
+			AND depth = 1
+		ORDER BY sequence ASc
+	]]>
+	</select>
+	
+	<!-- 하위 포함 대단원의 리스트를 가지고 온다. -->
+	<select id="getMasterUnitListAll" resultMap="UnitMap" cacheModel="unit-cache">
+	<![CDATA[
+	 select a.*, if(a.parent_id = 0, a.sequence,  (select b.sequence from th_unit b where b.unit_id = a.parent_id)) as seq
+     from
+     (
+      SELECT 
+  			*
+  		FROM th_unit 
+  		WHERE category = #category# 
+  			AND book_id = #bookId# 
+        and depth in (1, 2)
+      ) a
+      order by seq, depth, sequence
+
+	]]>
+	</select>
+	
+	
+	<!-- 해당 단원에 속한 하위 단원의 리스트를 가지고 온다. -->
+	<select id="getChildrenUnitList" resultMap="UnitMap" cacheModel="unit-cache">
+	<![CDATA[
+	SELECT 
+			* 
+		FROM th_unit 
+		WHERE book_id = #bookId# 
+			AND parent_id = #unitId# 
+			AND depth = #depth#
+			AND is_use = 'Y' 
+		ORDER BY sequence ASC 
+	]]>
+	</select>
+</sqlMap>

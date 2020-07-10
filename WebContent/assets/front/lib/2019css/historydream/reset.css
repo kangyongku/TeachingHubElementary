@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+html,body {width:100%; height:100%; -webkit-text-size-adjust:none; word-break:break-all;}
+input {margin:0; padding:0}
+html,body,h1,h2,h3,h4,h5,h6,div,span,p,blockquote,pre,abbr,acronym,address,cite,code,del,dfn,em,img,figure,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,form,fieldset,legend,a,textarea,input,select,option,button,label,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video {margin:0; padding:0; -webkit-box-sizing:border-box; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; appearance:none; -moz-appearance:none}
+
+a {color:inherit}
+a:link{text-decoration:none}
+a:active,a:hover{outline:0; text-decoration:none}
+a:visited{text-decoration:none}
+
+h1, h2, h3, h4, h5, h6{font-weight:normal; font-size:inherit}
+b, strong{font-weight:bold}
+address, caption, cite, code, dfn, em, var{font-style:normal; font-weight:normal}
+abbr, acronym, img, button{border:0}
+
+ul, ol, li{list-style:none}
+
+button{cursor:pointer}
+button, input, select, textarea{border:0 none; outline:0 none; background-color:transparent; border-radius:0; -webkit-border-radius:0; vertical-align:middle}
+textarea{vertical-align:top;border:solid 1px #999}
+img {vertical-align:top}
+
+table{width:100%; border-collapse:collapse; empty-cells:show; border-spacing:0; table-layout:fixed}
+table caption {overflow:hidden; visibility:hidden; width:0; height:0; font-size:0; line-height:0; text-indent:-9999em}
+fieldset legend{display:block; overflow:hidden; position:absolute; top:-1000em; left:0}
+
+.ir {position:absolute; overflow:hidden; width:0px; height:0px; font-size:0}

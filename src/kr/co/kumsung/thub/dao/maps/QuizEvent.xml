@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<!-- Quiz 이벤트 -->
+<sqlMap namespace="QuizEvent">
+
+	<resultMap id="QuizEventID" class="kr.co.kumsung.thub.domain.QuizEvent">
+		<result column="user_id" property="user_id"/>
+		<result column="quiz_date" property="quiz_date" />
+		<result column="event_id" property="event_id" />
+	</resultMap>
+	
+	<!-- 이벤트 등록 여부 체크 -->
+	<select id="getRegCnt" resultClass="int">
+		<![CDATA[
+			SELECT
+				Count(1) as cnt
+			FROM quiz_rlt
+			WHERE 1 = 1
+		]]>
+		<isNotEmpty property="user_id" prepend="AND">
+				user_id = #user_id#
+		</isNotEmpty>
+		<isNotEmpty property="quiz_date" prepend="AND">
+				quiz_date = #quiz_date#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 이벤트 종료일 반환 -->
+	<select id="getEnddate" resultClass="String">
+		<![CDATA[
+			SELECT
+				end_date
+			FROM th_event
+			WHERE 1 = 1
+		]]>
+		<isNotEmpty property="event_id" prepend="AND">
+				event_id = #event_id#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 이벤트 응모 등록 -->
+	<insert id="insertQuizEvent">
+		<![CDATA[
+		INSERT INTO quiz_rlt
+		(
+			user_id ,
+			quiz_date ,
+			reg_date
+		)
+		VALUES
+		(
+			#user_id# , 
+			#quiz_date# ,
+			NOW()
+		)
+		]]>
+	</insert>
+</sqlMap>

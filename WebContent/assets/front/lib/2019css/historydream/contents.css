@@ -1,0 +1,850 @@
+/* contents */
+
+/* sub header */
+
+.contents {
+    padding: 85px 0 0 0;
+}
+
+.contents .header {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    height: 85px;
+    padding: 20px 20px 15px 20px;
+    background: #fff;
+    border-bottom: 1px solid #fbfbfb;
+    text-align: center;
+    z-index: 3;
+}
+
+.contents.scroll .header {
+    position: fixed;
+    /*top: 0;*/
+ }
+
+ .contents.scroll {
+     /*padding: 0 0 0 0;*/
+ }
+
+.contents .header a.home {
+    display: block;
+    width: 213px;
+    height: 50px;
+    position: absolute;
+    top: 20px; left: 20px;
+    background: url(/assets/front/img/logo_sub.png) no-repeat center;
+    overflow: hidden;
+    text-indent: -1000px;
+    z-index: 2;
+}
+
+.contents .header .linkBox {
+    position: absolute;
+    top: 20px;
+    right: 100px;
+    width: 320px;
+    height: 50px;
+    border: 2px solid #1a1314;
+    box-sizing: border-box;
+    transition:all 0.3s;
+    overflow: hidden;
+    z-index: 1;
+    text-align: left;
+}
+
+.contents .header .linkBox a {
+    display: block;
+    width: 100%;
+    height: 46px;
+    line-height: 46px;
+    color: #1a1314;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    padding: 0 0 0 25px;
+    transition:all 0.3s;
+    position: relative;
+    z-index: 2;
+}
+
+.contents .header .linkBox a span.arrow {
+    position: absolute;
+    top: 0;
+    right: 9px;
+}
+
+.contents .header .linkBox:hover {
+    height: 298px;
+}
+
+.contents .header .linkBox:hover > a {
+    background: #fff;
+    color: #1a1314;
+    font-weight: 700;
+}
+
+.contents .header .linkBox:hover a span.arrow {
+    background-position: -50px -70px;
+}
+
+.contents .header .linkBox ul {
+    background: #1a1314;
+}
+
+.contents .header .linkBox ul li {
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+}
+
+.contents .header .linkBox ul li:last-child {
+    border-bottom: none;
+}
+
+
+.contents .header .linkBox ul li a {
+    display: block;
+    height: 49px;    
+    padding: 0 25px;
+    color: #fff;;
+}
+
+.contents .header .linkBox ul li a:hover {
+    background: #e34f07;
+}
+
+.contents .header .loginBox {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 66px;
+    height: 50px;
+    border: 2px solid #e74a05;
+    box-sizing: border-box;
+    z-index: 2;
+}
+ 
+.contents .header .loginBox a {
+    display: none;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    color: #e43d03;
+    font-size: 14px;
+    text-align: center;
+}
+
+.contents .header .loginBox.logOutBtn {
+    border: 1px solid #a2a2a2;
+}
+
+.contents .header .loginBox.logOutBtn a {
+    color: #8e8e8e;
+}
+
+.contents .header .loginBox a.on {
+    display: block;
+} 
+
+.contents .header .nav {
+    position: relative;
+    text-align: center;
+    font-size: 0;
+}
+
+.contents .header .nav li {
+    display: inline-block;
+    margin-right: calc(6.666VW - 1%);
+}
+
+.contents .header .nav li:last-child {
+    margin-right: 0;
+}
+
+.contents .header .nav li a {
+    display: block;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 23px; 
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    box-sizing: border-box;
+}
+
+.contents .header .nav li.on a {
+    color: #ea4e0c;
+    border-bottom: 3px solid #ea4e0c;
+}
+
+.contents .header .nav li:hover a {
+    color: #ea4e0c;
+}
+
+.subTitle {
+    padding: 106px 100px 0 100px;
+    background: url(/assets/front/img/subTitle_bar.png) no-repeat 0 109px #fff;
+    min-width: 1166px;
+}
+
+.subTitle.scroll {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 0 3px 6px rgba(0,0,0,0.12);
+    background-image: none;
+    
+}
+
+
+.subTitle .title {
+    padding: 0 0 50px 0;
+}
+
+.subTitle.scroll .title {
+    display: none;
+}
+
+.subTitle.sub2 .title {
+    padding: 0 0 40px 0;
+}
+
+.subTitle .title span {
+    display: block;
+    font-size: 21px;
+    color: #1a1314;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.subTitle .title strong {
+    display: inline-block;
+    font-size: 55px;
+    letter-spacing: -0.06em;
+    font-weight: 800;
+    margin-right: 26px;
+    vertical-align: bottom;
+}
+
+.subTitle .title p {
+    display: inline-block;
+    font-size: 18px;
+    line-height: 26px;
+    color: rgba(26,20,17,0.7);
+    vertical-align: bottom;
+}
+
+.subTitle .tab {
+    font-size: 0;
+    min-width: 1166px;
+}
+
+.subTitle .tab li {
+    display: inline-block;
+    width: calc(( 100% / 6) - 0.2px);
+    border-top: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    vertical-align: top;
+}
+
+.subTitle .tab li:first-child {
+    border-left: 1px solid #dddddd;
+}
+
+.subTitle .tab li a {
+    display: block;
+    width: 100%;
+    font-size: 1.0416vw;
+    line-height: 29px;
+    padding: 15px 0 15px 1.5625vw;
+    color: rgba(26,19,20,0.7);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    position: relative;
+    word-break: keep-all;
+}
+
+.subTitle.sub2 .tab li a {
+    display: block;
+    width: 100%;
+    font-size: 1.0416vw;
+    line-height: 29px;
+    padding: 20px 0 20px 1.5625vw;
+    color: rgba(26,19,20,0.7);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    position: relative;
+    word-break: keep-all;
+}
+
+.subTitle.sub2 .tab li a.multiLine {
+    line-height: 20px;
+    padding: 15px 0 15px 1.5625vw;
+}
+.subTitle.sub2 .tab li a.multiLine span.wdate {
+    line-height: 19px;
+    display: block;
+    font-size: 0.78125vw;
+	font-family: 'NotoSans', sans-serif;
+	font-weight: 400;
+}
+
+.tabArrow {
+    display: block;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    background: url(/assets/front/img/main_img.png) no-repeat;
+    background-position: -140px 0;
+    position: absolute;
+    top: 6px;
+    right: 0;
+}
+
+.subTitle .tab li.on {
+    border-top: 1px solid #1a1314;
+    border-right: 1px solid #1a1314;
+    background: #1a1314;
+}
+
+.subTitle .tab li:first-child.on {
+    border-left: 1px solid #1a1314;
+}
+
+.subTitle .tab li.on a {
+    color: #c8a47d;
+}
+
+.subTitle .tab li.on a .tabArrow {
+    background-position: -190px 0;
+}
+
+.contentsBox { 
+    padding: 66px 100px 50px 100px;
+}
+
+.contentsBox.scroll,
+.contentsBox.sub3.scroll { 
+    margin-top: 308px;
+}
+
+
+.contentsBox .contentHeader {
+    color: #fff;
+    position: relative;
+}
+
+.contentsBox .contentHeader .title {
+    padding: 0 0 22px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 36px;    
+}
+.contentsBox .contentHeader .title strong {
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    display: block;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #fff;
+}
+
+.contentsBox .contentHeader .title strong span {
+    font-weight: 400;
+}
+
+.contentsBox .contentHeader .title p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.8);
+    line-height: 25px;
+    max-width: 58.333333333333336vw;
+    word-break: keep-all;
+}
+
+.contentsBox .contentHeader .indicater {
+    position: absolute;
+    bottom: 0; 
+    right: 0;
+    width: 320px;
+} 
+
+.contentsBox .contentHeader .currentNum {
+    color: #f35d1e;
+    font-size: 34px;
+    line-height: 30px;
+    font-weight: 800;
+    letter-spacing: 0.04em;;
+    position: absolute;
+    bottom: 34px;
+    right: 288px;
+    width: 50px;
+    text-align: right;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+}
+
+.contentsBox .contentHeader .totalNum {
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    position: absolute;
+    bottom: 44px;
+    left: 40px;
+    width: 50px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+}
+
+.contentsBox .contentHeader .indicater .processBar {
+    position: absolute;
+    bottom: 34px; 
+    right: 98px;
+    width: 184px;
+    height: 1px;
+    background: rgba(241,243,241,0.3)
+} 
+
+.contentsBox .contentHeader .indicater .processBar .process {
+    display: block;
+    width: 16.666%;
+    height: 1px;
+    background: #f35d1e
+} 
+
+.contentsBox .contentHeader .indicater .processBar .process.sub1_2 {
+    width: 33.333%;
+} 
+
+.contentsBox .contentHeader .indicater .processBar .process.sub1_3 {
+    width: 50%;
+} 
+
+.contentsBox .contentHeader .indicater .processBar .process.sub1_4 {
+    width: 66.666%;
+} 
+
+.contentsBox .contentHeader .indicater .processBar .process.sub1_5 {
+    width: 83.333%;
+} 
+
+.contentsBox .contentHeader .indicater .processBar .process.sub1_6 {
+    width: 100%;
+} 
+
+
+.contentsBox .contentHeader .indicater a {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    border: 2px solid rgba(255,255,255,0.2);
+    overflow: hidden;
+    text-indent: -1000px;
+    position: absolute;
+    bottom: 15px;
+    transition:all 0.3s;
+}
+
+.contentsBox .contentHeader .indicater .prevBtn {
+    right: 48px;
+    background: url(/assets/front/img/indi_prev.png) no-repeat center;
+}
+
+.contentsBox .contentHeader .indicater .nextBtn {
+    right: 0;
+    background: url(/assets/front/img/indi_next.png) no-repeat center;
+}
+
+.contentsBox .contentHeader .indicater a.prevBtn:hover {
+    border: 4px solid #f35d1e;
+    background: url(/assets/front/img/indi_prev_on.png) no-repeat center;
+}
+
+.contentsBox .contentHeader .indicater a.nextBtn:hover {
+    border: 4px solid #f35d1e;
+    background: url(/assets/front/img/indi_next_on.png) no-repeat center;
+}
+
+.contentsBox.sub1 {
+    background: url(/assets/front/img/sub_bg_01.jpg) no-repeat center top;
+    background-attachment: fixed;
+    background-color: #1c1413;
+}
+
+.contentsBox.sub2 {
+    background: url(/assets/front/img/sub_bg_02.jpg) no-repeat center top;
+    background-attachment: fixed;
+    background-color: #1c1413;
+}
+
+.contentsBox.sub3 {
+    background: url(/assets/front/img/sub_bg_02.jpg) no-repeat center top;
+    background-attachment: fixed;
+    background-color: #1c1413;
+}
+
+.contentsBox ul {
+    position: relative;
+    font-size: 0;
+}
+
+.contentsBox ul li {
+    display: inline-block;
+    width: calc((100% - 104px) / 5);
+    margin-right: 26px;
+    margin-bottom: 26px;
+    vertical-align: top;
+}
+
+.contentsBox ul li:nth-child(5n) {
+    margin-right: 0;
+}
+
+.contentsBox ul li .thumbNail {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.contentsBox ul li a {
+    display: block;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.contentsBox ul li .screen {
+    width: 100%;
+    height: 160px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transition:all 0.3s;
+    border-top: 5px solid rgba(243,93,30,0);
+    border-left: 5px solid rgba(243,93,30,0);
+    border-right: 5px solid rgba(243,93,30,0);    
+}
+
+.contentsBox ul li:hover .screen{
+    border-top: 5px solid rgba(243,93,30,1);
+    border-left: 5px solid rgba(243,93,30,1);
+    border-right: 5px solid rgba(243,93,30,1);
+}
+
+.contentsBox ul li .thumbNail img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin: 0 0 0 -160px;
+}
+
+.contentsBox ul li:hover .thumbNail {
+    background: rgba(26,19,20,0.7);
+}
+
+.contentsBox ul li:hover .thumbNail img {
+    opacity: 0.7;
+}
+
+.contentsBox ul li .thumbNail .ico {
+    display: block;
+    width: 48px; height: 48px;
+    border: 2px solid #fff;
+    border-radius: 50px;
+    background: rgba(0,0,0,0.4);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -25px;
+    z-index: 1;
+    background: url(/assets/front/img/thumbArrow.png) no-repeat center;
+    transition:all 0.3s;
+}
+
+.contentsBox ul li:hover .thumbNail .ico {
+    border: 6px solid #f35d1e;
+    background: url(/assets/front/img/thumbArrow_on.png) no-repeat center;
+}
+
+.contentsBox ul li .textBox {
+    padding: 20px;
+    min-height: 110px;
+    box-sizing: border-box;
+    background: #fff;  
+    color: #878586;
+    font-size: 16px;
+    letter-spacing: -0.04em;
+    line-height: 17.4px;  
+    word-break: keep-all;
+    transition:all 0.3s;
+}
+
+.contentsBox ul li:hover .textBox {
+    background: #f35d1e;  
+    color: rgba(255,255,255,0.8);
+}
+
+.contentsBox ul li .textBox strong {
+    font-size: 20px;
+    line-height: 25px;
+    color: #1a1314;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+    transition:all 0.3s;
+}
+
+.contentsBox ul li:hover .textBox strong {
+    color: #fff;
+}
+
+.contentsBox ul li .textBox span {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.contentsBox.sub3 {
+    padding-top: 60px;
+    /*height: 710px;*/
+    position: relative;
+}
+
+.contentsBox.sub3 .contentHeader {
+    font-size: 0;
+}
+
+.contentsBox.sub3 .contentHeader .title {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contentsBox.sub3 .contentHeader .title .topText {
+    float: left;
+}
+
+.contentsBox.sub3 .contentHeader .title .lineBox {
+    float: right;
+    height: 58px;
+    border-bottom: 1px solid rgba(255,255,255,0.25)
+}
+
+.contentsBox.sub3 .contentHeader .title .lineBox.type1 {
+    width: calc(100% - 464px);
+}
+
+.contentsBox.sub3 .contentHeader .title .lineBox.type2 {
+    width: calc(100% - 346px);
+}
+
+.contentsBox.sub3 .contentHeader .title .lineBox.type3 {
+    width: calc(100% - 451px);
+}
+
+.contentsBox.sub3 .contentHeader .title .lineBox.type4 {
+    width: calc(100% - 346px);
+}
+
+.contentsBox.sub3 .contentHeader .title .lineBox.type5 {
+    width: calc(100% - 411px);
+}
+
+.contentsBox.sub3 .contentHeader .title .topText {
+    font-size: 60px;
+    color: #fff;
+    line-height: 65px;
+    letter-spacing: -0.04em;
+    padding: 0 20px 0 0;
+}
+
+.contentsBox.sub3 .contentHeader .title strong {
+    clear: both;
+    font-size: 90px; 
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 20px;
+}
+
+.contentsBox.sub3 .contentHeader .title p {
+    width: 32.29166666666667VW;
+    font-size: 21px; 
+    line-height: 37px;
+    letter-spacing: -0.02em;
+}
+
+.contentsBox.sub3 .contentHeader .title p.sub3_2 {
+    width: 27.604166666666668VW;
+}
+
+.contentsBox.sub3 .contentHeader .title p.sub3_3 {
+    width: 28.125VW;
+}
+
+.contentsBox.sub3 .contentHeader .title p.sub3_5 {
+    width: 33.85416666666667VW;
+}
+
+.contentsBox.sub3 .contentHeader .title p.sub3_6 {
+    width: 23.958333333333336VW;
+}
+
+.contentsBox.sub3 .contentHeader .indicater {
+    bottom: inherit;
+    top: 56px;
+}
+
+.contentsBox.sub3 .btns {
+    margin-top: 20px;
+}
+
+.contentsBox.sub3 .btns a {
+    display: block;
+    width: 23.4375vw;
+	min-width: 320px;
+    height: 60px;
+    border: 1px solid rgba(255,255,255,0.8);
+    text-align: center;
+    line-height: 60px;
+    font-size: 1.25vw;
+    letter-spacing: -0.04em;
+    font-weight: 700;
+    margin-top: 15px;
+    color: #fff;
+}
+
+.contentsBox.sub3 .btns a:hover {
+    color: #ea4e0c;
+    border: 1px solid rgba(255,255,255,1);
+    background: #fff;
+}
+
+.contentsBox.sub3:after {content:""; display:block; clear:both;}
+
+.contentsBox.sub3 .img {
+    position: relative;
+	float: right; 
+	margin-top: 45px;
+}
+
+.contentsBox.sub3 > .title {
+	position: absolute;
+	top: 124px; left: 100px;
+	color: #fff;
+}
+
+.contentsBox.sub3 > .title strong {
+    display: block;
+    font-size: 4.6875vw; 
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 20px;
+}
+
+.contentsBox.sub3 > .title p {
+    width: 28vw;
+    font-size: 1.09375VW; 
+    line-height: 1.9270833333333335;
+    letter-spacing: -0.02em;
+	word-break: keep-all;
+}
+
+
+.contentsBox.sub3 .img img {
+    display: block;
+    width: 46.875vw;
+	max-width: 900px;
+}
+
+.contentsBox.sub3 .img.sub3_2 img {
+    display: block;
+    width: 57.291666666666664vw;
+	max-width: 1100px;
+}
+
+.contentsBox.sub3 .img.sub3_3 img {
+    display: block;
+    width: 57.291666666666664vw;
+	max-width: 1100px;
+}
+
+.contentsBox.sub3 .img.sub3_5 img {
+    display: block;
+    width: 46.875vw;
+	max-width: 900px;
+}
+.contentsBox.sub3 .img.sub3_6 img {
+    display: block;
+    width: 57.291666666666664vw;
+	max-width: 1100px;
+}
+
+
+@media screen and ( max-width: 1366px ) {
+
+    .contentsBox ul li .textBox {
+        min-height: 136px;
+    }
+
+    .subTitle .tab li a {
+        font-size: 14px;
+        padding: 15px 0 15px 20px;
+    }
+
+    .contents .header .nav li {
+        margin-right: 78px;
+    }
+
+    .contentsBox.sub3 .img img {
+        display: block;
+        width: 640px;
+    }
+    
+    .contentsBox.sub3 .img.sub3_2 img {
+        display: block;
+        width: 783px;
+    }
+    
+    .contentsBox.sub3 .img.sub3_3 img {
+        display: block;
+        width: 783px;
+    }
+    
+    .contentsBox.sub3 .img.sub3_5 img {
+        display: block;
+        width: 640px;
+    }
+    .contentsBox.sub3 .img.sub3_6 img {
+        display: block;
+        width: 783px;
+    }
+
+	.contentsBox.sub3 .btns a {
+
+		font-size: 17px;
+
+	}
+
+	.contentsBox.sub3 > .title strong {
+		font-size: 64px;
+	}
+	.contentsBox.sub3 > .title p {
+		width: 382px;
+		font-size: 15px;
+		line-height: 28px;
+	}
+
+}
+
+
+.console { position: fixed;
+    top: 0; 
+    right: 0;
+    color: #fff;
+    background: #ff0000;
+    padding: 10px;
+    font-size: 14px;
+    z-index: 100;
+    text-align: right;
+}

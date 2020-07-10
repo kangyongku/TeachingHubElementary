@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Event">
+	<!-- 이벤트 관리 리스트 Mapper -->
+	<resultMap id="EventList" class="kr.co.kumsung.thub.domain.Event">
+		<result column="event_id" property="eventId" />
+		<result column="title" property="title" />
+		<result column="summary_contents" property="summaryContents" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="file_name" property="fileName" />
+		<result column="banner_img" property="bannerImg" />
+		<result column="contents" property="contents" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="modify_id" property="modifyId" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="hits" property="hits" />
+		<result column="eventCnt" property="eventCnt" />
+		<result column="win_id" property="winId" />
+		<result column="progress" property="progress" />
+		<result column="use_comment" property="useComment" />
+		<result column="use_reply" property="useReply" />
+		<result column="viewCnt" property="viewCnt" />
+	</resultMap>
+	
+	<!-- 이벤트 관리 상세  Mapper -->
+	<resultMap id="eventMap" class="kr.co.kumsung.thub.domain.Event">
+		<result column="title" property="title"/>
+		<result column="summary_contents" property="summaryContents"/>
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="file_name" property="fileName" />
+		<result column="banner_img" property="bannerImg" />
+		<result column="contents" property="contents" />
+		<result column="modify_id" property="modifyId" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="eventCnt" property="eventCnt" />
+		<result column="win_id" property="winId" />
+		<result column="use_comment" property="useComment" />
+		<result column="use_reply" property="useReply" />
+	</resultMap>
+	
+	<!-- 이벤트 당첨자 리스트 Mapper -->
+	<resultMap id="EventWinList" class="kr.co.kumsung.thub.domain.EventWin">
+		<result column="win_id" property="winId" />
+		<result column="event_id" property="eventId" />
+		<result column="title" property="title" />
+		<result column="contents" property="contents" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="modify_id" property="modifyId" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="hits" property="hits" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+	</resultMap>
+	
+	<!-- 등록된 이벤트 리스트 Mapper -->
+	<resultMap id="EventSelectList" class="kr.co.kumsung.thub.domain.Event">
+		<result column="event_id" property="eventId" />
+		<result column="title" property="title" />
+	</resultMap>
+	
+	<!-- 이벤트 당첨자 상세보기 Mapper -->
+	<resultMap id="EventWinMap" class="kr.co.kumsung.thub.domain.EventWin">
+		<result column="win_id" property="winId" />
+		<result column="event_id" property="eventId" />
+		<result column="title" property="title" />
+		<result column="contents" property="contents" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+	</resultMap>
+	
+	<!-- 등록된 이벤트 리스트 Mapper -->
+	<resultMap id="EventDupMap" class="kr.co.kumsung.thub.domain.EventWin">
+		<result column="win_id" property="winId" />
+		<result column="eventCnt" property="eventCnt" />
+	</resultMap>
+	
+		<!-- Comment Map -->
+	<resultMap id="CommentMap" class="kr.co.kumsung.thub.domain.Comment">
+		<result column="comment_id" property="commentId" />
+		<result column="board_id" property="boardId" />
+		<result column="article_id" property="articleId" />
+		<result column="group_id" property="groupId" />
+		<result column="depth" property="depth" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" nullValue="탈퇴회원"/>
+		<result column="comment" property="comment" />
+		<result column="reg_date" property="regDate" />
+		<result column="remote_ip" property="remoteIp" />
+		<result column="is_del" property="isDel" />
+		<result column="event_id" property="eventId" />
+	</resultMap>
+	
+	<cacheModel id="article-cache" type="LRU">
+		<flushInterval minutes="3"/> 
+		<flushOnExecute statement="Board.insertArticle"/>
+		<flushOnExecute statement="Board.updateArticle"/>
+		<flushOnExecute statement="Board.deleteArticle"/>
+		<flushOnExecute statement="Board.updateArticleHits"/>
+		<flushOnExecute statement="Board.insertRecommendLog"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<!-- 이벤트 리스트 -->
+	<select id="getEventList" resultMap="EventList">
+	<![CDATA[
+	SELECT
+		event_id,
+		title,
+		summary_contents,
+		start_date,
+		end_date,
+		file_name,
+		banner_img,
+		contents,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date,
+		hits,
+		(SELECT count(event_id) FROM th_event_win WHERE event_id = A.event_id) AS eventCnt,
+		coalesce((SELECT win_id FROM th_event_win WHERE event_id = A.event_id),0) AS win_id,
+		if( cast(end_date as datetime) >= date_format(NOW(), '%Y-%m-%d'),"Y","N" )as progress,
+		use_comment,
+		use_reply,
+		(SELECT count(event_id) FROM th_board_comment WHERE event_id = A.event_id) AS viewCnt
+	FROM
+		th_event A
+	WHERE
+		1=1
+		AND use_view = 'Y'	
+	]]>
+		<isNotEmpty property="findStartDate" prepend="AND">
+		(
+		date_format(start_date, '%Y-%m-%d') <![CDATA[>=]]> #findStartDate#
+		AND
+		date_format(end_date, '%Y-%m-%d') <![CDATA[<=]]> #findEndDate#
+		)
+		</isNotEmpty>
+		<isNotEmpty property="findStatusDate" prepend="AND">
+			<isEqual property="findStatusDate" compareValue="Y">
+				cast(end_date as datetime) <![CDATA[>=]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+			<isEqual property="findStatusDate" compareValue="N">
+				cast(end_date as datetime) <![CDATA[<]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				modify_id LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+	ORDER BY
+		reg_date desc
+	LIMIT #skip# , #pageSize#
+	</select>
+
+	<!-- 이벤트 리스트 개수 -->
+	<select id="getEventTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1) as cnt
+	FROM
+		th_event
+	WHERE
+		1=1
+	]]>
+		<isNotEmpty property="findStartDate" prepend="AND">
+		(
+		date_format(start_date, '%Y-%m-%d') <![CDATA[>=]]> #findStartDate#
+		AND
+		date_format(end_date, '%Y-%m-%d') <![CDATA[<=]]> #findEndDate#
+		)
+		</isNotEmpty>
+		<isNotEmpty property="findStatusDate" prepend="AND">
+			<isEqual property="findStatusDate" compareValue="Y">
+				cast(end_date as datetime) <![CDATA[>=]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+			<isEqual property="findStatusDate" compareValue="N">
+				cast(end_date as datetime) <![CDATA[<]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				modify_id LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+	</select>
+	
+	<!-- 이벤트 상세보기 -->
+	<select id="getEventDetail" resultMap="eventMap">
+	<![CDATA[
+	SELECT
+		A.title,
+		A.summary_contents,
+		A.start_date,
+		A.end_date,
+		A.file_name,
+		A.banner_img,
+		A.contents,
+		A.modify_id,
+		A.modify_date,
+		(SELECT count(event_id) FROM th_event_win WHERE event_id = A.event_id) AS eventCnt,
+		coalesce((SELECT win_id FROM th_event_win WHERE event_id = A.event_id),0) AS win_id,
+		use_comment,
+		use_reply
+	FROM
+		th_event A
+	WHERE
+		event_id = #eventId#
+	]]>
+	</select>
+	
+	<!-- 이벤트 등록 -->
+	<insert id="insertEvent">
+	<![CDATA[
+	INSERT INTO th_event
+	(
+		title,
+		summary_contents,
+		start_date,
+		end_date,
+		file_name,
+		banner_img,
+		contents,
+		use_comment,
+		use_reply,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date
+	)
+	VALUES
+	(
+		#title#,
+		#summaryContents#,
+		#startDate#,
+		#endDate#,
+		#fileName#,
+		#bannerImg#,
+		#contents#,
+		#useComment#,
+		#useReply#,
+		#regId#,
+		NOW(),
+		#modifyId#,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 이벤트 수정 -->
+	<update id="updateEvent">
+	<![CDATA[
+	UPDATE
+		th_event
+	SET
+		title = #title#,
+		summary_contents = #summaryContents#,
+		start_date = #startDate#,
+		end_date = #endDate#,
+		file_name = #fileName#,
+		banner_img = #bannerImg#,
+		contents = #contents#,
+		use_comment = #useComment#,
+		use_reply = #useReply#,
+		reg_id = #regId#,
+		modify_id = #modifyId#,
+		modify_date = NOW()
+	WHERE
+		event_id = #eventId#
+	]]>
+	</update>
+	
+	<!-- 이벤트 삭제 -->
+	<delete id="deleteEvent">
+	<![CDATA[
+	DELETE FROM
+		th_event
+	WHERE
+		event_id = #eventId#
+	]]>
+	</delete>
+	
+	<!-- 등록된 이벤트 배너 이미지 가져오기 -->
+	<select id="getEventDetailBanner" resultClass="String">
+	<![CDATA[
+	SELECT
+		banner_img
+	FROM
+		th_event
+	WHERE
+		event_id = #eventId#
+	]]>
+	</select>
+	
+	<!-- 이벤트 당첨자 리스트 -->
+	<select id="getEventWinList" resultMap="EventWinList">
+		<![CDATA[
+			SELECT  A.win_id
+                  , A.event_id
+                  , A.title
+                  , A.contents
+                  , A.reg_id
+                  , date_format(A.reg_date, '%Y-%m-%d') as reg_date
+                  , A.modify_id
+                  , A.modify_date
+                  , A.hits
+                  , date_format(B.start_date, '%Y-%m-%d') as start_date
+                  , date_format(B.end_date, '%Y-%m-%d') as end_date
+			FROM  th_event_win A
+				, th_event B
+			WHERE A.event_id = B.event_id
+		]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				A.title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				A.modify_id LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+		ORDER BY A.reg_date desc
+		LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 이벤트 당첨자 리스트 개수-->
+	<select id="getEventWinTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(0) as cnt
+	FROM
+		th_event_win
+	WHERE
+		1=1
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="ft">
+			title LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			modify_id LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	</select>
+	
+	<!-- 입력된 이벤트 리스트 가져오기 -->
+	<select id="getEventSelectList" resultMap="EventSelectList">
+	<![CDATA[
+	SELECT
+		title,
+		event_id
+	FROM
+		th_event
+	ORDER BY
+		reg_date desc	
+	]]>		
+	</select>
+	
+	<!-- 이벤트 당첨자 상세 보기 -->
+	<select id="getEventWinDetail" resultMap="EventWinMap">
+	<![CDATA[
+	SELECT
+		A.win_id,
+		A.event_id,
+		A.title,
+		A.contents,
+		date_format(B.start_date, '%Y-%m-%d') as start_date,
+		date_format(B.end_date, '%Y-%m-%d') as end_date
+	FROM
+		th_event_win A,
+		th_event B
+	WHERE
+		A.event_id = B.event_id
+	AND
+		A.win_id = #winId#
+	]]>
+	</select>
+		
+	<!-- 이벤트 당첨자 입력시 이벤트 중복 체크 -->
+	<select id="getEventWinDup" resultMap="EventDupMap">
+	<![CDATA[
+	SELECT
+		count(1) as eventCnt,
+		COALESCE(win_id,0) as win_id
+	FROM
+		th_event_win
+	WHERE
+		event_id = #eventId#
+	]]>
+	</select>
+	
+	<!-- 이벤트 당첨자 등록 -->
+	<insert id="insertEventWin">
+	<![CDATA[
+	INSERT INTO th_event_win
+	(
+		event_id,
+		title,
+		contents,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date
+	)
+	VALUES
+	(
+		#eventId#,
+		#title#,
+		#contents#,
+		#regId#,
+		NOW(),
+		#modifyId#,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 이벤트 당첨자 수정 -->
+	<update id="updateEventWin">
+	<![CDATA[
+	UPDATE
+		th_event_win
+	SET
+		event_id = #eventId#,
+		title = #title#,
+		contents = #contents#,
+		reg_id = #regId#,
+		modify_id = #modifyId#,
+		modify_date = NOW()
+	WHERE
+		win_id = #winId#
+	]]>
+	</update>
+	
+	<!-- 이벤트 당첨자 삭제 -->
+	<delete id="deleteEventWin">
+	<![CDATA[
+	DELETE FROM
+		th_event_win
+	WHERE
+		win_id = #winId#
+	]]>
+	</delete>
+
+	<!-- 티칭허브 낱말 맞추기 이벤트 -->
+	<select id="getEvent01MyFlags" resultClass="kr.co.kumsung.thub.util.ResultMap">
+	SELECT * FROM th_event01 WHERE user_id = #userId#
+	</select>
+	
+	<insert id="insertEvent01MyFlag">
+	<![CDATA[
+	INSERT INTO th_event01
+	(
+		user_id ,
+		flag ,
+		reg_date
+	)
+	VALUES
+	(
+		#userId# ,
+		#flag# ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 게시글의 리스트를 가지고 온다. -->
+	<select id="getArticle" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+      	A.*,
+      	(SELECT name FROM Member WHERE userid = A.user_id) as user_name
+	FROM th_board_comment A
+	WHERE event_id = #eventId#
+	]]>
+	</select>
+	<!-- 댓글의 그룹 아이디를 가지고 온다. -->
+	<select id="getCommentGroupId" resultClass="int">
+	<![CDATA[
+	SELECT
+			IFNULL(MAX(group_id) + 1 , 1)
+		FROM th_board_comment
+		WHERE board_id = #boardId#
+	]]>
+	</select>
+	
+	
+	<!-- 댓글갯수 가져옴. -->
+	<select id="getComment" resultClass="int">
+	<![CDATA[
+		SELECT
+			 count(*) as cnt  
+		FROM th_board_comment A
+		WHERE event_id = #eventId#
+	]]>
+	</select>
+	<!-- 댓글을 가지고 온다. -->
+	<select id="getComment1" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			 A.* , 
+			 (SELECT name FROM Member WHERE userid = A.user_id) as user_name 
+		FROM th_board_comment A
+		WHERE event_id = #commentId#
+	]]>
+	</select>
+	
+	<!-- 댓글을 리스트업 한다. -->
+	<select id="getCommentList" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			A.* , 
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name
+		FROM th_board_comment A
+		WHERE board_id = '41'
+			AND article_id = '999'
+			AND event_id = #eventId#
+			ORDER BY group_id DESC , depth ASC , comment_id ASC, reg_date DESC
+		
+	]]>
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 댓글의 자식 노드가 있는지 체크한다. -->
+	<select id="getIsChildeNode" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_board_comment
+		WHERE group_id = (SELECT group_id FROM th_board_comment WHERE comment_id = #commentId#)
+			AND depth = '2'
+	]]>
+	</select>
+	
+	<!-- 현재 노드의 삭제처리를 한다. -->
+	<update id="updateCommentToDelete">
+	<![CDATA[
+	UPDATE th_board_comment
+		SET is_del = 'Y'
+		WHERE comment_id = #commentId#
+	]]>
+	</update>
+	
+	<!-- 댓글을 입력한다. -->
+	<insert id="insertComment">
+	<![CDATA[
+	INSERT INTO th_board_comment
+	(
+		board_id ,
+		article_id ,
+		group_id ,
+		depth ,
+		user_id ,
+		comment ,
+		reg_date ,
+		remote_ip,
+		event_id
+	)
+	VALUES
+	(
+		#boardId# ,
+		#articleId# ,
+		#groupId# ,
+		#depth# ,
+		#userId# ,
+		#comment# ,
+		NOW() ,
+		#remoteIp#,
+		#eventId#
+	)
+	]]>
+	
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 댓글을 삭제한다 -->
+	<delete id="deleteComment">
+	<![CDATA[
+	DELETE FROM th_board_comment
+		WHERE comment_id = #commentId#
+	]]>
+	</delete>
+	
+	<!-- 게시판의 댓글 리스트 카운트를 가지고 온다. -->
+	<select id="getTotalCommentListCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_board_comment
+		WHERE is_del = 'N'
+		AND board_id = '41'
+	]]>
+	</select>
+	
+	<!-- 게시판의 댓글 리스트를 가지고 온다. -->
+	<select id="getTotalCommentList" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			A.* , 
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name
+		FROM th_board_comment A
+		WHERE is_del = 'N'
+		AND board_id = '41'
+	]]>
+		
+	<![CDATA[ 
+		ORDER BY comment_id DESC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 이벤트 조회수 증가 -->
+	<update id="updateEventHits">
+		<![CDATA[
+			UPDATE th_event
+			   SET hits = hits + 1
+			 WHERE event_id = #eventId#
+		]]>
+	</update>
+
+	<!-- 이벤트 조회수 증가 -->
+	<update id="updateEventWinHits">
+		<![CDATA[
+			UPDATE th_event_win
+			   SET hits = hits + 1
+			 WHERE win_id = #winId#
+		]]>
+	</update>
+</sqlMap>

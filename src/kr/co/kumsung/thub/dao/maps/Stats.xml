@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Stats">
+	
+	<typeAlias alias="resultMap" type="kr.co.kumsung.thub.util.ResultMap"/>
+	
+	<!-- 전체 회원 통계 -->
+	<select id="getTotalMemberStat" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM Member A
+		WHERE teacher = 'Y'
+			AND visitreason IS NOT NULL
+	]]>
+	</select>
+	
+	<!-- 회원 통계 -->
+	<select id="getMemberStat" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			(SELECT CODENAME FROM COMMONCODE WHERE CATEGORY = 'VSR' AND CODE = A.visitreason) AS reason ,
+			COUNT(1) AS cnt
+		FROM Member A
+		WHERE teacher = 'Y'
+			AND visitreason IS NOT NULL
+	]]>
+		<isNotEmpty property="findAuthType" prepend="AND">
+			<isEqual property="findAuthType" compareValue="N">
+			auth_type = 'N'
+			</isEqual>
+			<isNotEqual property="findAuthType" compareValue="N">
+			auth_type IN ('Y' , 'D')
+			</isNotEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+				writedate BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY visitreason
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 탈퇴 회원 수 -->
+	<select id="getTotalMemberSeceder" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM	Member a, MemberSeceder b
+		WHERE	b.member_id= a.id
+          and   a.teacher = 'Y'
+	]]>
+		<isNotEmpty property="findAuthType" prepend="AND">
+			<isEqual property="findAuthType" compareValue="N">
+			a.auth_type = 'N'
+			</isEqual>
+			<isNotEqual property="findAuthType" compareValue="N">
+			a.auth_type IN ('Y' , 'D')
+			</isNotEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+				b.writedate BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+       ORDER	BY b.WRITEDATE DESC
+	]]>	
+	</select>
+	
+	<!-- 탈퇴 통계 -->
+	<select id="getMemberSeceder" resultClass="resultMap">
+	<![CDATA[
+  		SELECT 	
+				b.reason AS reason ,
+			COUNT(1) AS cnt					
+		FROM	Member a, MemberSeceder b
+		WHERE	b.member_id= a.id
+          and   a.teacher = 'Y'
+
+	]]>
+		<isNotEmpty property="findAuthType" prepend="AND">
+			<isEqual property="findAuthType" compareValue="N">
+			a.auth_type = 'N'
+			</isEqual>
+			<isNotEqual property="findAuthType" compareValue="N">
+			a.auth_type IN ('Y' , 'D')
+			</isNotEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+				b.writedate BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+	   GROUP BY b.reason
+       ORDER	BY b.WRITEDATE DESC
+	]]>
+	</select>
+	
+	
+	
+		
+	<!-- 티칭허브 컨텐츠 / 교수학습자료의 전체 갯수를 가지고 온다. -->
+	<select id="getTotalHubContentStat" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM th_learning_data A
+		WHERE LENGTH(data_type) > 4
+	]]>
+	</select>
+	
+	<!-- 티칭허브 컨텐츠 / 교수학습자료의 통계를 가지고 온다. -->
+	<select id="getHubContentStat" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			(SELECT name FROM th_category WHERE category = SUBSTRING(A.data_type , 1 , 7)) AS name ,
+			COUNT(1) AS cnt
+		FROM th_learning_data A
+		WHERE data_type LIKE CONCAT(#findType# , '%')
+			AND LENGTH(data_type) > 4
+	]]>
+		<isNotEmpty property="findCategory" prepend="AND">
+			category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findBookId" prepend="AND">
+			book_id = #findBookId#
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY SUBSTRING(data_type , 1 , 7)
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 티칭허브 컨텐츠 / 통합게시판 카운트 -->
+	<select id="getTotalHubArticleStat" resultClass="int">
+	<![CDATA[
+	SElECT
+			COUNT(1) 
+		FROM th_board_master A
+	]]>
+	</select>
+	
+	<!-- 티칭허브 컨텐츠 / 통합게시판 -->
+	<select id="getHubArticleStat" resultClass="resultMap">
+	<![CDATA[
+	SELECT
+			(SELECT board_name FROM th_board_config WHERE board_id = A.board_id) AS board_name ,
+	 		COUNT(1) AS cnt
+		FROM th_board_master A
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate">
+			WHERE SUBSTRING(reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY board_id
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 티칭허브 컨텐츠 / 통합게시판 카운트 -->
+	<select id="getTotalHubScrapStat" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM th_scrap A
+	]]>
+	</select>
+	
+	<!-- 티칭허브 컨텐츠 / 통합게시판 -->
+	<select id="getHubScrapStat" resultClass="resultMap">
+	<![CDATA[
+	SELECT
+				TMP.title ,
+				COUNT(1) AS cnt
+		FROM
+		( 
+			SELECT
+					A.scrap_id ,
+					A.reg_date ,
+					A.user_id ,
+					A.scrap_type ,
+					A.relation_id ,
+					B.title							
+				FROM th_scrap A , th_learning_data B
+				WHERE A.scrap_type = 'DATA'
+					AND A.relation_id = B.data_id
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+				SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		UNION
+			SELECT
+					C.scrap_id ,
+					C.reg_date ,
+					C.user_id ,
+					C.scrap_type ,
+					C.relation_id ,
+					D.title
+				FROM th_scrap C , th_multimedia D
+				WHERE C.scrap_type = 'MULTIMEDIA'
+					AND C.relation_id = D.mm_id
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+				SUBSTRING(C.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		UNION
+			SELECT
+					E.scrap_id ,
+					E.reg_date ,
+					E.user_id ,
+					E.scrap_type ,
+					E.relation_id ,
+					F.subject AS SUBJECT
+				FROM th_scrap E , th_board_master F
+				WHERE E.scrap_type = 'ARTICLE'
+					AND E.relation_id = F.article_id
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+				SUBSTRING(E.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		UNION
+			SELECT
+					G.scrap_id ,
+					G.reg_date ,
+					G.user_id ,
+					G.scrap_type ,
+					G.relation_id ,
+					H.title AS SUBJECT 
+				FROM th_scrap G , th_smart_headword H
+				WHERE G.scrap_type = 'HEADWORD'
+					AND G.relation_id = H.headword_id
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+				SUBSTRING(G.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[		
+		) AS TMP
+		GROUP BY scrap_type , relation_id
+		ORDER BY cnt DESC
+		LIMIT 50
+	]]>
+	</select>
+	
+	<!-- 전체 백과 컨텐츠 -->
+	<select id="getTotalSmartStat" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1) 
+		FROM th_smart_headword
+	]]>
+	</select>
+	
+	<!-- 티칭백과 컨텐츠관리 -->
+	<select id="getSmartGradeStat" resultClass="resultMap">
+	<![CDATA[
+	SELECT
+			(SELECT NAME FROM th_category WHERE category = SUBSTRING(A.category , 1 , 4)) AS title ,
+			COUNT(1) AS cnt
+		FROM th_smart_headword A
+		WHERE 
+	]]>
+		<isEqual property="findFlag" compareValue="H">
+		flag = 'H'
+		</isEqual>
+		<isEqual property="findFlag" compareValue="P">
+		flag = 'P'
+		</isEqual>
+		<isEqual property="findFlag" compareValue="C">
+		(SELECT COUNT(1) FROM th_smart_history WHERE headword_id = A.headword_id) > 0
+		</isEqual>
+		<isEqual property="findFlag" compareValue="E">
+		exhibit != ''
+		</isEqual>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+			AND category != ''
+		GROUP BY SUBSTRING(category , 1 , 4)
+		ORDER BY SUBSTRING(category , 1 , 4) ASC
+	]]>
+	</select>
+	
+	<!-- 백과의 교과별 통계 -->
+	<select id="getSmartSubjectStat" resultClass="resultMap">
+	<![CDATA[
+	SELECT
+			get_category_path(category) AS title ,
+			COUNT(1) AS cnt
+		FROM th_smart_headword A
+		WHERE 
+	]]>
+		<isEqual property="findFlag" compareValue="H">
+		flag = 'H'
+		</isEqual>
+		<isEqual property="findFlag" compareValue="P">
+		flag = 'P'
+		</isEqual>
+		<isEqual property="findFlag" compareValue="C">
+		(SELECT COUNT(1) FROM th_smart_history WHERE headword_id = A.headword_id) > 0
+		</isEqual>
+		<isEqual property="findFlag" compareValue="E">
+		exhibit != ''
+		</isEqual>
+		<isNotEmpty property="findCategory" prepend="AND">
+			category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>		
+	<![CDATA[
+			AND category != ''
+		GROUP BY category
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 백과의 도서별 통계 -->
+	<select id="getSmartBookStat" resultClass="resultMap">
+	<![CDATA[
+	SELECT
+			CONCAT(category_path , ' > ' , book_name) AS title ,
+			TMP.cnt
+	FROM
+	(	
+	SELECT
+			get_category_path(category) AS category_path ,
+			(SELECT NAME FROM th_smart_book WHERE book_id = A.book_id) AS book_name , 
+			COUNT(1) as cnt
+		FROM th_smart_headword A
+		WHERE 1=1
+	]]>
+		<isNotEmpty property="findFlag" prepend="AND">
+			<isEqual property="findFlag" compareValue="H">
+			flag = 'H'
+			</isEqual>
+			<isEqual property="findFlag" compareValue="P">
+			flag = 'P'
+			</isEqual>
+			<isEqual property="findFlag" compareValue="C">
+			(SELECT COUNT(1) FROM th_smart_history WHERE headword_id = A.headword_id) > 0
+			</isEqual>
+			<isEqual property="findFlag" compareValue="E">
+			exhibit != ''
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>		
+	<![CDATA[
+			AND category != ''
+		GROUP BY book_id
+		ORDER BY cnt DESC
+	) as TMP
+	]]>
+	</select>
+	
+	<!-- CS관리 > 고객문의 -->
+	<select id="getTotalCsRequestList" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM th_customer A
+		WHERE board_category = 'C003001'
+			AND category != ''
+	]]>
+	</select>
+	
+	<!-- CS관리 > 고객문의 -->
+	<select id="getCsRequestList" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			(SELECT NAME FROM th_category WHERE category = A.category) AS title ,
+			COUNT(1) AS cnt
+		FROM th_customer A
+		WHERE board_category = 'C003001'
+			AND category != ''
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY category
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- CS관리 > 교과서 자료요청 -->
+	<select id="getTotalCsSubjectList" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM th_customer A
+		WHERE board_category = 'C003002'
+			AND category != ''
+	]]>
+	</select>
+	
+	<!-- CS관리 > 교과서 자료요청 리스트 -->
+	<select id="getCsSubjectList" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			get_category_path(category) AS title ,
+			COUNT(1) AS cnt
+		FROM th_customer A
+		WHERE board_category = 'C003002'
+			AND category != ''
+	]]>
+		<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY SUBSTRING(category , 1, 7)
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- CS관리 > 교과서 내용문의 -->
+	<select id="getTotalCsContentsList" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM th_customer A
+		WHERE board_category = 'C003003'
+			AND category != ''
+	]]>
+	</select>
+	
+	<!-- CS관리 > 교과서 자료요청 리스트 -->
+	<select id="getCsContentsList" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			get_category_path(category) AS title ,
+			COUNT(1) AS cnt
+		FROM th_customer A
+		WHERE board_category = 'C003003'
+			AND category != ''
+	]]>
+		<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY SUBSTRING(category , 1, 7)
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 총 회원 누적수를 구한다. -->
+	<select id="getTotalSettingList" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM Member
+		WHERE teacher = 'Y'
+			AND auth_type != 'N'
+	]]>
+	</select>
+	
+	<!-- 학교급설정 -->
+	<select id="getGradeSettingList" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			(SELECT NAME FROM th_category WHERE category = SUBSTRING(sub_category , 1 , 4)) AS title ,
+			COUNT(1) AS cnt
+		FROM Member
+		WHERE teacher = 'Y'
+			AND auth_type != 'N'
+		GROUP BY SUBSTRING(sub_category , 1 , 4)
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 교과설정 -->
+	<select id="getSubjectSettingList" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			get_category_path(sub_category) AS title ,
+			COUNT(1) AS cnt
+		FROM Member
+		WHERE teacher = 'Y'
+			AND auth_type != 'N'
+	]]>
+		<isNotEmpty property="findCategory" prepend="AND">
+		sub_category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY sub_category
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 교과설정 전체 카운트 -->
+	<select id="getTotalBookSettingList" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM th_my_books A , Member B
+		WHERE B.teacher = 'Y'
+			AND B.auth_type != 'N'
+			AND A.user_id = B.userid 
+	]]>
+	</select>
+	
+	<!-- 교과설정 -->
+	<select id="getBookSettingList" resultClass="resultMap">
+	<![CDATA[
+	SELECT 
+			(SELECT NAME FROM th_learning_book WHERE book_id = A.book_id) AS title ,
+			COUNT(1) AS cnt
+		FROM th_my_books A , Member B
+		WHERE B.teacher = 'Y'
+			AND B.auth_type != 'N'
+			AND A.user_id = B.userid
+	]]>
+		<isNotEmpty property="findCategory" prepend="AND">
+		B.sub_category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY A.book_id
+		ORDER BY cnt DESC
+	]]>
+	</select>
+	
+	<!-- 검색어 리스트 -->
+	<select id="getSearchWordList" resultClass="resultMap">
+	<![CDATA[
+	SELECT
+			search_word as title,
+			COUNT(1) AS cnt
+		FROM th_search_words
+		WHERE flag = #findFlag#
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY search_word
+		ORDER BY cnt DESC
+		LIMIT 50
+	]]>
+	</select>
+	
+	<!-- 저작도구 다운로드 현황 전체 갯수를 가지고 온다. -->
+	<select id="getTotalsdfdown" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM th_sdf_download
+	]]>
+	</select>
+	
+	<!-- 저작도구 기간조회 -->
+	<select id="getSearchDownList" resultClass="resultMap">
+	<![CDATA[
+	SELECT
+			date_format(down_date,'%Y년%m월%d일') as title,
+			COUNT(1) AS cnt
+		FROM th_sdf_download
+		WHERE
+	]]>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate">
+			down_date BETWEEN date_format(#findStartDate#,'%Y%m%d') AND date_format(#findEndDate#,'%Y%m%d')
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		GROUP BY date_format(down_date,'%Y년%m월%d일') 
+		ORDER BY cnt DESC
+		LIMIT 50
+	]]>
+	</select>
+	
+	<!-- 저작도구 기간조회1 -->
+	<select id="getSearchDownList1" resultClass="resultMap">
+	<![CDATA[
+	select concat(year, '년',month,'월') as title,
+       count(1) as cnt
+	from th_sdf_download
+	where 1=1
+	]]>
+	<isNotEqual property="category_1" compareValue="all"> 
+	  and year =#category_1#
+	</isNotEqual>
+	<isNotEqual property="category_2" compareValue="all"> 
+	  and month=#category_2#
+	</isNotEqual>
+	<![CDATA[
+	GROUP BY concat(year, '년',month,'월')
+	ORDER BY cnt DESC
+	]]>
+	</select>
+</sqlMap>

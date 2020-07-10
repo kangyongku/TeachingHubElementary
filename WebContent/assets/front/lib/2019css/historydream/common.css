@@ -1,0 +1,211 @@
+/* common */
+
+html, body {
+    margin: 0;
+    height: 100%;
+    font-family: 'NanumSquare', sans-serif;	
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body { min-width: 1366px; }
+
+a { cursor: pointer; }
+
+
+/* ico */
+span.arrow {
+    display: block;
+    width: 50px;
+    height: 50px;
+    background: url(../img/main_img.png);
+    background-position: 0 -70px;
+}
+
+.contents span.arrow {
+    width: 46px;
+    height: 46px;
+    background-position: -50px -70px;
+}
+
+.wrap { 
+    height: 100%; 
+    background: #150d08;
+}
+
+.header {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    min-width: 1366px;
+}
+
+.header a.home {
+    display: block;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 20px; left: 20px;
+    background: url(/assets/front/img/logo.png) no-repeat center;
+    overflow: hidden;
+    text-indent: -1000px;
+    z-index: 2;
+}
+
+.header .linkBox {
+    position: absolute;
+    top: 20px;
+    right: 100px;
+    width: 320px;
+    height: 50px;
+    border: 1px solid rgba(255,255,255,0.8);
+    box-sizing: border-box;
+    transition:all 0.3s;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.header .linkBox a {
+    display: block;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    color: #fff;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    padding: 0 0 0 25px;
+    transition:all 0.3s;
+    position: relative;
+    z-index: 2;
+}
+
+.header .linkBox a span.arrow {
+    position: absolute;
+    top: 0;
+    right: 9px;
+}
+
+.header .linkBox:hover {
+    height: 300px;
+}
+
+.header .linkBox:hover > a {
+    background: #fff;
+    color: #1a1314;
+    font-weight: 700;
+}
+
+.header .linkBox:hover a span.arrow {
+    background-position: -50px -70px;
+}
+
+.header .linkBox ul {
+    background: #1a1314;
+}
+
+.header .linkBox ul li {
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+}
+
+.header .linkBox ul li a {
+    display: block;
+    height: 49px;    
+    padding: 0 25px;
+}
+
+.header .linkBox ul li a:hover {
+    background: #e34f07;
+}
+
+.header .loginBox {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 66px;
+    height: 50px;
+    border: 1px solid rgba(255,255,255,0.4);
+    box-sizing: border-box;
+    z-index: 2;
+}
+ 
+.header .loginBox a {
+    display: none;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+}
+
+.header .loginBox a.on {
+    display: block;
+}
+
+.header .snsBox {
+    position: absolute;
+    top: 106px;
+    right: 30px;
+    width: 391px;
+    height: 20px;
+    transition:all 0.3s;
+}
+
+.header .snsBox.scroll {
+    top: 50px;
+    opacity: 0;
+}
+
+.header .snsBox span.follow {
+    display: block;
+    width: 298px;
+    height: 9px;
+    margin: 5px 0 0 0;
+    background: url(/assets/front/img/main_img.png) no-repeat;
+    background-position: 0 -120px;
+}
+
+.header .snsBox a {
+    display: block;
+    position: absolute;
+    top: 0;
+    background: url(/assets/front/img/main_img.png) no-repeat;
+    overflow: hidden;
+    text-indent: -1000px;
+}
+
+.header .snsBox a:nth-child(2) {
+    width: 11px;
+    height: 20px;
+    right: 55px;
+    background-position: -100px -70px;
+}
+
+.header .snsBox a:nth-child(3) {
+    width: 21px;
+    height: 20px;
+    right: 26px;
+    background-position: -174px -70px;
+}
+
+.header .snsBox a:nth-child(4) {
+    width: 19px;
+    height: 20px;
+    right: 0;
+    background-position: -147px -70px;
+}
+
+.header .snsBox a:nth-child(2):hover {
+    background-position: -100px -90px;
+}
+
+.header .snsBox a:nth-child(3):hover {
+    background-position: -174px -90px;
+}
+
+.header .snsBox a:nth-child(4):hover {
+    background-position: -147px -90px;
+}
+

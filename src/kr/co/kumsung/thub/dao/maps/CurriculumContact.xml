@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CurriculumContact">
+
+	<!-- 교과정보관리 리스트 Mapper -->
+	<resultMap id="CurriculumContactMapList" class="kr.co.kumsung.thub.domain.CurriculumContact">
+		<result column="curriculum_id" property="curriculumId" />
+		<result column="category" property="category" />
+		<result column="email" property="email" />
+		<result column="link_url" property="linkUrl" />
+		<result column="categoryName" property="categoryName" />
+		<result column="gradeName" property="gradeName" />
+		<result column="flag" property="flag" />
+	</resultMap>
+	
+	<!-- 교과정보관리 상세보기 Mapper -->
+	<resultMap id="CurriculumContactMap" class="kr.co.kumsung.thub.domain.CurriculumContact">
+		<result column="curriculum_id" property="curriculumId" />
+		<result column="category" property="category" />
+		<result column="email" property="email" />
+		<result column="link_url" property="linkUrl" />
+		<result column="flag" property="flag" />
+	</resultMap>
+
+	<!-- 교과정보관리 리스트  -->
+	<select id="getCurriculumContactList" resultMap="CurriculumContactMapList">
+	<![CDATA[
+	SELECT
+		curriculum_id,
+		category,
+		email,
+		link_url,
+		(select B.name from th_category B where B.category = substr(A.category,1,4))as gradeName,
+		(select B.name from th_category B where B.category = A.category)as categoryName ,
+		flag 
+	FROM
+		th_curriculum_contact A
+	WHERE
+		1=1
+	]]>	
+	<isNotEmpty property="findCategory" prepend="AND">
+		A.category LIKE CONCAT('%' , #findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findFlag" prepend="AND">
+		A.flag = #findFlag#
+	</isNotEmpty>
+	ORDER BY
+		category
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 교과정보관리  게시글 수 -->
+	<select id="getCurriculumContactTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(curriculum_id)as cnt		
+	FROM
+		th_curriculum_contact A
+	WHERE
+		1=1
+	]]>	
+	<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT('%' , #findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findFlag" prepend="AND">
+		A.flag = #findFlag#
+	</isNotEmpty>
+	</select>
+	
+	<!-- 교과정보관리 데이타 가지고 오기 -->
+	<select id="getCurriculumContactDetailFromCategory" resultMap="CurriculumContactMap">
+	<![CDATA[
+	SELECT
+		curriculum_id,
+		category,
+		email,
+		link_url ,
+		flag
+	FROM
+		th_curriculum_contact A
+	WHERE
+		category = #category#
+	]]>
+	</select>
+	
+	<!-- 교과정보관리  상세보기-->
+	<select id="getCurriculumContactDetail" resultMap="CurriculumContactMap">
+	<![CDATA[
+	SELECT
+		curriculum_id,
+		category,
+		email,
+		link_url ,
+		flag
+	FROM
+		th_curriculum_contact A
+	WHERE
+		curriculum_id = #curriculumId#
+	]]>
+	</select>
+	
+	<!-- 교과정보관리 입력 -->
+	<insert id="insertCurriculumContact">
+	<![CDATA[
+	INSERT INTO th_curriculum_contact
+	(
+		category,
+		email,
+		link_url ,
+		flag
+	)
+	VALUES
+	(
+		#category#,
+		#email#,
+		#linkUrl# ,
+		#flag#
+	)
+	]]>
+	</insert>
+	
+	<!-- 교과정보관리 수정 -->
+	<update id="updateCurriculumContact">
+	<![CDATA[
+	UPDATE
+		th_curriculum_contact
+	SET
+		category = #category#,
+		email = #email#,
+		link_url = #linkUrl#
+	WHERE
+		curriculum_id = #curriculumId#
+	]]>
+	</update>
+		
+	<!-- 교과정보관리 삭제 -->
+	<delete id="deleteCurriculumContact">
+	<![CDATA[
+	DELETE FROM
+		th_curriculum_contact
+	WHERE
+		curriculum_id = #curriculumId#	
+	]]>
+	</delete>
+	
+	<!-- 교과정보 중복체크 -->
+	<select id="getCurriculumContactDup" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(0) as cnt
+	FROM
+		th_curriculum_contact A
+	WHERE
+		category = #category#
+	AND
+		curriculum_id <> #curriculumId#
+	]]>
+	<isNotEmpty property="findFlag" prepend="AND">
+		A.flag = #findFlag#
+	</isNotEmpty>
+	</select>
+
+</sqlMap>

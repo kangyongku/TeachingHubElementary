@@ -1,0 +1,1685 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Poll">
+
+	<!-- 설문지 등록 상세 Mapper -->
+	<resultMap id="PollDetailMap" class="kr.co.kumsung.thub.domain.Poll">
+		<result column="poll_id"    property="pollId" />
+		<result column="subject"    property="subject" />
+		<result column="target"     property="target" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date"   property="endDate" />
+		<result column="reg_date"   property="regDate" />
+		<result column="is_use"     property="isUse" />
+		<result column="is_result"  property="isResult" />
+	</resultMap>
+	
+	<!-- 설문지 등록 리스트 Mapper -->
+	<resultMap id="PollListMap" class="kr.co.kumsung.thub.domain.Poll">
+		<result column="poll_id"    property="pollId" />
+		<result column="subject"    property="subject" />
+		<result column="target"     property="target" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date"   property="endDate" />
+		<result column="reg_date"   property="regDate" />
+		<result column="is_use"     property="isUse" />
+		<result column="is_result"  property="isResult" />
+		<result column="progress"   property="progress" />
+		<result column="reg_id"     property="regId" />
+	</resultMap>
+	
+	<!-- Poll entry -->
+	<resultMap id="PollEntryMap" class="kr.co.kumsung.thub.domain.PollEntry">
+		<result column="entry_id" property="entryId" />
+		<result column="poll_id"  property="pollId" />
+		<result column="title"    property="title" />
+		<result column="type"     property="type" />
+		<result column="reg_date" property="regDate" />
+		<result column="multiple" property="multiple" />
+		<result column="ans_yn"   property="ansyn" />
+		<result column="progress" property="progress" />
+	</resultMap>
+	
+	<!-- Poll entry -->
+	<resultMap id="PollEntryMap2" class="kr.co.kumsung.thub.domain.PollEntry">
+		<result column="entry_id" property="entryId" />
+		<result column="poll_id"  property="pollId" />
+		<result column="title"    property="title" />
+		<result column="type"     property="type" />
+		<result column="reg_date" property="regDate" />
+		<result column="multiple" property="multiple" />
+		<result column="ans_yn"   property="ansyn" />
+	</resultMap>
+	
+	<!-- Poll item --> 
+	<resultMap id="PollItemMap" class="kr.co.kumsung.thub.domain.PollItem">
+		<result column="item_id"  property="itemId" />
+		<result column="entry_id" property="entryId" />
+		<result column="sequence" property="sequence" />
+		<result column="answer"   property="answer" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- Poll Entry Item Mapping  -->
+	<resultMap id="PollEntryItemMap" class="kr.co.kumsung.thub.domain.PollEntryItem">
+		<result column="poll_id"  property="pollId" />
+		<result column="entry_id" property="entryId" />
+		<result column="item_id"  property="itemId" />
+		<result column="title"    property="title" />
+		<result column="type"     property="type" />
+		<result column="multiple" property="multiple" />
+		<result column="ans_yn"   property="ansyn" />
+		<result column="sequence" property="sequence" />
+		<result column="answer"   property="answer" />
+	</resultMap>
+	
+	<!-- 설문지 상세 데이터 폼 사용자  -->
+	<resultMap id="PollResponseDetailMap" class="kr.co.kumsung.thub.domain.PollResponse">
+		<result column="poll_id"  property="pollId" />
+		<result column="target"   property="target" />
+		<result column="entry_id" property="entryId" />
+		<result column="title"    property="title" />
+		<result column="type"     property="type" />
+		<result column="item_id"  property="itemId" />
+		<result column="sequence" property="sequence" />
+		<result column="answer"   property="answer" />
+		<result column="ans_yn"   property="ansyn" />
+		<result column="multiple" property="multiple" />
+	</resultMap>
+	
+	<!-- 설문조사 결과 -->
+	<resultMap id="PollResultMap" class="kr.co.kumsung.thub.domain.PollResponse">
+		<result column="poll_id"   property="pollId" />
+		<result column="target"    property="target" />
+		<result column="entry_id"  property="entryId" />
+		<result column="title"     property="title" />
+		<result column="type"      property="type" />
+		<result column="item_id"   property="itemId" />
+		<result column="answer"    property="answer" />
+		<result column="sequence"  property="sequence" />
+		<result column="answerCnt" property="answerCnt" />
+		<result column="entryCnt"  property="entryCnt" />
+	</resultMap>
+	
+	<!-- 설문조사 주간식 결과보기 -->
+	<resultMap id="PollResultLayerMap" class="kr.co.kumsung.thub.domain.PollResponse">
+		<result column="answer"    property="answer" />
+		<result column="answerCnt" property="answerCnt" />
+	</resultMap>
+
+	<!-- 설문조사 통계 리스트 Admin -->
+	<resultMap id="PollResultAdmin" class="kr.co.kumsung.thub.domain.PollResponse">
+		<result column="poll_id"    property="pollId" />
+		<result column="subject"    property="subject" />
+		<result column="target"     property="target" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date"   property="endDate" />
+		<result column="reg_date"   property="regDate" />
+		<result column="is_use"     property="isUse" />
+		<result column="progress"   property="progress" />
+		<result column="userCnt"    property="userCnt" />
+		<result column="reg_id"     property="regId" />
+	</resultMap>
+	
+	<!-- 설문조사 통계 리스트 Admin -->
+	<resultMap id="PollResponseUserInfo" class="kr.co.kumsung.thub.domain.PollResponse">
+		<result column="school_nm" property="schoolName" />
+		<result column="reg_id"    property="regId" />
+		<result column="name"      property="name" />
+		<result column="reg_date"  property="regDate" />
+		<result column="job_name"  property="jobName" />
+	</resultMap>
+	
+	<resultMap id="tqevent_select" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="date_813" property="date_813" />
+        <result column="date_814" property="date_814" />
+	    <result column="date_815" property="date_815" />
+	    <result column="date_816" property="date_816" />
+	    <result column="date_817" property="date_817" />
+	    <result column="date_818" property="date_818" />
+	    <result column="date_819" property="date_819" />
+	    <result column="date_820" property="date_820" />
+	    <result column="date_821" property="date_821" />
+	    <result column="date_822" property="date_822" />
+	    <result column="date_823" property="date_823" />
+	    <result column="date_824" property="date_824" />
+	    <result column="date_825" property="date_825" />
+	    <result column="date_826" property="date_826" />
+	    <result column="date_827" property="date_827" />
+	    <result column="date_828" property="date_828" />
+	    <result column="date_829" property="date_829" />
+	    <result column="date_830" property="date_830" />
+	    <result column="date_831" property="date_831" />
+	    <result column="date_901" property="date_901" />
+	    <result column="date_902" property="date_902" />
+	    <result column="date_903" property="date_903" />
+	    <result column="date_904" property="date_904" />
+	    <result column="date_905" property="date_905" />
+	    <result column="date_906" property="date_906" />
+	    <result column="date_907" property="date_907" />
+	    <result column="date_908" property="date_908" />
+	    <result column="date_909" property="date_909" />	    
+	</resultMap>	
+	
+	<resultMap id="tqevent_cnt" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="cnt" property="cnt" />
+	</resultMap>		
+	
+		<resultMap id="tqevent_select_test" class="kr.co.kumsung.thub.domain.PollResponse">
+		<result column="date_710" property="date_710" />
+		<result column="date_711" property="date_711" />
+		<result column="date_712" property="date_712" />
+	    <result column="date_713" property="date_713" />
+        <result column="date_714" property="date_714" />
+	    <result column="date_715" property="date_715" />
+	    <result column="date_716" property="date_716" />
+	    <result column="date_717" property="date_717" />
+	    <result column="date_718" property="date_718" />
+	    <result column="date_719" property="date_719" />
+	    <result column="date_720" property="date_720" />
+	    <result column="date_721" property="date_721" />
+	    <result column="date_722" property="date_722" />
+	    <result column="date_723" property="date_723" />
+	    <result column="date_724" property="date_724" />
+	    <result column="date_725" property="date_725" />
+	    <result column="date_726" property="date_726" />
+	    <result column="date_727" property="date_727" />
+	    <result column="date_728" property="date_728" />
+	    <result column="date_729" property="date_729" />
+	    <result column="date_730" property="date_730" />
+	    <result column="date_731" property="date_731" />
+	    <result column="date_801" property="date_801" />
+	    <result column="date_802" property="date_802" />
+	    <result column="date_803" property="date_803" />
+	    <result column="date_804" property="date_804" />
+	    <result column="date_805" property="date_805" />
+	    <result column="date_806" property="date_806" />
+	    <result column="date_807" property="date_807" />
+	    <result column="date_808" property="date_808" />
+	    <result column="date_809" property="date_809" />	    
+	</resultMap>
+	
+	<resultMap id="tqevent_select" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="date_813" property="date_813" />
+        <result column="date_814" property="date_814" />
+	    <result column="date_815" property="date_815" />
+	    <result column="date_816" property="date_816" />
+	    <result column="date_817" property="date_817" />
+	    <result column="date_818" property="date_818" />
+	    <result column="date_819" property="date_819" />
+	    <result column="date_820" property="date_820" />
+	    <result column="date_821" property="date_821" />
+	    <result column="date_822" property="date_822" />
+	    <result column="date_823" property="date_823" />
+	    <result column="date_824" property="date_824" />
+	    <result column="date_825" property="date_825" />
+	    <result column="date_826" property="date_826" />
+	    <result column="date_827" property="date_827" />
+	    <result column="date_828" property="date_828" />
+	    <result column="date_829" property="date_829" />
+	    <result column="date_830" property="date_830" />
+	    <result column="date_831" property="date_831" />
+	    <result column="date_901" property="date_901" />
+	    <result column="date_902" property="date_902" />
+	    <result column="date_903" property="date_903" />
+	    <result column="date_904" property="date_904" />
+	    <result column="date_905" property="date_905" />
+	    <result column="date_906" property="date_906" />
+	    <result column="date_907" property="date_907" />
+	    <result column="date_908" property="date_908" />
+	    <result column="date_909" property="date_909" />	    
+	</resultMap>		
+	
+	<resultMap id="cnt_tqquizevent" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="cnt" property="cnt" />
+	</resultMap>		
+
+	<resultMap id="tqquizevent_select" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="eventid" property="eventid" />
+	    <result column="userid"  property="userid" />
+	    <result column="answer"  property="answer" />
+	</resultMap>
+	
+	<resultMap id="chk_teacher" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="cnt" property="cnt" />
+	</resultMap>		
+	
+	<resultMap id="cnt_tq_test" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="cnt" property="cnt" />
+	</resultMap>		
+
+	<resultMap id="cnt_tq_test_190529" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="cnt" property="cnt" />
+	</resultMap>
+	
+	<resultMap id="chk_500" class="kr.co.kumsung.thub.domain.PollResponse">
+	    <result column="cnt" property="cnt" />
+	</resultMap>	
+	
+	<resultMap id="usergap" class="kr.co.kumsung.thub.domain.PollResponse">
+		<result column="userid"        property="userid"       />
+		<result column="usernm"        property="usernm"       />
+		<result column="hp1"           property="hp1"          />
+		<result column="hp2"           property="hp2"          />
+		<result column="hp3"           property="hp3"          />
+		<result column="schoolinfoseq" property="schoolinfoseq"/>
+		<result column="schoolnm"      property="schoolnm"     />
+		<result column="address"       property="address"      />
+		<result column="zipcode"       property="zipcode"      />
+	</resultMap>	
+	
+	<!-- 설문조사 문제 리스트 -->
+	<select id="getPollList" resultMap="PollListMap">
+         SELECT  poll_id
+               , subject
+               , target
+               , start_date
+               , end_date
+               , date_format(reg_date, '%Y-%m-%d')as reg_date
+               , is_use
+               , is_result
+               , if(<![CDATA[cast(end_date as datetime) >= date_format(NOW(), '%Y-%m-%d')]]>
+                 AND <![CDATA[cast(start_date as datetime) <=  date_format(NOW(), '%Y-%m-%d')]]> ,"Y","N")as progress
+               , reg_id				
+           FROM th_poll
+          WHERE 1=1
+         	<isNotEmpty property="findStr" prepend="AND">
+         		subject LIKE CONCAT('%' , #findStr# , '%')
+         	</isNotEmpty>
+         	<isNotEmpty property="findIsUse" prepend="AND">
+         		is_use = #findIsUse#
+         	</isNotEmpty>
+           ORDER BY reg_date desc 
+           LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 설문조사 문제 상세 보기 -->
+	<select id="getPollDetail" resultMap="PollDetailMap">
+		<![CDATA[
+             SELECT  poll_id
+                   , subject
+                   , target
+                   , start_date
+                   , end_date
+                   , date_format(reg_date, '%Y-%m-%d')as reg_date
+                   , is_use 
+                   , is_result
+               FROM th_poll
+              WHERE poll_id = #pollId#
+		]]>
+	</select>
+	
+	<!-- 설문조사 문제 개수 -->
+	<select id="getTotalPoll" resultClass="int">
+		<![CDATA[
+			SELECT  COUNT(1) as cnt
+			  FROM th_poll
+			 WHERE 1=1
+		]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			subject LIKE CONCAT('%' , #findStr# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findIsUse" prepend="AND">
+			is_use = #findIsUse#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 게시글을 삭제한다. -->
+	<delete id="deletePoll">
+		<![CDATA[
+			DELETE 
+			  FROM th_poll
+		     WHERE poll_id = #pollId#
+		]]>
+	</delete>
+	
+	<!-- 설문조사 문제 등록 -->
+	<insert id="insertPoll">
+		<![CDATA[
+			INSERT 
+			  INTO th_poll(   
+			       subject
+				 , target
+				 , start_date
+				 , end_date
+				 , reg_date
+				 , is_use
+				 , is_result 
+				 , reg_id
+			)
+			VALUES(
+				   #subject#
+				 , #target#
+				 , #startDate#
+				 , #endDate#
+				 , NOW()
+				 , #isUse# 
+				 , #isResult# 
+				 , #regId#
+			)
+		]]>
+	</insert>
+	
+	<!-- 설문조사 문제 수정 -->
+	<update id="updatePoll">
+		UPDATE th_poll
+		   SET  subject    = #subject#
+			  , target     = #target#
+			  , start_date = #startDate#
+			  , end_date   = #endDate#
+			  , is_use     = #isUse#
+			  , is_result  = #isResult# 
+			  , reg_id     = #regId#
+		 WHERE poll_id = #pollId#
+	</update>
+	
+	<!-- 설문조사 질문 상세 보기 -->
+	<select id="getPollEntryDetail" resultMap="PollEntryMap2">
+		<![CDATA[
+		     SELECT  entry_id
+		           , poll_id
+		           , title
+		           , type
+		           , reg_date
+		           , multiple
+		           , ans_yn
+		       FROM th_poll_entry 
+		      WHERE entry_id = #entryId#
+		]]>
+	</select>
+	
+	<!-- 설문조사 문항 상세 -->
+	<select id="getPollItemDetail" resultMap="PollItemMap">
+		<![CDATA[
+			SELECT  entry_id
+			      , item_id
+			      , sequence
+			      , answer
+			      , reg_date
+			  FROM th_poll_item
+			 WHERE entry_id = #entryId#
+		]]>
+	</select>
+	
+	<!-- 게시문항을  삭제한다. -->
+	<delete id="deletePollEntry">
+		<![CDATA[
+			DELETE 
+			  FROM th_poll_entry
+		     WHERE entry_id = #entryId#
+		]]>
+	</delete>
+	
+	<!-- 설문 질문 입력 -->
+	<insert id="insertPollEntry">
+		<![CDATA[
+			INSERT 
+			  INTO th_poll_entry(
+				poll_id
+			  , title
+			  , type
+			  , reg_date
+			  , multiple
+			  , ans_yn
+			)
+			VALUES(
+				#pollId#
+			  , #title#
+			  , #type#
+			  , NOW()
+			  , #multiple#
+			  , #ansyn#
+			)
+		]]>
+	</insert>
+	
+	<!-- Last increment -->
+	<select id="getEntryId" resultClass="int">
+		SELECT last_insert_id();
+	</select>
+	
+	<!-- 설문지 삭제시 등록된 문항 초기화 -->
+	<update id="updatePollEntryReset">
+		<![CDATA[
+			UPDATE th_poll_entry
+			   SET poll_id = 0
+			 WHERE poll_id = #pollId#
+		]]>
+	</update>
+	
+	<!-- 설문 문항 입력 -->
+	<insert id="insertPollItem">
+		<![CDATA[
+			INSERT 
+			  INTO th_poll_item(
+				  entry_id
+				, sequence
+				, answer
+				, reg_date
+			)
+			VALUES(
+				  #entryId#
+				, #sequence#
+				, #answer#
+				, NOW()
+			)
+		]]>
+	</insert>
+	
+	<!-- 설문 문항 수정 -->
+	<update id="updatePollItem">
+		<![CDATA[
+			UPDATE th_poll_item
+			   SET  sequence = #sequence#
+			      , answer   = #answer#
+			      , reg_date = NOW()
+			 WHERE item_id = #itemId#
+		]]>
+	</update>
+	
+	<!-- 설문 항문 삭제 -->
+	<delete id="deletePollItem">
+		<![CDATA[
+			DELETE 
+			  FROM th_poll_item
+			 WHERE entry_id = #entryId#
+		]]>	
+	</delete>
+	
+	<!-- 설문조사 항목  리스트 -->
+	<select id="getPollEntryList" resultMap="PollEntryMap2">
+		<![CDATA[	
+			SELECT  entry_id
+			      , poll_id
+			      , title
+			      , type
+			      , date_format(reg_date, '%Y-%m-%d')as reg_date
+			      , multiple
+			      , ans_yn
+			  FROM th_poll_entry
+		]]>	    
+		<isNotEmpty property="findStr" prepend="WHERE">
+			title LIKE CONCAT('%' , #findStr# , '%')
+		</isNotEmpty>
+             ORDER BY entry_id desc
+	         LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 설문조사 문제 개수 -->
+	<select id="getTotalPollEntry" resultClass="int">
+		<![CDATA[
+			SELECT  COUNT(1) as cnt
+			  FROM th_poll_entry
+		]]>
+		<isNotEmpty property="findStr" prepend="WHERE">
+			title LIKE CONCAT('%' , #findStr# , '%')
+		</isNotEmpty>
+	</select>
+	
+	<!-- 설문 문항 팝업-->
+	<select id="getPollEntryPopup" resultMap="PollEntryMap2">
+		<![CDATA[
+			SELECT  entry_id
+				  , poll_id
+				  , title
+				  , type
+				  , reg_date
+				  , multiple
+				  , ans_yn
+			  FROM th_poll_entry 
+			 ORDER BY entry_id desc
+		]]>
+	</select>
+	
+	<!-- 설문지 등록된 설문 문항 리스트-->
+	<select id="getPollEntryed" resultMap="PollEntryMap">
+		<![CDATA[
+			SELECT  a.entry_id
+			      , a.poll_id
+			      , a.title
+			      , a.type
+			      , a.reg_date
+			      , if(cast(b.end_date as datetime) >= date_format(NOW(), '%Y-%m-%d')
+			      	AND cast(b.start_date as datetime) <=  date_format(NOW(), '%Y-%m-%d') ,"Y","N")as progress
+			      , a.multiple
+			      ,  a.ans_yn
+			FROM  th_poll_entry a
+			    , th_poll b
+			WHERE a.poll_id = b.poll_id
+			  AND a.poll_id = #pollId#
+			ORDER BY a.entry_id desc
+		]]>
+	</select>
+	
+	<!-- 설문 문항 팝업 총 개수 -->
+	<select id="getTotalPollEntryPopup" resultClass="int">
+		<![CDATA[
+			SELECT  COUNT(1) as cnt
+			  FROM th_poll_entry
+			 WHERE poll_id = '0'
+		]]>
+	</select>
+	
+	<!-- 설문조사 설문 문항 등록 -->
+	<update id="updatePollEntry">
+		<![CDATA[
+			UPDATE th_poll_entry
+			   SET poll_id = #pollId#
+			 WHERE entry_id in
+		]]>
+			<iterate property="arrEntryId" open="(" close=")" conjunction=",">
+				#arrEntryId[]#
+			</iterate>
+	</update>
+	
+	<!-- 설문문항의 설문번호 확인 -->
+	<select id="getEntryPollId" resultClass="int">
+		<![CDATA[
+			SELECT  poll_id
+			  FROM th_poll_entry
+			 WHERE entry_id = #entryId#
+		]]>
+	</select>
+	
+	<!-- 설문문항 복사 -->
+	<insert id="insertEntryCopy">
+		<![CDATA[
+			INSERT 
+			  INTO th_poll_entry(
+			       poll_id
+				 , title
+				 , type
+				 , reg_date
+				 , multiple
+				 , ans_yn
+			)
+			SELECT  #pollId# as poll_id
+			      , title
+				  , type
+				  , NOW()    as reg_date
+				  , multiple
+				  , ans_yn 
+		      FROM th_poll_entry
+			 WHERE entry_id = #entryId#
+		]]>
+		
+		<selectKey keyProperty="temp_entryid" resultClass = "int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<!-- 설문문항 세부복사 -->
+	<insert id="insertEntryDetailCopy">
+		<![CDATA[
+			INSERT 
+			  INTO th_poll_item(
+			       entry_id
+				 , sequence
+				 , answer
+				 , reg_date
+			)
+			SELECT  #entryId# as entry_id
+			      , sequence
+				  , answer
+				  , NOW() as reg_date 
+			  FROM th_poll_item
+			 WHERE entry_id = #oldId#
+		]]>
+	</insert>
+	
+	<!-- 설문조사 문항 수정 -->
+	<update id="updatePollEntryDetail">
+		<![CDATA[
+			UPDATE th_poll_entry
+			   SET  title    = #title#
+			      , type     = #type#
+			      , multiple = #multiple#
+			      , ans_yn   = #ansyn#
+			 WHERE entry_id = #entryId#
+		]]>
+	</update>
+	
+	<!-- 설문 조사 문항 추가 데이터 리스트 -->
+	<select id="getPollEntryItemList" resultMap="PollEntryItemMap">
+		<![CDATA[
+			SELECT  B.poll_id
+			      , A.entry_id
+			      , A.item_id
+			      , B.title
+			      , B.type
+			      , B.multiple
+			      , B.ans_yn
+			      , A.sequence
+			      , A.answer
+			  FROM th_poll_item A 
+			 INNER JOIN th_poll_entry B ON B.entry_id = A.entry_id
+			 WHERE B.poll_id = #pollId#
+			 ORDER BY B.entry_id, A.sequence
+		]]>
+	</select>
+	
+	<!-- 설문조사 응답 -->
+	<insert id="insertPollResponse">
+		<![CDATA[
+			INSERT 
+			  INTO th_poll_response(
+				   poll_id
+				 , entry_id
+				 , item_id
+				 , reg_id
+				 , reg_date
+				 , answer
+			)
+			VALUES(
+				   #pollId#
+				 , #entryId#
+				 , #itemId#
+				 , #regId#
+				 , NOW()
+				 , #answer#
+			)
+		]]>
+	</insert>
+	
+	<!-- 설문조사 중복 참여 확인 -->
+	<select id="getPollResponseDup" resultClass="int">
+		<![CDATA[
+			SELECT  count(0)as cnt
+			  FROM th_poll_response	
+			 WHERE reg_id = #regId#
+			   AND poll_id = #pollId#
+		]]>
+	</select>
+	
+	<!-- 설문지 상세  데이터 사용자 폼-->
+	<select id="getPollResponseDetail" resultMap="PollResponseDetailMap">
+		<![CDATA[
+			SELECT  A.poll_id
+			      , A.target
+			      , B.entry_id
+			      , B.title
+			      , B.type
+			      , C.item_id
+			      , C.sequence
+			      , C.answer
+			      , B.ans_yn
+			      , B.multiple
+			FROM  th_poll A 
+			    , th_poll_entry B
+			    , th_poll_item C
+			WHERE A.poll_id = B.poll_id
+			  AND C.entry_id = B.entry_id
+			  AND B.poll_id = #pollId#
+			ORDER BY B.entry_id, C.sequence
+		]]>
+	</select>
+	
+	<!-- 설문지 결과 데이터 -->
+	<select id="getPollResult" resultMap="PollResultMap">
+		<![CDATA[
+			SELECT  A.poll_id
+			      , A.target
+			      , B.entry_id
+			      , B.title
+			      , B.type
+			      , C.item_id
+			      , C.sequence
+			      , C.answer
+			      , ( SELECT count(0) as cnt
+			      	  FROM th_poll_response D
+			      	 WHERE D.entry_id = B.entry_id
+			      	   AND D.item_id = C.item_id
+			      	   AND D.poll_id = A.poll_id  					
+			        ) as answerCnt
+			      , ( SELECT  count(0) as cnt
+			      	  FROM th_poll_response D
+			      	 WHERE D.entry_id = B.entry_id
+			      	   AND D.poll_id = A.poll_id   				
+			        ) as entryCnt
+			  FROM  th_poll A
+			      , th_poll_entry B
+			      , th_poll_item C
+			 WHERE A.poll_id = B.poll_id
+			   AND C.entry_id = B.entry_id
+			   AND B.poll_id = #pollId#
+			 ORDER BY C.entry_id, C.sequence
+		]]>
+	</select>
+	
+	<!-- 설문 결과 주간식 리스트 -->
+	<select id="getPollResultLayer" resultMap="PollResultLayerMap" >
+		<![CDATA[
+			SELECT  answer
+			      , count(answer)as answerCnt
+			  FROM th_poll_response
+			 WHERE entry_id = #entryId#
+			   AND poll_id = #pollId#
+			   AND length(answer) > 0
+			 GROUP BY answer
+			 ORDER BY answerCnt desc
+		]]>
+	</select>
+	
+	<!-- 설문 결과 기타 리스트 -->	
+	<select id="getPollResultEtcLayer" resultMap="PollResultLayerMap" >
+		<![CDATA[
+			SELECT  answer
+			      , count(answer)as answerCnt
+			  FROM th_poll_response
+			 WHERE entry_id = #entryId#
+			   AND poll_id = #pollId#
+			   AND item_id = #itemId#
+			   AND  length(answer) > 0
+			 GROUP BY answer
+			 ORDER BY answerCnt desc
+		]]>
+	</select>
+	
+	
+	<!-- 설문조사 통계 리스트 Admin용-->
+	<select id="getPollResultList" resultMap="PollResultAdmin">
+		<![CDATA[
+			SELECT  A.poll_id
+			      , A.target
+			      , A.subject
+			      , A.start_date
+			      , A.end_date
+			      , date_format(A.reg_date,'%Y-%m-%d')as reg_date
+			      , A.is_use
+			      , A.reg_id
+			      , if( cast(A.end_date as datetime) >= date_format(NOW(), '%Y-%m-%d'),"Y","N" )as progress
+			      , ( SELECT  count(B.poll_id)
+			      	  FROM( SELECT  *
+			      			  FROM th_poll_response B
+			      			 GROUP BY B.reg_id, B.poll_id
+			      		   )B
+			      	  WHERE B.poll_id=A.poll_id
+			        ) AS userCnt
+			  FROM th_poll A
+		]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				A.subject LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				A.reg_id LIKE CONCAT('%', #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.target = #findCategory#
+		</isNotEmpty>
+	         ORDER BY A.reg_date desc 
+	         LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 설문조사 통계 리스트 Admin용-->
+	<select id="getPollResultTotalList" resultClass="int">
+		<![CDATA[
+			SELECT count(0)as cnt
+			  FROM th_poll A
+		]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				A.subject LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				A.reg_id LIKE CONCAT('%', #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.target = #findCategory#
+		</isNotEmpty>
+	</select>	
+	
+	<!-- 설문조사 참여자 상세 내역 -->
+	<select id="getPollResponseUserInfo" resultMap="PollResponseUserInfo">
+		<![CDATA[
+			SELECT  ( SELECT school_nm 
+			            FROM SCHOOL 
+					   WHERE school_seq = A.schoolInfoSeq
+				     ) as school_nm
+				   , A.name
+				   , A.userid as reg_id
+				   , ( SELECT codename 
+				         FROM COMMONCODE 
+						WHERE category='JOB' 
+						  AND code = A.job
+					  ) AS job_name
+				   , DATE_FORMAT(B.reg_date, '%Y-%m-%d') AS reg_date
+			  FROM  Member A
+			      , th_poll_response B
+			 WHERE B.reg_id = A.userid
+			   AND B.poll_id = #pollId#
+			 GROUP BY B.reg_id
+			 ORDER BY B.reg_date
+			 LIMIT #skip# , #pageSize#
+		]]>
+	</select>
+	
+	<!-- 설문조사 참여자 수 (페이징 처리용) -->
+	<select id="getPollResponseUserInfoTotal" resultClass="int">
+		<![CDATA[
+			SELECT  count(0) as cnt
+			  FROM( SELECT  *
+				      FROM  Member A
+					      , th_poll_response B
+				     WHERE B.reg_id = A.userid
+				       AND B.poll_id = #pollId#
+				     GROUP BY B.reg_id
+				     ORDER BY B.reg_date
+			      )C
+		]]>
+	</select>
+	
+	<select id="tqevent_select" resultMap="tqevent_select">
+		<![CDATA[
+			SELECT  *
+			  FROM th_cal_event
+			 WHERE user_id = #user_id#
+		]]>
+	</select>	
+	
+	<select id="tqevent_cnt" resultMap="tqevent_cnt">
+		<![CDATA[
+			SELECT SUM(CNT) AS CNT
+	          FROM ( SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_813 = 1
+	               
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_814 = 1
+	                    
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_815 = 1        
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_816 = 1  
+	   					
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_817 = 1  					
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_818 = 1  
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_819 = 1  
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_820 = 1  
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_821 = 1  					
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_822 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_823 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_824 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_825 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_826 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_827 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_828 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_829 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_830 = 1  										
+					
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_831 = 1  	
+	
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_901 = 1  								
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_902 = 1  										
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_903 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_904 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_905 = 1  															
+											
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_906 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_907 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_908 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event 
+					  WHERE user_id = #user_id#
+					    AND date_909 = 1  															
+			        ) AS A
+		]]>
+	</select>		
+	
+	<insert id="tqevent_insert">
+		<![CDATA[
+			INSERT 
+			  INTO th_cal_event(
+				   user_id
+				 , date_813
+				 , date_814
+				 , date_815
+				 , date_816
+				 , date_817
+				 , date_818
+				 , date_819
+				 , date_820
+				 , date_821
+				 , date_822
+				 , date_823
+				 , date_824
+				 , date_825
+				 , date_826
+				 , date_827
+				 , date_828
+				 , date_829
+				 , date_830
+				 , date_831
+				 , date_901
+				 , date_902
+				 , date_903
+				 , date_904
+				 , date_905
+				 , date_906
+				 , date_907
+				 , date_908
+				 , date_909
+				 , in_date
+			)
+			VALUES(
+				   #user_id#
+				 , #date_813#
+				 , #date_814#
+				 , #date_815#
+				 , #date_816#
+				 , #date_817#
+				 , #date_818#
+				 , #date_819#
+				 , #date_820#
+				 , #date_821#
+				 , #date_822#
+				 , #date_823#
+				 , #date_824#
+				 , #date_825#
+				 , #date_826#
+				 , #date_827#
+				 , #date_828#
+				 , #date_829#
+				 , #date_830#
+				 , #date_831#
+				 , #date_901#
+				 , #date_902#
+				 , #date_903#
+				 , #date_904#
+				 , #date_905#
+				 , #date_906#
+				 , #date_907#
+				 , #date_908#
+				 , #date_909#
+				 , NOW()
+			)
+		]]>
+	</insert>	
+	
+	<update id="tqevent_update">
+		<![CDATA[
+			UPDATE th_cal_event
+			   SET date_813 = #date_813#
+				 , date_814 = #date_814#
+				 , date_815 = #date_815#
+				 , date_816 = #date_816#
+				 , date_817 = #date_817#
+				 , date_818 = #date_818#
+				 , date_819 = #date_819#
+				 , date_820 = #date_820#
+				 , date_821 = #date_821#
+				 , date_822 = #date_822#
+				 , date_823 = #date_823#
+				 , date_824 = #date_824#
+				 , date_825 = #date_825#
+				 , date_826 = #date_826#
+				 , date_827 = #date_827#
+				 , date_828 = #date_828#
+				 , date_829 = #date_829#
+				 , date_830 = #date_830#
+				 , date_831 = #date_831#
+				 , date_901 = #date_901#
+				 , date_902 = #date_902#
+				 , date_903 = #date_903#
+				 , date_904 = #date_904#
+				 , date_905 = #date_905#
+				 , date_906 = #date_906#
+				 , date_907 = #date_907#
+				 , date_908 = #date_908#
+				 , date_909 = #date_909#
+				 , up_date = NOW()
+			 WHERE user_id = #user_id#
+		]]>
+	</update>	
+	
+	
+	
+	
+	<select id="tqevent_select_test" resultMap="tqevent_select_test">
+		<![CDATA[
+			SELECT  *
+			  FROM th_cal_event_test
+			 WHERE user_id = #user_id#
+		]]>
+	</select>	
+	
+	<select id="tqevent_cnt_test" resultMap="tqevent_cnt">
+		<![CDATA[
+			SELECT SUM(CNT) AS CNT
+	          FROM ( 
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_710 = 1			  
+			  
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_711 = 1			  
+			  
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_712 = 1
+			  
+			          UNION ALL
+			  
+				     SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_713 = 1
+	               
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_714 = 1
+	                    
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_715 = 1        
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_716 = 1  
+	   					
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_717 = 1  					
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_718 = 1  
+
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_719 = 1
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_720 = 1  
+	
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_721 = 1  					
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_722 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_723 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_724 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_725 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_726 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_727 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_728 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_729 = 1  										
+						
+				      UNION ALL
+	             
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_730 = 1  										
+					
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_731 = 1  	
+	
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_801 = 1  								
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_802 = 1  										
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_803 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_804 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_805 = 1  															
+											
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_806 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_807 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_808 = 1  															
+						
+					  UNION ALL
+					
+					 SELECT COUNT(*) AS CNT
+					   FROM th_cal_event_test 
+					  WHERE user_id = #user_id#
+					    AND date_809 = 1  	
+			        ) AS A
+		]]>
+	</select>		
+	
+	<insert id="tqevent_insert_test">
+		<![CDATA[
+			INSERT 
+			  INTO th_cal_event_test(
+				   user_id
+				 , date_710
+				 , date_711
+				 , date_712  
+				 , date_713
+				 , date_714
+				 , date_715
+				 , date_716
+				 , date_717
+				 , date_718
+				 , date_719
+				 , date_720
+				 , date_721
+				 , date_722
+				 , date_723
+				 , date_724
+				 , date_725
+				 , date_726
+				 , date_727
+				 , date_728
+				 , date_729
+				 , date_730
+				 , date_731
+				 , date_801
+				 , date_802
+				 , date_803
+				 , date_804
+				 , date_805
+				 , date_806
+				 , date_807
+				 , date_808
+				 , date_809
+				 , in_date
+			)
+			VALUES(
+				   #user_id#
+				 , #date_710#
+				 , #date_711#
+				 , #date_712# 				   
+				 , #date_713#
+				 , #date_714#
+				 , #date_715#
+				 , #date_716#
+				 , #date_717#
+				 , #date_718#
+				 , #date_719#
+				 , #date_720#
+				 , #date_721#
+				 , #date_722#
+				 , #date_723#
+				 , #date_724#
+				 , #date_725#
+				 , #date_726#
+				 , #date_727#
+				 , #date_728#
+				 , #date_729#
+				 , #date_730#
+				 , #date_731#
+				 , #date_801#
+				 , #date_802#
+				 , #date_803#
+				 , #date_804#
+				 , #date_805#
+				 , #date_806#
+				 , #date_807#
+				 , #date_808#
+				 , #date_809#
+				 , NOW()
+			)
+		]]>
+	</insert>	
+	
+	<update id="tqevent_update_test">
+		<![CDATA[
+			UPDATE th_cal_event_test
+			   SET date_710 = #date_710#
+			     , date_711 = #date_711#
+			     , date_712 = #date_712#
+			     , date_713 = #date_713#
+				 , date_714 = #date_714#
+				 , date_715 = #date_715#
+				 , date_716 = #date_716#
+				 , date_717 = #date_717#
+				 , date_718 = #date_718#
+				 , date_719 = #date_719#
+				 , date_720 = #date_720#
+				 , date_721 = #date_721#
+				 , date_722 = #date_722#
+				 , date_723 = #date_723#
+				 , date_724 = #date_724#
+				 , date_725 = #date_725#
+				 , date_726 = #date_726#
+				 , date_727 = #date_727#
+				 , date_728 = #date_728#
+				 , date_729 = #date_729#
+				 , date_730 = #date_730#
+				 , date_731 = #date_731#
+				 , date_801 = #date_801#
+				 , date_802 = #date_802#
+				 , date_803 = #date_803#
+				 , date_804 = #date_804#
+				 , date_805 = #date_805#
+				 , date_806 = #date_806#
+				 , date_807 = #date_807#
+				 , date_807 = #date_808#
+				 , date_808 = #date_809#
+				 , up_date = NOW()
+			 WHERE user_id = #user_id#
+		]]>
+	</update>		
+	<select id="cnt_tqquizevent" resultMap="cnt_tqquizevent">
+		<![CDATA[
+			SELECT  COUNT(*) AS cnt
+			  FROM tqquiz_event
+			 WHERE userid = #userid#
+		]]>
+	</select>		
+	
+	<insert id="tqquizevent_insert">
+		<![CDATA[
+			INSERT 
+			  INTO tqquiz_event(
+			       eventid
+			     , userid
+			     , answer
+			     , indate
+			)
+			VALUES(
+				   #eventid#
+				 , #userid#
+				 , #answer#
+				 , NOW()
+			)
+		]]>
+	</insert>
+	
+	<select id="chk_teacher" resultMap="chk_teacher">
+		<![CDATA[
+			SELECT  COUNT(*) AS cnt
+			  FROM Member
+			 WHERE userid = #userid#
+			   AND is_finally_auth = 'Y'
+		]]>
+	</select>	
+	
+	<select id="cnt_tq_test" resultMap="cnt_tq_test">
+		<![CDATA[
+			SELECT  COUNT(*) AS cnt
+			  FROM tq_test
+			 WHERE userid = #userid#
+		]]>
+	</select>
+	
+	<insert id="tq_test_insert">
+		<![CDATA[
+			INSERT 
+			  INTO tq_test(
+			       eventid
+			     , userid
+			     , answer1
+			     , answer2
+			     , answer3
+			     , answer4
+			     , indate
+			)
+			VALUES(
+				   #eventid#
+				 , #userid#
+				 , #answer1#
+				 , #answer2#
+				 , #answer3#
+				 , #answer4#
+				 , NOW()
+			)
+		]]>
+	</insert>
+	
+	<select id="cnt_tq_test_190529" resultMap="cnt_tq_test_190529">
+		<![CDATA[
+			SELECT  COUNT(*) AS cnt
+			  FROM tq_test
+			 WHERE userid  = #userid#
+			   AND eventid = #eventid#
+		]]>
+	</select>	
+	
+	<insert id="tq_test_insert_190529">
+		<![CDATA[
+			INSERT 
+			  INTO tq_test(
+			       eventid
+			     , userid
+			     , answer1
+			     , answer2
+			     , indate
+			)
+			VALUES(
+				   #eventid#
+				 , #userid#
+				 , #answer1#
+				 , #answer2#
+				 , NOW()
+			)
+		]]>
+	</insert>	
+	
+	<select id="usergap" resultMap="usergap">
+		<![CDATA[
+			SELECT  a.userid
+			      , a.name          as usernm
+			      , a.hp1   
+			      , a.hp2
+			      , a.hp3
+			      , a.schoolInfoSeq as schoolinfoseq
+			      , b.SCHOOL_NM     as schoolnm
+			      , b.address       
+			      , b.ZIPCODE       as zipcode
+			  FROM Member a
+			  LEFT OUTER JOIN SCHOOL b ON a.schoolInfoSeq = b.SCHOOL_SEQ
+			 WHERE a.userid = #userid#
+		]]>
+		<!-- WHERE a.userid = #userid# -->
+	</select>	
+	
+	<select id="chk_500" resultMap="chk_500">
+	<![CDATA[
+		SELECT  IFNULL(SUM(answer6), 0) AS cnt
+		  FROM tq_test
+		 WHERE eventid = '224'
+	]]>
+	</select>		
+	
+	<insert id="tq_test_insert_190619">
+		<![CDATA[
+			INSERT 
+			  INTO tq_test(
+			       eventid
+			     , userid
+			     , answer1
+			     , answer2
+			     , answer3
+			     , answer4
+			     , answer5
+			     , answer6
+			     , indate
+			)
+			VALUES(
+				   #eventid#
+				 , #userid#
+				 , #hp#
+				 , #schoolinfoseq#
+				 , #address#
+				 , #zipcode#
+				 , #remark#
+				 , #qty#
+				 , NOW()
+			)
+		]]>
+	</insert>		
+</sqlMap>

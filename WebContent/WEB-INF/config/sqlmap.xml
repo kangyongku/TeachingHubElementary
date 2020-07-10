@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+	"http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+	
+<sqlMapConfig>
+	
+	<!-- default sqlMapSettings -->
+	<settings
+		cacheModelsEnabled="true"
+		enhancementEnabled="true"
+		lazyLoadingEnabled="true"
+		useStatementNamespaces="true"
+		/>
+	
+	<!-- sqlMap Mapping -->
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/File.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Category.xml" />	
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Board.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Smart.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Unit.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Poll.xml" /> 
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Multimedia.xml" /> 
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Training.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Event.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Learning.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Lecture.xml" /> 
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Member.xml" />    
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Popup.xml" /> 
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/CurriculumContact.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Scrap.xml" />  
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Customer.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/Stats.xml" />
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/MainDisplay.xml" /> 
+	
+	<sqlMap resource="kr/co/kumsung/thub/dao/maps/zip.xml" />
+</sqlMapConfig>

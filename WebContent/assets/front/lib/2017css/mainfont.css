@@ -1,0 +1,107 @@
+@charset "utf-8";
+
+/* font */
+@font-face{
+	font-family:'NotoSans';
+	font-style:normal;
+	font-weight:400;
+	src:url('/assets/front/lib/2017font/NotoSans-Regular.eot');
+	src:local('※'),
+		url('/assets/front/lib/2017font/NotoSans-Regular.woff') format('woff'),
+		url('/assets/front/lib/2017font/NotoSans-Regular.woff2') format('woff2'),
+		url('/assets/front/lib/2017font/NotoSans-Regular.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'NotoSansLight';
+	font-style:normal;
+	font-weight:normal;
+	src:url('/assets/front/lib/2017font/NotoSansCJKkr-Light.eot');
+	src:local('※'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Light.woff') format('woff'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Light.woff2') format('woff2'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Light.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'NotoSansMedium';
+	font-style:normal;
+	font-weight:normal;
+	src:url('/assets/front/lib/2017font/NotoSansCJKkr-Medium.eot');
+	src:local('※'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Medium.woff') format('woff'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Medium.woff2') format('woff2'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Medium.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'NotoSansBold';
+	font-style:normal;
+	font-weight:normal;
+	src:url('/assets/front/lib/2017font/NotoSansCJKkr-Bold.eot');
+	src:local('※'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Bold.woff') format('woff'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Bold.woff2') format('woff2'),
+		url('/assets/front/lib/2017font/NotoSansCJKkr-Bold.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'NotoSansThin';
+	font-style:normal;
+	font-weight:normal;
+	src:url('/assets/front/lib/2017font/NotoSans-Thin.eot');
+	src:local('※'),
+		url('/assets/front/lib/2017font/NotoSans-Thin.woff') format('woff'),
+		url('/assets/front/lib/2017font/NotoSans-Thin.woff2') format('woff2'),
+		url('/assets/front/lib/2017font/NotoSans-Thin.ttf') format('truetype');
+}
+
+@font-face{
+	font-family:'NanumGothic';
+	font-style:normal;
+	font-weight:normal;
+	src:url('/assets/front/lib/2017font/NanumGothic-Regular.eot');
+	src:local('※'),
+		url('/assets/front/lib/2017font/NanumGothic-Regular.woff') format('woff'),
+		url('/assets/front/lib/2017font/NanumGothic-Regular.woff2') format('woff2'),
+		url('/assets/front/lib/2017font/NanumGothic-Regular.ttf') format('truetype');
+}
+
+html {margin:0;padding:0;height:100%}
+body {margin:0;padding:0; width:100%; height:100%; font-family:'NotoSans', '맑은 고딕','malgun gothic','돋움',dotum,sans-serif; font-size:13px; line-height:1.2; letter-spacing:-1px; color:#444444; }
+div,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,p,form,fieldset,input,table,tr,th,td,button,textarea,select {margin:0;padding:0}
+h1, h2, h3, h4, h5, h6{font-size:100%;font-weight:normal}
+img {border:0;vertical-align:top}
+ul,ol,dl,dt,dd,li {list-style:none; word-break:break-word}
+table {width:100%; table-layout:fixed}
+table, th, td {border-collapse:collapse;border-spacing:0; border:0; font-weight:normal;word-wrap:break-word}
+caption {overflow:hidden;width:0; height:0;font-size:0;line-height:0}
+legend {overflow:hidden;width:0; height:0;font-size:0;line-height:0;}
+fieldset, blockquote, iframe, button {border:none}
+i, em, u, cite {font-style:normal}
+strong,em, b {font-weight:normal}
+a {color:#666;text-decoration:none;}
+button {width:auto; border:none;cursor:pointer;vertical-align:middle;margin:0; padding:0; outline:none;*overflow:visible; background:none; letter-spacing:-1px}
+button::-moz-focus-inner {margin:0;padding:0;border:0}
+button > span {position:relative}
+button,input[type="submit"], input[type="button"], input[type="reset"] {cursor:pointer; border:0}
+
+input[type="hidden"] { width:0; height:0;}
+input {padding:0; margin:0; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }
+input[type="file"] {display:inline-block; height:34px; border:1px solid #666; line-height:34px; -moz-box-sizing:border-box; -webkit-box-sizing:border-box;  box-sizing:border-box}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {/*-webkit-appearance: none;*/margin: 0;} /* input number 기본 버튼 reset*/
+input[type="text"]::-ms-clear {display: none;}
+input[disabled] { color:#333333; background:#fff}
+
+
+select { margin:0; padding:0; appearance: none; -webkit-appearance: none; -moz-appearance: none; word-wrap:break-word; }
+select::-ms-expand { display:none; }
+textarea {-moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; width:100%; height:63px; padding:8px; border:1px solid #ccc; font-size:16px; line-height:18px; overflow-y:auto; resize:none; color:#000;}
+hr { border:1px solid #dee3e7;}
+
+/* skipnav */
+#skipnav a {display:block;height:1px;width:1px;margin:0 -1px -1px 0;padding:0;overflow:hidden;font-size:1px;line-height:0}
+#skipnav a:active,
+#skipnav a:focus,
+#skipnav a:hover {width:100%;height:auto;margin:0;padding:10px 0;text-indent:10px;font-weight:700;font-size:13px;color:#333;line-height:1;text-decoration:none;text-align:center}

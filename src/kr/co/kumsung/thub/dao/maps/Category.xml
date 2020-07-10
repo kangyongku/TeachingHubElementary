@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Category">
+	
+	<cacheModel id="category-cache" type="LRU">
+		<flushInterval hours="24"/>
+		<flushOnExecute statement="Category.insert"/>
+		<flushOnExecute statement="Category.update"/>
+		<flushOnExecute statement="Category.updateSequence"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<!-- 카테고리 -->
+	<resultMap id="CategoryMap" class="kr.co.kumsung.thub.domain.Category">
+		<result column="category" property="category" />
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="children" property="children" />
+		<result column="depth" property="depth" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<resultMap id="CategoryMultimediaMap" class="kr.co.kumsung.thub.domain.Category">
+		<result column="category" property="category" />
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="children" property="children" />
+		<result column="depth" property="depth" />
+		<result column="reg_date" property="regDate" />
+		<result column="multimedia_count" property="multimediaCount" />
+	</resultMap>
+	
+	<resultMap id="CategoryDataCountMap" class="kr.co.kumsung.thub.domain.Category">
+		<result column="category" property="category" />
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="children" property="children" />
+		<result column="depth" property="depth" />
+		<result column="reg_date" property="regDate" />
+		<result column="data_count" property="dataCount" />
+	</resultMap>
+	
+	<resultMap id="CategoryHeadwordCountMap" class="kr.co.kumsung.thub.domain.Category">
+		<result column="category" property="category" />
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="children" property="children" />
+		<result column="depth" property="depth" />
+		<result column="reg_date" property="regDate" />
+		<result column="headword_count" property="headwordCount" />
+	</resultMap>
+	
+	<resultMap id="CategoryHashChildrenMap" class="kr.co.kumsung.thub.domain.Category">
+		<result column="category" property="category" /> 
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="depth" property="depth" />
+		<result column="reg_date" property="regDate" />
+		<result column="children" property="children" />
+	</resultMap>
+	
+	<!-- 카테고리 가지고 오기 -->
+	<select id="getCategory" resultMap="CategoryMap" cacheModel="category-cache">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children
+		FROM th_category A
+		WHERE
+			category = #category#
+	]]>
+	</select>
+	
+	<!-- CD 다운로드가 존재하는 카테고리만 조회 -->
+	<!-- <select id="getCategoryInCDDownload" resultMap="CategoryMap" cacheModel="category-cache"> -->
+	<select id="getCategoryInCDDownload" resultMap="CategoryMap">
+	<![CDATA[
+	SELECT
+			* ,
+			0 as children
+		FROM
+			th_category
+		WHERE
+			category IN 
+			(
+	SELECT
+-- 			category
+			left(category,7)			
+		FROM th_learning_book A 
+		LEFT OUTER JOIN th_learning_cd B
+		ON A.book_id = B.book_id
+		WHERE B.url != ''
+			AND category LIKE CONCAT(#findCategory# , '%')
+			AND A.is_use = 'Y'
+		GROUP BY A.book_id
+		)
+		ORDER BY sequence
+	]]>
+	</select>
+	
+	<!-- 카테고리 가지고 오기 -->
+	<select id="getChildren" resultMap="CategoryMap">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth#
+			AND is_use = 'Y'
+		ORDER BY sequence  , category ASC
+	]]>
+	</select>
+	
+	<!-- 미인증 카테고리 가지고 오기(A001 : 초등전용) -->
+	<select id="getChildrenA001" resultMap="CategoryMap">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth#
+		ORDER BY sequence  , category ASC
+	]]>
+	</select>
+	
+	<!-- 카테고리 가지고 오기 -->
+	<select id="getChildrenWithHeadwordCount" resultMap="CategoryHeadwordCountMap" cacheModel="category-cache">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children , 
+			(SELECT COUNT(1) FROM th_smart_headword WHERE category LIKE CONCAT(A.category , '%') AND is_use = 'Y') as headword_count 
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth#
+			AND is_use = 'Y'
+		ORDER BY sequence  , category ASC
+	]]>
+	</select>
+	
+	<!-- 미노출까지 카테고리 가지고 오기 -->
+	<select id="getChildrenAll" resultMap="CategoryMap" cacheModel="category-cache">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth# 
+		ORDER BY sequence  , category ASC
+	]]>
+	</select>
+	
+	<!-- 카테고리 가지고 오기(멀티미디어 카운트와 함께) -->
+	<select id="getChildrenWithMultimediaCount" resultMap="CategoryMultimediaMap" cacheModel="category-cache">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children ,
+			(SELECT COUNT(1) FROM th_multimedia WHERE category LIKE CONCAT(A.category , '%') AND is_use = 'Y') as multimedia_count
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth#
+			AND is_use = 'Y'
+		ORDER BY sequence  , category ASC
+	]]>
+	</select>
+	
+		<!-- 카테고리 가지고 오기(교수학습자료 카운트와 함께) -->
+	<select id="getChildrenWithLeaningCount" resultMap="CategoryDataCountMap" cacheModel="category-cache">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children ,
+			(SELECT COUNT(1) FROM th_learning_data B, th_unit C WHERE B.unit_id = C.unit_id AND B.data_type LIKE CONCAT(A.category , '%') AND B.book_id = #bookId#) as data_count
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth#
+			AND is_use = 'Y'
+		ORDER BY sequence  , category ASC
+	]]>
+	</select>
+	
+	<!-- 카테고리 가지고 오기(데이타 카운트와 함께) -->
+	<select id="getChildrenWithDataCount" resultMap="CategoryDataCountMap" cacheModel="category-cache">
+	<![CDATA[
+	SELECT
+			* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children ,
+			(SELECT 
+					COUNT(1) 
+				FROM th_learning_data B, th_unit C
+        		WHERE B.unit_id = C.unit_id
+				AND B.data_type LIKE CONCAT(A.category , '%')
+				AND data_flag != 'C'
+	]]>
+		<isGreaterThan property="findParentUnitId" compareValue="0" prepend="AND">
+			B.unit_id IN (SELECT unit_id FROM th_unit WHERE category LIKE 'A%' AND parent_id = #findParentUnitId#)
+		</isGreaterThan>
+		<isNotEmpty property="findCategory" prepend="AND">
+			B.category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findTypeCategory" prepend="AND">
+			B.data_type LIKE CONCAT(#findTypeCategory# , '%')
+		</isNotEmpty> 
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			B.book_id = #findBookId#
+		</isGreaterThan>
+		<isGreaterThan property="findUnitId" compareValue="0" prepend="AND">
+			B.unit_id = #findUnitId#
+		</isGreaterThan>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(B.reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ss">
+			B.title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+	<![CDATA[
+			) as data_count
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth#
+			AND is_use = 'Y'
+		ORDER BY sequence , category ASC
+	]]>
+	</select>
+	
+	<!-- 카테고리 리스트를 가지고 온다. -->
+	<select id="getList" resultMap="CategoryMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children
+		FROM th_category A
+		WHERE depth = #depth#
+	]]>
+		<isGreaterThan property="depth" compareValue="1">
+			<isNotEmpty property="parent">
+			AND category LIKE CONCAT(#parent# , '%')
+			</isNotEmpty>
+		</isGreaterThan>
+	<![CDATA[
+		ORDER BY sequence , category ASC
+	]]>
+	</select>
+	
+	<!-- 가장 최고값을 가지는 카테고리를 가지고 온다. -->
+	<select id="getMaxCategory" resultClass="String">
+	<![CDATA[
+	SELECT
+			MAX(category)
+		FROM th_category
+		WHERE category LIKE CONCAT(#parent# , '%')
+			AND depth = #depth#
+	]]>
+	</select>
+	
+	<!-- 카테고리 등록 -->
+	<insert id="insert">
+	<![CDATA[
+	INSERT INTO th_category
+	(
+		category , 
+		name ,
+		is_use , 
+		depth , 
+		reg_date
+	)
+	VALUES
+	(
+		#category# ,
+		#name# ,
+		#isUse# ,
+		#depth# ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 카테고리 수정 -->
+	<update id="update">
+	<![CDATA[
+	UPDATE th_category
+		SET 
+			name = #name# ,
+			is_use = #isUse#
+		WHERE
+			category = #category#
+	]]>
+	</update>
+	
+	<!-- 2차까지의 카테고리 전체 리스트를 가지고 온다. -->
+	<select id="getSecondaryAllList" resultMap="CategoryMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT COUNT(1) FROM th_category WHERE category LIKE CONCAT(A.category , '%') AND depth = A.depth + 1  AND is_use = 'Y' ) AS children
+		FROM th_category A
+		WHERE category LIKE CONCAT( #findCategory# , '%')
+			AND depth BETWEEN 2 AND 3
+		ORDER BY sequence , category ASC
+	]]>
+	</select>
+	
+	<!-- 카테고리 전체 경로를 가져온다. -->
+	<select id="getCategoryPath" resultClass="String">
+	<![CDATA[
+	SELECT
+		get_category_path(A.category) as category_path
+	FROM
+		th_category A
+	WHERE
+		A.category = #category#
+	]]>
+	</select>
+	
+	<!-- 카테고리의 정렬 순서 수정 -->
+	<update id="updateSequence">
+	<![CDATA[
+	UPDATE th_category
+		SET 
+			sequence = #sequence#			
+		WHERE
+			category = #category#
+	]]>
+	</update>
+</sqlMap>

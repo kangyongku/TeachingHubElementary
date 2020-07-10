@@ -1,0 +1,161 @@
+
+@charset "utf-8";
+
+.container_m {width: calc(100% - 140px);min-width: 1056px;}
+.container_m .cont_wrap { position:relative; margin:0 auto; width:1021px;}
+.in_container { margin:40px 0; }
+.in_container:after { content:''; clear:both; display:block;  }
+
+
+
+.in_container > .box {clear:both;width:100%;padding-bottom:44px;overflow:hidden}
+.mybook {position:relative;float:left;width:517px;height:289px;border:1px solid #e0e0e0;background:#f5f5f5}
+.mybook .setting {position:absolute;top:16px;right:23px;width:46px;height:18px;}
+.mybook .setting a img {vertical-align:middle;margin-right:2px;}
+.mybook .setting a {color:#fff;font-size:14px;font-weight:300;}
+
+.gear{
+  -webkit-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  -moz-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+ 
+@-webkit-keyframes spin {
+    0%  {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg);}
+}
+ 
+@-moz-keyframes spin {
+   0%  {-moz-transform: rotate(0deg);}
+    100% {-moz-transform: rotate(360deg);}
+}
+@keyframes spin {
+    0%  {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
+.rotated {
+    -webkit-animation-play-state: running;
+    -moz-animation-play-state: running;
+    -ms-animation-play-state: running;
+    -o-animation-play-state: running;
+    animation-play-state: running;
+	animation-iteration-count: infinite;
+
+}
+
+.mybook .mark_09 {position:absolute;width:33px;height:39px;top:8px;left:22px;background:url(/assets/front/2019img/main/09.png) no-repeat;color:#fff;padding-right:4px;letter-spacing:0;font-size:12px;padding-top:5px;line-height:115%;}
+.mybook .mark_15 {position:absolute;width:33px;height:39px;top:8px;left:22px;background:url(/assets/front/2019img/main/15.png) no-repeat;color:#fff;padding-right:4px;letter-spacing:0;font-size:12px;padding-top:5px;line-height:115%;}
+
+.mybook > h3.m {width:490px;height:49px;background:#ff6363;font-size:18px;font-weight:500;line-height:49px;padding-left:27px;color:#fff;}
+.mybook .offmybook {width:517px;height:110px;font-size:20px;font-weight:300;text-align:center;color:#222;padding-top:130px;line-height:135%;background:url(/assets/front/2019img/main/bg_mybook.png) center 30px no-repeat #fff}
+.mybook .offmybook span {color:#c52610;}
+.mybook .mybooklist {height:240px;width:450px;margin-left:35px;background:url(/assets/front/2019img/main/bg_booklist.jpg) center 14px no-repeat }
+
+.bookdata {position:absolute;width:186px;height:100%;left:0;top:0;opacity:0;transition: all 0.3s ease-out;border-radius:4px;overflow:hidden;}
+.bookdata .blc{position:absolute;width:100%;height:100%;background:#000;opacity:0.5;z-index:999;}
+
+/**
+.bookdata .booklist {padding-top:19px;position:absolute;z-index:1999;width:186px;height:196px;padding-left:30px;}
+.bookdata .booklist .btnadd_w {border:2px solid #fff;width:123px;height:36px;border-radius:4px;line-height:36px;margin-bottom:3px;}
+.bookdata .booklist .btnadd_w a {color:#fff;display:block;width:100%;height:100%;font-size:14px;}
+.bookdata .booklist .btnadd_w a:hover {color:#333;display:block;width:100%;height:100%;font-size:14px;background:#fff}
+.bookdata .booklist .btnadd_y {border:2px solid #f8e50f;width:123px;height:36px;border-radius:4px;line-height:36px;margin-bottom:3px;}
+.bookdata .booklist .btnadd_y a {color:#f8e50f;display:block;width:100%;height:100%;font-size:14px;}
+.bookdata .booklist .btnadd_y a:hover {color:#333;display:block;width:100%;height:100%;font-size:14px;background:#f8e50f}
+**/
+
+.bookdata .booklist {position:absolute;z-index:1999;width:186px;height:196px;display:table}
+.bookdata .booklist .cen {display:table-cell;vertical-align:middle;padding-top:20px}
+.bookdata .booklist .cen .btnadd_w {border:2px solid #fff;width:123px;height:36px;border-radius:4px;line-height:36px;margin-bottom:3px;display:inline-block}
+.bookdata .booklist .cen .btnadd_w a {color:#fff;display:block;width:100%;height:100%;font-size:14px;}
+.bookdata .booklist .cen .btnadd_w a:hover {color:#333;display:block;width:100%;height:100%;font-size:14px;background:#fff}
+.bookdata .booklist .cen .btnadd_y {border:2px solid #f8e50f;width:123px;height:36px;border-radius:4px;line-height:36px;margin-bottom:3px;display:inline-block}
+.bookdata .booklist .cen .btnadd_y a {color:#f8e50f;display:block;width:100%;height:100%;font-size:14px;}
+.bookdata .booklist .cen .btnadd_y a:hover {color:#333;display:block;width:100%;height:100%;font-size:14px;background:#f8e50f}
+
+
+.banarea_m {float:right;width:467px;height:291px;}
+.bestdata {float:left;width:519px;height:203px;}
+.bestdata > h3.m {font-size:18px;color:#222;height:33px;font-weight:500;}
+.bestdata ul li {float:left;width:150px;margin-right:34px;}
+.bestdata ul li:nth-child(3) {margin-right:0}
+.bestdata a {display:block}
+.bestdata a .thum_img {margin-bottom:12px;width:150px;height:115px;overflow:hidden}
+.bestdata a .thum_img img:hover {transform: scale( 1.1 );}
+.bestdata a .thum_img img {width:100%;height:100%;transition: all 0.3s ease-out;cursor:pointer}
+.bestdata a .thum_title {font-size:14px;color:#666;line-height:130%;font-weight:300;}
+.bestdata a .thum_title span {color:#222;font-weight:400;}
+.bestdata a:hover .thum_title  {text-decoration:underline;text-underline-position:under;}
+.thubmc {float:right;width:465px;height:201px;border:1px solid #e0e0e0;}
+.thubmc .historyday {position:relative;float:left;width:224px;height:171px;border-right:1px solid #e0e0e0;padding:15px}
+.thubmc .historyday .todayh {width:100%;height:65px;background:url(/assets/front/2019img/main/bg_dotline.png) repeat-x bottom}
+.thubmc .historyday .todayh .todaym {position:relative;float:left;width:100px;height:62px;background:url(/assets/front/2019img/main/bg_todaym.png) no-repeat}
+.thubmc .historyday .todayh .todaym .hmon {position:absolute;top:2px;left:5px;font-size:26px;font-weight:500;color:#fb6060}
+.thubmc .historyday .todayh .todaym .hmon span {font-weight:700;}
+.thubmc .historyday .todayh .todaym .hday {position:absolute;top:35px;right:10px;font-size:21px;font-weight:500;color:#fb6060}
+.thubmc .historyday .todayh .todaym .hday span {font-weight:700;}
+.thubmc .historyday .todayh .todayd {position:relative;float:right;width:95px;height:62px;}
+.thubmc .historyday .todayh .todayd li {float:left;font-size:22px;width:28px;margin-right:3px;padding-top:3px;}
+.thubmc .historyday .todayh .todayd li a {color:#222;font-weight:300;}
+.thubmc .historyday .todayh .todayd li a.on {color:#fb6060;font-weight:400;}
+.thubmc .historyday .todayh .todayd li a:hover {color:#fb6060;font-weight:400;}
+.thubmc .historyday .hissue {width:100%;height:76px;padding-top:8px;}
+.thubmc .historyday .hissue a .hthum {float:left;width:100px;}
+.thubmc .historyday .hissue a .hexp {float:right;width:110px;font-size:14px;letter-spacing:0;line-height:135%;}
+.thubmc .historyday .hissue a {display:block;color:#666}
+.thubmc .historyday .hissue a:hover .hexp {text-decoration:underline;text-underline-position:under;}
+.thubmc .historyday > h3.m {font-size:18px;color:#222;height:28px;font-weight:500;}
+.thubmc .historyday .btnmore {position:absolute;top:15px;right:15px;}
+.thubmc .notice {position:relative;float:right;width:180px;height:111px;border-bottom:1px solid #e0e0e0;padding:15px;}
+.thubmc .notice > h3.m {font-size:18px;color:#222;height:28px;font-weight:500;}
+.thubmc .notice .btnmore {position:absolute;top:15px;right:15px;}
+.thubmc .notice ul li {font-size:14px;padding:5px 0 6px 9px ;background:url(/assets/front/2019img/main/bg_noticelist.jpg) left 7px no-repeat;border-image:url(/assets/front/2019img/main/bg_dotline.png) 0 0 100 0 repeat;border-bottom:1px solid transparent}
+.thubmc .notice ul li a {color:#666;font-weight:300;}
+.thubmc .notice ul li a:hover {text-decoration:underline;text-underline-position:under;}
+.thubmc .notice ul li img {vertical-align:middle;margin-left:2px;}
+.thubmc .dvddata {float:right;width:210px;height:59px;background:url(/assets/front/2019img/main/bg_dvddata.png) 156px 12px no-repeat #ff6363}
+.thubmc .dvddata a {display:block;width:100%;height:100%;color:#fff;line-height:59px;font-size:14px;padding-left:15px;}
+.thubmc2 {float:left;width:517px;height:139px;border:1px solid #e0e0e0;}
+.thubmc2 .paperdata {float:left;width:225px;height:99px;padding:20px;border-right:1px solid #e0e0e0;background:url(/assets/front/2019img/main/icn_databank.png) 160px 24px no-repeat}
+.thubmc2 .paperdata > a > h3.m {font-size:18px;color:#222;height:33px;font-weight:500;}
+.thubmc2 .paperdata a p {font-size:14px;color:#666;line-height:135%;font-weight:300;}
+
+.thubmc2 .paperdata a {display:block;font-weight:300;}
+.thubmc2 .paperdata a:hover {text-decoration:underline;text-underline-position:under;}
+
+.thubmc2 .dicsearch {float:left;width:210px;height:99px;padding:20px;border-right:1px solid #e0e0e0;background:url(/assets/front/2019img/main/icn_tdic.png) 181px 24px no-repeat}
+.thubmc2 .dicsearch > a > h3.m {font-size:18px;color:#222;height:28px;font-weight:500;}
+.thubmc2 .dicsearch a p {font-size:14px;color:#666;line-height:135%;font-weight:300;}
+.thubmc2 .dicsearch a {display:block;font-weight:300;}
+.thubmc2 .dicsearch a:hover {text-decoration:underline;text-underline-position:under;}
+.thubmc2 .dicsearch .search_dic {position:relative;margin-top:10px;}
+.thubmc2 .dicsearch .search_dic input {width:167px;height:31px;border:1px solid #e0e0e0;border-radius:100px;padding:0 20px 0 20px;color:#fff;font-weight:200;font-family:'Notosans';font-size:13px;background:#7b7b7b}
+.thubmc2 .dicsearch .search_dic input::placeholder {color:#fff}
+.thubmc2 .dicsearch .search_dic .btn_s2 {position:absolute;top:4px;right:10px;cursor:pointer;width:26px;height:26px;transition:all 0.8s ease-out;}
+.thubmc2 .dicsearch .search_dic input:-ms-input-placeholder {color:#fff}
+.thubmc2 .dicsearch .search_dic input:focus{outline:none}
+
+.banarea_s {float:right;width:467px;height:141px;}
+
+.quickmenu_m {width:877px;height:65px;background:#eee;padding:20px 72px;}
+.quickmenu_m ul li {position:relative;float:left;line-height:65px;font-size:18px;margin-right:81px;}
+.quickmenu_m ul li.a1{width:184px;overflow:hidden}
+.quickmenu_m ul li.a2{width:152px;overflow:hidden}
+.quickmenu_m ul li.a3{width:152px;overflow:hidden}
+.quickmenu_m ul li.a4{width:146px;overflow:hidden}
+.quickmenu_m ul li:nth-child(4) {margin-right:0}
+.quickmenu_m ul li a {display:block;color:#222;}
+.quickmenu_m ul li img {position:absolute;top:0;}
+.quickmenu_m ul li .qmoff {opacity:1;right:0;}
+.quickmenu_m ul li .qmon {opacity:0;right:-64px;}
+.spcont > h3.m {font-size:18px;color:#222;height:33px;font-weight:500;}
+.spcont ul li {float:left;margin-right:7px;width:248px;height:320px;border:1px solid #e0e0e0;}
+.spcont ul li:nth-child(4) {margin-right:0;}
+.spcont ul li div {overflow:hidden;text-align:center}
+.spcont ul li div img:hover {transform: scale( 1.05 );}
+.spcont ul li div img {width:100%;height:100%;transition: all 0.3s ease-out;cursor:pointer}
+
+
+

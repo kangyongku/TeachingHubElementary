@@ -1,0 +1,34 @@
+body{background-color:#fff;-webkit-text-size-adjust:none}
+body, input, textarea, select, button, table{font-size:14px;font-family:'³ª´®°íµñ',NanumGothic,'¸¼Àº °íµñ','Malgun Gothic','µ¸¿ò',Dotum,'±¼¸²',Gulim,Helvetica,sans-serif;line-height:1.25em}
+#header{height:88px;background-color:#51555f;border-bottom:solid 2px #272729;overflow:hidden;}
+#header h1{margin:15px 0 9px 10px;float:left;}
+#header .btn_plus{float:right;margin:10px 10px 0 0}
+#header .search{clear:both;margin:0 10px;position:relative;}
+#header .search select{-webkit-appearance:none;width:97px;padding:6px 0 6px;border:solid 1px #27292f;position:absolute;left:0;top:0;padding-left:15px;background:url(../../img/icon/down.png) 72px 10px no-repeat #fff;background-size:15px 9px;border-radius:0;-webkit-border-radius:0;}
+#header .search .search_text{position:relative;margin:0 0 0 100px;border:solid 1px #27292f;background-color:#fff;padding: 6px 33px 6px 3px;}
+#header .search .search_text input[type=text]{width:100%;-webkit-appearance:none;border:0;outline:none;}
+#header .search .search_text input[type=image]{position:absolute;right:7px;top:4px;-webkit-appearance: none;}
+
+.container{min-height:100px;}
+
+
+/* 50ÁÖ³â ·Î°í ¾øÀ»¶§  
+#footer{height:135px;border-top:solid 1px #979797;padding-top:22px;}
+#footer .buttons{text-align:center;margin-bottom:24px;}
+#footer .menu{text-align:center;margin-bottom:5px;}
+#footer .menu a{color:#51555f;}
+#footer .menu a:before{width:1px;height:12px;background-color:#979797;display:inline-block;content:"";display:inline-block;vertical-align:-2px;margin:0 7px}
+#footer .menu a:first-child:before{width:0;height:0;}
+#footer .copyright{color:#979797;text-align:center;font-size:11px} */
+
+
+/* 50ÁÖ³â ·Î°í ÀÖÀ»¶§  */
+#footer{height:135px;border-top:solid 1px #979797;padding-top:22px;}
+#footer .buttons{text-align:center;margin-bottom:24px;}
+#footer .menu{text-align:center;margin-bottom:5px;}
+#footer .menu a{color:#51555f;}
+#footer .menu a:before{width:1px;height:12px;background-color:#979797;display:inline-block;content:"";display:inline-block;vertical-align:-2px;margin:0 7px}
+#footer .menu a:first-child:before{width:0;height:0;}
+#footer .copyright{color:#979797;font-size:11px;text-align:center;}
+#footer .logo_50{width:75px;display:block;margin:0 auto;display:block;}
+

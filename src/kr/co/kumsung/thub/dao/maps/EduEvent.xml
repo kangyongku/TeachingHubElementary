@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<!-- 교실개선프로젝트 비주얼씽킹, 진로교육 이벤트 -->
+<sqlMap namespace="EduEvent">
+
+	<resultMap id="EduEventID" class="kr.co.kumsung.thub.domain.EduEvent">
+		<result column="user_id" property="user_id"/>
+		<result column="edu_day" property="edu_day" />
+		<result column="reg_date" property="reg_date" />
+		<result column="person_agreement" property="person_agreement" />
+		<result column="school" property="school" />
+		<result column="tel" property="tel" />
+	</resultMap>
+	
+	<!--  이벤트 등록된 총 갯수를 가지고 온다. -->
+	<select id="getTotalPerson" resultClass="int">
+	<![CDATA[
+	SELECT
+			count(1)as cnt
+		FROM edu_event where edu_day = #edu_day#
+	]]>
+	<isNotEmpty property="user_id" prepend="AND">
+			user_id = #user_id#
+	</isNotEmpty>
+	</select>
+	
+	<!--  도서를 등록한다. -->
+	<insert id="insertEduevent">
+	<![CDATA[
+	INSERT INTO edu_event
+	(
+		user_id ,
+		edu_day ,
+		reg_date ,
+		person_agreement,
+		school,
+		tel
+	)
+	VALUES
+	(
+		#user_id# , 
+		#edu_day# ,
+		NOW()  ,
+		#person_agreement#,
+		#school#,
+		#tel#
+	)
+	]]>
+	</insert>
+</sqlMap>

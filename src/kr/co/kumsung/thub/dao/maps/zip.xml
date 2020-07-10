@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="zip">
+
+	<resultMap class="kr.co.kumsung.thub.domain.Config" id="zipList">
+		<result property="seq" 			column="SEQ" />
+		<result property="zipCode" 		column="ZIPCODE" />
+		<result property="sido" 		column="SIDO" />
+		<result property="gugun" 		column="GUGUN" />
+		<result property="bunji" 		column="BUNJI" />
+		<result property="new_road" 		column="NEW_ROAD" />
+		<result property="new_road_building" 	column="NEW_ROAD_BUILDING" />
+		<result property="new_road_dong" 	column="NEW_ROAD_DONG" />
+		<result property="dong" 		column="DONG" />
+		<result property="new_bunji" 		column="NEW_BUNJI" />
+	</resultMap>
+	
+	<select id="zip.zipList" resultMap="zipList" >
+			SELECT	a.SEQ
+					,a.ZIPCODE ZIPCODE
+					,a.SIDO SIDO
+					,a.GUGUN GUGUN
+					,a.DONG DONG
+					,a.BUNJI BUNJI
+					,b.ROAD NEW_ROAD
+					,b.BUNJI NEW_BUNJI 
+					,b.ROAD_BUILDING NEW_ROAD_BUILDING
+					,b.DONG NEW_ROAD_DONG						 				
+			FROM	zipcode a
+        inner join newzipcode b
+			on	a.zipcode = b.zipcode
+			<isNotEmpty property="searchNm" prepend="WHERE">
+			<![CDATA[
+			a.DONG LIKE CONCAT('%',#searchNm#,'%')
+			or b.ROAD LIKE CONCAT('%',#searchNm#,'%')
+			]]>
+			</isNotEmpty>
+			ORDER BY a.ZIPCODE, a.bunji, b.bunji 
+	</select>
+	
+	<select id="zip.zipCount" resultClass="int">
+	
+			SELECT	COUNT(*)
+			FROM	zipcode a
+        inner join newzipcode b
+			on	a.zipcode = b.zipcode
+			<isNotEmpty property="searchNm" prepend="WHERE">
+			<![CDATA[
+			a.DONG LIKE CONCAT('%',#searchNm#,'%')
+			or b.ROAD LIKE CONCAT('%',#searchNm#,'%')			
+			]]>
+			</isNotEmpty>
+	</select>
+
+</sqlMap>

@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+.sbHolder{
+    background-color:#ffffff;
+    border: solid 1px #d8d8d8;
+    height: 26px;
+	position: relative;
+    width: 188px;
+    outline: none;
+}
+.sbHolder:focus .sbSelector, .sbSelector:hover,.sbOptions a{
+	text-decoration: none;
+}
+.sbSelector{
+	color: #666;
+	display: block;
+	height: 26px;
+	left: 0;
+	line-height: 28px;
+	outline: none;
+	overflow: hidden;
+	position: absolute;
+	text-indent: 8px;
+	top: 0;
+	color: #666;
+	width: 188px;
+	text-decoration: none;
+}
+.sbToggle{
+	width:7px;
+	height:4px;
+	display:block;
+	position:absolute;
+	right:10px;
+	top:11px;
+	background:url(../../img/common/selectbox_bull_open.gif) 0 0 no-repeat;
+}
+.sbToggleOpen{
+	background-image:url(../../img/common/selectbox_bull_close.gif);
+}
+.sbHolderDisabled{
+	background-color: #3C3C3C;
+	border: solid 1px #515151;
+}
+.sbHolderDisabled .sbHolder{
+
+}
+.sbHolderDisabled .sbToggle{
+
+}
+.sbOptions{
+	background-color: #ffffff;
+	border: 1px solid #e5e5e5;
+	border-top: none;
+	list-style: none;
+	left: -1px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 30px;
+	width: 100%;
+	z-index: 10;
+	overflow-y: auto;
+}
+.sbOptions li{
+	padding-bottom: 0 !important;
+}
+.sbOptions li:hover{
+    background-color:#eee;
+}
+.sbOptions a{
+	display: block;
+	outline: none;
+	padding: 7px 10px;
+	color: #666;
+}
+.sbOptions li.last a{
+	border-bottom: none;
+}
+.sbOptions .sbDisabled{
+	border-bottom: dotted 1px #515151;
+	color: #999;
+	display: block;
+	padding: 7px 0 7px 3px;
+}
+.sbOptions .sbSub{
+	padding-left: 17px;
+}

@@ -1,0 +1,113 @@
+@charset "utf-8";
+
+/* font */
+@font-face{
+	font-family:'Notosans';
+	font-style:normal;
+	font-weight:100;
+	src:url('../font/NotoSans-Thin.eot');
+	src:local('※'),
+		url('../font/NotoSans-Thin.woff') format('woff'),
+		url('../font/NotoSans-Thin.woff2') format('woff2'),
+		url('../font/NotoSans-Thin.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'Notosans';
+	font-style:normal;
+	font-weight:200;
+	src:url('../font/NotoSansCJKkr-Light.eot');
+	src:local('※'),
+		url('../font/NotoSansCJKkr-Light.woff') format('woff'),
+		url('../font/NotoSansCJKkr-Light.woff2') format('woff2'),
+		url('../font/NotoSansCJKkr-Light.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'Notosans';
+	font-style:normal;
+	font-weight:300;
+	src:url('../font/NotoSans-DemiLight.eot');
+	src:local('※'),
+		url('../font/NotoSans-DemiLight.woff') format('woff'),
+		url('../font/NotoSans-DemiLight.woff2') format('woff2'),
+		url('../font/NotoSans-DemiLight.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'Notosans';
+	font-style:normal;
+	font-weight:400;
+	src:url('../font/NotoSans-Regular.eot');
+	src:local('※'),
+		url('../font/NotoSans-Regular.woff') format('woff'),
+		url('../font/NotoSans-Regular.woff2') format('woff2'),
+		url('../font/NotoSans-Regular.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'Notosans';
+	font-style:normal;
+	font-weight:500;
+	src:url('../font/NotoSansCJKkr-Medium.eot');
+	src:local('※'),
+		url('../font/NotoSansCJKkr-Medium.woff') format('woff'),
+		url('../font/NotoSansCJKkr-Medium.woff2') format('woff2'),
+		url('../font/NotoSansCJKkr-Medium.otf') format('opentype');
+}
+
+@font-face{
+	font-family:'Notosans';
+	font-style:normal;
+	font-weight:600;
+	src:url('../font/NotoSansCJKkr-Bold.eot');
+	src:local('※'),
+		url('../font/NotoSansCJKkr-Bold.woff') format('woff'),
+		url('../font/NotoSansCJKkr-Bold.woff2') format('woff2'),
+		url('../font/NotoSansCJKkr-Bold.otf') format('opentype');
+}
+
+html {margin:0;padding:0;height:100%}
+body {margin:0;padding:0;width:100%; height:100%; font-family:'Notosans', '맑은 고딕','malgun gothic','돋움',dotum,sans-serif; font-size:13px; font-weight:400; line-height:1.2; letter-spacing:-1px; color:#333333;}
+div,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,p,form,fieldset,input,table,tr,th,td,button,textarea,select {margin:0;padding:0}
+h1, h2, h3, h4, h5, h6{font-size:100%;font-weight:normal}
+img {border:0;vertical-align:top}
+ul,ol,dl,dt,dd,li {list-style:none; word-break:break-word}
+table {width:100%; table-layout:fixed}
+table, th, td {border-collapse:collapse;border-spacing:0; border:0; font-weight:normal;word-wrap:break-word}
+caption {overflow:hidden;width:0; height:0;font-size:0;line-height:0}
+legend {overflow:hidden;width:0; height:0;font-size:0;line-height:0;}
+fieldset, blockquote, iframe, button {border:none}
+i, em, u, cite {font-style:normal}
+strong,em, b {font-weight:normal}
+a {color:#666;text-decoration:none;}
+button {width:auto; border:none;cursor:pointer;vertical-align:middle;margin:0; padding:0; outline:none;*overflow:visible; background:none; letter-spacing:-1px}
+button::-moz-focus-inner {margin:0;padding:0;border:0}
+button > span {position:relative}
+button,input[type="submit"], input[type="button"], input[type="reset"] {cursor:pointer; border:0}
+
+input[type="hidden"] { width:0; height:0;}
+input {padding:0 23px; margin:0; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; width:282px; height:34px; line-height:34px; font-family:'Notosans'; font-size:16px; color:#313131; border:1px solid #bfbfbf;}
+input[type="file"] {display:inline-block; height:34px; border:1px solid #666; line-height:34px; -moz-box-sizing:border-box; -webkit-box-sizing:border-box;  box-sizing:border-box}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {/*-webkit-appearance: none;*/margin: 0;} /* input number 기본 버튼 reset*/
+input[type="text"]::-ms-clear {display: none;}
+input[disabled] { color:#333333; background:#fff}
+*::-webkit-input-placeholder {color:#7f7e7e !important; font-family:'Notosans'}
+*:-moz-placeholder {color:#7f7e7e !important; font-family:'Notosans'} /* FF 4-18 */
+*::-moz-placeholder {color:#7f7e7e !important; font-family:'Notosans'} /* FF 19+ */
+*:-ms-input-placeholder {color:#7f7e7e !important; font-family:'Notosans'} /* IE 10+ */
+input[type="text"]:focus, input[type="password"]:focus { border:1px solid #313131;}
+
+select { width:100%; margin:0; appearance: none; -webkit-appearance: none; -moz-appearance: none; font-family:'Notosans'; font-size:14px; word-wrap:break-word; border:none;}
+select::-ms-expand { display:none; }
+
+/* layout */
+#wrap { position:relative; min-width:990px;}
+
+/* header */
+.header { height:101px; background:url('../image/@header.png') center no-repeat;}
+
+#container {}
+
+footer { }

@@ -1,0 +1,1169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Member">
+
+	<cacheModel id="book-cache" type="LRU">
+		<flushInterval hours="24"/>
+		<flushOnExecute statement="Member.insertMyBook"/>
+		<flushOnExecute statement="Member.deleteMyBook"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+
+	<!-- 회원의 기본 Map -->
+	<resultMap id="MemberMap" class="kr.co.kumsung.thub.domain.Member">
+		<result column="id"                property="id" />
+		<result column="userid"            property="userId" />
+		<result column="passwd"            property="passwd" />
+		<result column="name"              property="name" />
+		<result column="connectcount"      property="connectCount" />
+		<result column="connectdate"       property="connectDate" />
+		<result column="teacher"           property="teacher" />
+		<result column="auth_type"         property="authType" />
+		<result column="board_auth"        property="boardAuth" />
+		<result column="learning_auth"     property="learningAuth" />
+		<result column="smart_auth"        property="smartAuth" />
+		<result column="access_auth"       property="accessAuth" />
+		<result column="sub_category"      property="subCategory" />
+		<result column="teacher_auth_type" property="teacherAuthType" />
+		<result column="is_finally_auth"   property="isFinallyAuth" nullValue="N"/>
+		<result column="fgclass"           property="fgclass" />
+		<result column="hp1"               property="hp1" />
+		<result column="hp2"               property="hp2" />
+		<result column="hp3"               property="hp3" />
+		<result column="schoolinfoseq"     property="schoolinfoseq" />
+		<result column="schoolNm"          property="schoolNm" />
+		<result column="address"           property="address" />
+		<result column="zipcode"           property="zipcode" />
+	</resultMap>
+	
+	<!-- 회원 정보 조회 -->
+	<resultMap id="MemberInfoMap" class="kr.co.kumsung.thub.domain.Member">
+		<result column="userid" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="hp1" property="hp1"/>
+		<result column="hp2" property="hp2"/>
+		<result column="hp3" property="hp3"/>
+		<result column="email" property="email"/>
+		<result column="ip" property="ip"/>
+		<result column="sub_category" property="subCategory" />		
+	</resultMap>
+	
+	<!-- 관리자 회원 Map -->
+	<resultMap id="AdminMemberMap" class="kr.co.kumsung.thub.domain.Member">
+		<result column="auth_id" property="authId" />
+		<result column="user_id" property="userId" />
+		<result column="name" property="name" />
+		<result column="auth_type" property="authType" />
+		<result column="smart_auth" property="smartAuth" />
+		<result column="access_auth" property="accessAuth" />
+		<result column="learning_auth" property="learningAuth" />
+		<result column="board_auth" property="boardAuth" />
+		<result column="sub_category" property="subCategory" />
+	</resultMap>
+	
+	<!-- 회원목록 리스트 -->
+	<resultMap id="MemberList" class="kr.co.kumsung.thub.domain.Member">
+		<result column="id" property="id" />
+		<result column="job" property="job" />
+		<result column="jobName" property="jobName" />
+		<result column="userid" property="userId" />
+		<result column="name" property="name" />
+		<result column="hpNum" property="hpNum" />
+		<result column="writedate" property="writedate" />
+		<result column="teacher" property="teacher" />
+		<result column="sub_category" property="subCategory" />
+		<result column="is_finally_auth" property="isFinallyAuth" nullValue="N" />				
+	</resultMap>
+	
+	<!-- 회원 데이타 -->
+	<resultMap id="MemberDetailMap" class="kr.co.kumsung.thub.domain.Member">
+		<result column="id" property="id" />
+		<result column="userid" property="userId" />
+		<result column="name" property="name" />
+		<result column="hp1" property="hp1" />
+		<result column="hp2" property="hp2" />
+		<result column="hp3" property="hp3" />
+		<result column="tel1" property="tel1" />
+		<result column="tel2" property="tel2" />
+		<result column="tel3" property="tel3" />
+		<result column="email" property="email" />
+		<result column="is_sms" property="is_sms" />
+		<result column="isremail" property="isremail" />
+		<result column="zipcode" property="zipcode" />
+		<result column="address1" property="address1" />
+		<result column="address2" property="address2" />
+		<result column="job" property="job" />
+		<result column="jobName" property="jobName" />
+		<result column="schoolInfoCharge" property="schoolInfoCharge" />
+		<result column="teacher" property="teacher" />
+		<result column="teacher_auth_type" property="teacherAuthType" />
+		<result column="visitreason" property="visitreason" />
+		<result column="sub_category" property="subCategory" nullValue=""/>
+		<result column="sub_category_name" property="subCategoryName" nullValue=""/>
+		<result column="is_finally_auth" property="isFinallyAuth" nullValue="N"/>	
+		<result column="finally_auth_date" property="finallyAuthDate" nullValue=""/>
+		<result column="school_nm" property="schoolNm" nullValue=""/>
+		<result column="school_tel" property="schoolTel" nullValue=""/>	
+		<result column="school_fax" property="schoolFax" nullValue=""/>	
+		<result column="school_zipcode" property="schoolZipcode" nullValue=""/>	
+		<result column="school_address1" property="schoolAddress1" nullValue=""/>
+		<result column="school_address2" property="schoolAddress2" nullValue=""/>
+		<result column="auth_type_etc" property="authTypeEtc" nullValue=""/>						
+	</resultMap>
+	
+	<!-- 관리자 회원의 조회를 위한 데이타 -->
+	<resultMap id="MemberAuthMap" class="kr.co.kumsung.thub.domain.Member">
+		<result column="id" property="id" />
+		<result column="userid" property="userId" />
+		<result column="name" property="name" />
+		<result column="auth_type" property="authType" />
+		<result column="email" property="email" />
+		<result column="hp1" property="hp1" />
+		<result column="hp2" property="hp2" />
+		<result column="hp3" property="hp3" />
+		<result column="hpNum" property="hpNum" />
+		<result column="smart_auth" property="smartAuth" />
+		<result column="access_auth" property="accessAuth" />
+		<result column="learning_auth" property="learningAuth" />
+		<result column="board_auth" property="boardAuth" />
+		<result column="sub_category" property="subCategory" />		
+	</resultMap>
+	
+	<!-- 관리자 권한 관리 리스트 데이터 -->
+	<resultMap id="MemberAuthList" class="kr.co.kumsung.thub.domain.Member">
+		<result column="auth_id" property="authId"/>
+		<result column="auth_type" property="authType"/>
+		<result column="userid" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="hpNum" property="hpNum"/>
+		<result column="writedate" property="writedate"/>
+		<result column="reg_date" property="adminDate"/>
+		<result column="auth_granter" property="authGranter"/>		
+		<result column="sub_category" property="subCategory" />
+	</resultMap>
+	<!-- 관리자 권한 접속 리스트 데이터 -->
+	<resultMap id="AccessList" class="kr.co.kumsung.thub.domain.Member">
+		<result column="auth_id" property="authId"/>
+		<result column="auth_type" property="authType"/>
+		<result column="userid" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="ip" property="ip" />
+		<result column="writedate" property="writedate"/>
+		<result column="sub_category" property="subCategory" />
+	</resultMap>
+	<!-- 관리자 권한 접속 리스트 데이터 -->
+	<resultMap id="MemberAccessList" class="kr.co.kumsung.thub.domain.Member">
+		<result column="num" property="num"/>
+		<result column="site_code" property="siteCode"/>
+		<result column="userid" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="action_date" property="actionDate"/>
+		<result column="ip" property="ip" />
+		<result column="action_mode" property="actionMode"/>
+		<result column="target_name" property="targetName" />
+		<result column="target_id" property="targetId" />
+	</resultMap>
+	
+	
+	<!-- 관리자 권한 관리 상세 데이터 -->	
+	<resultMap id="MemberAuthDetail" class="kr.co.kumsung.thub.domain.Member">
+		<result column="auth_id" property="authId"/>
+		<result column="auth_type" property="authType"/>
+		<result column="userid" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="ip" property="ip"/>
+		<result column="hpNum" property="hpNum"/>
+		<result column="writedate" property="writedate"/>
+		<result column="smart_auth" property="smartAuth"/>
+		<result column="access_auth" property="accessAuth"/>
+		<result column="learning_auth" property="learningAuth"/>
+		<result column="board_auth" property="boardAuth"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="email" property="email"/>
+		<result column="sub_category" property="subCategory" />		
+	</resultMap>
+	
+	<!-- 나의 교과서 -->
+	<resultMap id="ChoiceBookMap" class="kr.co.kumsung.thub.domain.ChoiceBook">
+		<result column="choice_id" property="choiceId"/>
+		<result column="user_id" property="userId"/>
+		<result column="book_id" property="bookId"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="name" property="name"/>
+		<result column="author" property="author"/>
+		<result column="course_name" property="courseName"/>
+		<result column="category" property="category"/>
+		<result column="img_url" property="imgUrl" />
+		<result column="special_cd" property="specialCd" />
+		<result column="teacher_cd_view" property="teacherCdView" nullValue=""/>
+		<result column="cd_links" property="cdLinks" />
+	</resultMap>
+	
+	<!-- 회원 데이타를 가지고 온다. -->
+	<select id="get" resultMap="MemberMap">
+	<![CDATA[
+		SELECT  id 
+		      , userid 
+		      , passwd 
+		      , NAME 
+		      , teacher 
+		      , sub_category 
+		      , connectcount
+		      , connectdate
+		      , B.auth_type 
+		      , B.board_auth 
+		      , B.learning_auth 
+		      , B.smart_auth
+		      , B.access_auth
+		      , A.auth_type as teacher_auth_type 
+		      , is_finally_auth
+		      , A.fgclass
+		      , A.hp1   
+		      , A.hp2
+		      , A.hp3
+		      , A.schoolInfoSeq as schoolinfoseq
+		      , C.SCHOOL_NM     as schoolNm
+		      , C.address       
+		      , C.ZIPCODE       as zipcode      
+		  FROM Member A
+		  LEFT OUTER JOIN th_admin B ON A.userid = B.user_id
+		  LEFT OUTER JOIN SCHOOL   C ON A.schoolInfoSeq = C.SCHOOL_SEQ
+		 WHERE A.userid = #userId#
+		   AND (A.teacher = 'Y' || B.auth_type != '')	
+	]]>
+	</select>
+	
+	
+	<!-- 회원 데이타를 가지고 온다. -->
+	<select id="matchPassword" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM Member
+		WHERE   userid = #userId#
+			AND passwd = PASSWORD(#passwd#)
+	]]>
+	</select>
+	
+	<!-- 회원 목록 리스트 -->
+	<select id="getMemberList" resultMap="MemberList">
+	<![CDATA[
+	SELECT
+		job,
+		(SELECT codename FROM COMMONCODE WHERE category='JOB' and code=A.job) as jobName,
+		id,
+		userid,
+		name,
+		concat(hp1,'-',hp2,'-',hp3) as hpNum,
+		writedate,
+		teacher ,
+		sub_category ,
+		A.auth_type as teacher_auth_type ,
+		is_finally_auth
+	FROM
+		Member A
+	WHERE
+		A.teacher = 'Y'
+	]]> 
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fn">
+			A.name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			A.userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fh">
+			CONCAT(A.hp1,A.hp2,A.hp3) like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fe">
+			A.email LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findIsRecSms">
+		<isNotEqual property="findIsRecSms" compareValue="N" prepend="AND">
+			is_sms = 'Y'
+		</isNotEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findIsFinallyAuth" prepend="AND">
+			A.is_finally_auth = #findIsFinallyAuth#
+	</isNotEmpty>
+	<isNotEmpty property="findAuthType" prepend="AND">
+			A.auth_type = #findAuthType#
+	</isNotEmpty>
+	<isNotEmpty property="findSubCategory" prepend="AND">
+			A.sub_category LIKE CONCAT(#findSubCategory# , '%')
+	</isNotEmpty>
+	ORDER BY
+		A.writedate desc
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 회원 목록 리스트 회원수 -->
+	<select id="getMemberTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1)as cnt
+	FROM
+		Member A
+	WHERE
+		teacher = 'Y' 
+	]]>	
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fn">
+			A.name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			A.userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fh">
+			CONCAT(A.hp1,A.hp2,A.hp3) like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fe">
+			A.email LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findIsRecSms">
+		<isNotEqual property="findIsRecSms" compareValue="N" prepend="AND">
+			is_sms = 'Y'
+		</isNotEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findIsFinallyAuth" prepend="AND">
+			A.is_finally_auth = #findIsFinallyAuth#
+	</isNotEmpty>
+	<isNotEmpty property="findAuthType" prepend="AND">
+			A.auth_type = #findAuthType#
+	</isNotEmpty>
+	<isNotEmpty property="findSubCategory" prepend="AND">
+			A.sub_category LIKE CONCAT(#findSubCategory# , '%')
+	</isNotEmpty>
+	</select>
+	
+	
+	<!-- 관리자로그인 실패 횟수 UPDATE -->
+	<update id="updateLoginCount">
+	<![CDATA[
+	UPDATE 
+		Member
+	SET
+		connectcount = connectcount+1
+	WHERE
+		userid = #userId# 
+	]]>
+	</update>
+	
+	<!-- 관리자로그인 실패 0회 UPDATE -->
+	<update id="updateLoginCountDefault">
+	<![CDATA[
+	UPDATE 
+		Member
+	SET
+		connectcount = 0
+	WHERE
+		userid = #userId# 
+	]]>
+	</update>
+	
+	<!-- 회원 승인 여부 수정 -->
+	<update id="updateMemberTeacher">
+	<![CDATA[
+	UPDATE 
+		Member
+	SET
+		teacher = #teacher#
+	WHERE
+		id = #id#
+	]]>
+	</update>
+	<!-- 회원 상세 보기 -->
+	<select id="getMemberDetail" resultMap="MemberDetailMap">
+	<![CDATA[
+	SELECT
+		A.id,
+		A.userid,
+		A.name,
+		A.zipcode,
+		A.address1,
+		A.address2,
+		A.isremail,
+		A.is_sms,
+		A.tel1,
+		A.tel2,
+		A.tel3,
+		A.hp1,
+		A.hp2,
+		A.hp3,
+		A.job,
+		A.email,
+		A.schoolInfoCharge,
+		A.teacher,
+		(SELECT codename FROM COMMONCODE WHERE category='JOB' and code=A.job) as jobName,
+		(SELECT codename FROM COMMONCODE WHERE CATEGORY = 'VSR' AND CODE = A.visitreason) as visitreason ,
+		A.sub_category ,
+		(SELECT name FROM th_category WHERE category = A.sub_category) as sub_category_name ,
+		A.auth_type as teacher_auth_type ,
+		A.is_finally_auth ,
+		A.finally_auth_date ,
+		B.SCHOOL_NM as school_nm ,
+		B.TEL as school_tel ,
+		B.FAX as school_fax ,
+		B.ZIPCODE as school_zipcode ,
+		B.ADDRESS as school_address1 ,
+		B.ADDRESS2 as school_address2 ,
+		A.auth_type_etc
+	FROM
+		Member A LEFT OUTER JOIN SCHOOL B
+		ON A.schoolInfoSeq = B.SCHOOL_SEQ
+	WHERE
+		A.id = #id#
+	]]>	
+	</select>
+	
+	<!-- 관리자 회원의 상세 데이타를 가지고 온다. -->
+	<select id="getFindUserInfo" resultMap="MemberAuthMap">
+	<![CDATA[
+	SELECT 
+		id , 
+		userid ,
+		name ,
+		'' AS auth_type ,
+		email ,
+		hp1 ,
+		hp2 ,
+		hp3 ,
+		concat(hp1,'-',hp2,'-',hp3)as hpNum,
+		'' AS smart_auth ,
+		'' AS access_auth ,
+		'' AS learning_auth ,
+		'' AS board_auth ,
+		sub_category ,
+		A.auth_type as teacher_auth_type
+	FROM Member A 
+	WHERE A.userid = #userId#
+		AND A.userid NOT IN (SELECT user_id FROM th_admin )
+	]]>
+	</select>
+	
+	<!-- 관리자 권한 입력 -->	
+	<insert id="insertAuth">
+	INSERT INTO th_admin
+	(
+		user_id,
+		auth_type,
+		smart_auth,
+		access_auth,
+		learning_auth,
+		board_auth,
+		reg_date,
+		auth_granter
+	)
+	VALUES
+	(
+		#userId#,
+		#authType#,
+		<isNotEmpty property="smartAuth">
+			<iterate property="smartAuth" open="'" close="'," conjunction=",">$smartAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="smartAuth">
+			'',
+		</isEmpty>
+		<isNotEmpty property="accessAuth">		
+			<iterate property="accessAuth" open="'" close="'," conjunction=",">$accessAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="accessAuth">
+			'',
+		</isEmpty>
+		<isNotEmpty property="learningAuth">
+			<iterate property="learningAuth" open="'" close="'," conjunction=",">$learningAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="learningAuth">
+			'',
+		</isEmpty>
+		<isNotEmpty property="boardAuth">
+			<iterate property="boardAuth" open="'" close="'," conjunction=",">$boardAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="boardAuth">
+			'',
+		</isEmpty>
+		NOW(),
+		#authGranter#
+	)
+	</insert>
+	
+	<!-- 관리자 권한 관리 리스트--> 
+	<select id="getAuthList" resultMap="MemberAuthList">
+	<![CDATA[
+	SELECT
+		A.auth_id,
+		A.auth_type,
+		B.userid,
+		concat(B.hp1,'-',B.hp2,'-',B.hp3)as hpNum,
+		B.name,
+		B.writedate ,
+		A.reg_date,
+		A.auth_granter,
+		sub_category ,
+		A.auth_type as teacher_auth_type
+	FROM
+		th_admin A,
+		Member B
+	WHERE
+		A.user_id = B.userid
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fn">
+			B.name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			B.userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fh">
+			CONCAT(B.hp1,B.hp2,B.hp3) like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fe">
+			B.email LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fw">
+			B.writedate LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findAuthType" prepend="AND">
+		A.auth_type = #findAuthType# 
+	</isNotEmpty>
+	ORDER BY A.auth_id desc 
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 관리자 권한 관리 리스트 개수 -->
+	<select id="getAuthTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1)as cnt
+	FROM
+		th_admin A,
+		Member B
+	WHERE
+		A.user_id = B.userid
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fn">
+			B.name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fi">
+			B.userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fh">
+			CONCAT(B.hp1,B.hp2,B.hp3) like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fe">
+			B.email LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fw">
+			B.writedate LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findAuthType" prepend="AND">
+		A.auth_type = #findAuthType# 
+	</isNotEmpty>
+	</select>
+	
+	<!-- 관리자 권한 관리 상세 보기 -->
+	<select id="getAuthDetail" resultMap="MemberAuthDetail">
+	<![CDATA[
+	SELECT
+		A.auth_id,
+		A.auth_type,
+		A.smart_auth,
+		A.access_auth,
+		A.learning_auth,
+		A.board_auth,
+		A.reg_date,
+		concat(B.hp1,'-',B.hp2,'-',B.hp3)as hpNum,
+		B.name,
+		B.ip,
+		B.writedate,
+		B.userid,
+		B.email ,
+		B.sub_category ,
+		B.auth_type as teacher_auth_type
+	FROM
+		th_admin A,
+		Member B
+	WHERE
+		A.user_id = B.userid
+	AND
+		A.auth_id = #authId#
+	]]>
+	</select>
+	
+	<!-- 관리자 권한 관리 수정 -->
+	<update id="updateAuth">
+	UPDATE
+		th_admin
+	SET
+		smart_auth = 
+		<isNotEmpty property="smartAuth">
+			<iterate property="smartAuth" open="'" close="'," conjunction=",">$smartAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="smartAuth">
+			'',
+		</isEmpty>
+		access_auth = 
+		<isNotEmpty property="accessAuth">		
+			<iterate property="accessAuth" open="'" close="'," conjunction=",">$accessAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="accessAuth">
+			'',
+		</isEmpty>
+		learning_auth =
+		<isNotEmpty property="learningAuth">
+			<iterate property="learningAuth" open="'" close="'," conjunction=",">$learningAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="learningAuth">
+			'',
+		</isEmpty>
+		board_auth = 
+		<isNotEmpty property="boardAuth">
+			<iterate property="boardAuth" open="'" close="'," conjunction=",">$boardAuth[]$</iterate>
+		</isNotEmpty>
+		<isEmpty property="boardAuth">
+			'',
+		</isEmpty>
+		auth_type = #authType#
+	WHERE
+		auth_id = #authId#
+	</update>
+	
+	<!-- 관리자의 로그인 데이타 처리 -->
+	<select id="getAdminLogin" resultMap="AdminMemberMap">
+	<![CDATA[
+	SELECT 
+		A.auth_id ,
+		A.user_id ,
+		B.name ,
+		A.auth_type ,
+		A.smart_auth ,
+		A.access_auth ,
+		A.learning_auth ,
+		A.board_auth ,
+		B.sub_category ,
+		B.auth_type as teacher_auth_type
+	FROM th_admin A , Member B
+	WHERE 
+		A.user_id = #userId#
+		AND PASSWORD(#passwd#) = B.passwd
+		AND A.user_id = B.userid
+	]]>
+	</select>
+	
+	<!-- 사용자 중복 체크 -->
+	<select id="getAuthUserDup" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1) cnt
+	FROM
+		th_admin
+	WHERE
+		user_id = #userId#
+	]]>
+	</select>
+	
+	<!-- 사용자 정보 조회 -->
+	<select id="getMemberInfo" resultMap="MemberInfoMap">
+	<![CDATA[
+	SELECT
+		userid,
+		name,
+		email,
+		hp1,
+		hp2,
+		hp3,
+		ip,
+		sub_category ,
+		auth_type as teacher_auth_type
+	FROM
+		Member	
+	WHERE
+		userid = #userId#
+	]]>
+	</select>
+
+	<!-- 교과 권한 여부 조회 -->
+	<select id="getLearningAuth" resultClass="int"> 
+	<![CDATA[
+	SELECT
+		count(0) as cnt
+	FROM
+		th_admin
+	WHERE
+		user_id = #userId#
+	AND
+		learning_auth LIKE CONCAT('%' , #category# , '%')
+	]]>
+	</select>
+	
+	<!-- 관리자 권한 삭제. -->
+	<delete id="deleteAuth">
+	<![CDATA[
+	DELETE FROM th_admin WHERE auth_id = #authId# 
+	]]>
+	</delete>
+	
+	<!-- 설정된 나의 교과서 목록을 가지고 온다. -->
+	<select id="getMyBooks" resultMap="ChoiceBookMap" cacheModel="book-cache">
+	<![CDATA[ 
+	SELECT
+		A.choice_id ,
+		A.user_id ,
+		A.book_id ,
+		A.reg_date , 
+		(SELECT prdimgm FROM Book WHERE id = B.legacy_id) as img_url ,
+		B.name ,
+		B.author ,
+		B.special_cd, 
+		B.teacher_cd_view ,
+		(SELECT GROUP_CONCAT(cd_id , '^' , NAME , '|') FROM th_learning_cd WHERE book_id = A.book_id) AS cd_links ,
+		(SELECT NAME FROM th_category WHERE category = B.course) AS course_name ,
+		B.category
+	FROM th_my_books A , th_learning_book B
+	WHERE A.user_id = #userId#
+		AND A.book_id = B.book_id
+	ORDER BY B.name ASC	
+	]]>
+	</select>
+	
+	<!-- 등록된 나의 교과서 카운트 가지고 오기 -->
+	<select id="getMyBooksCount" resultClass="int">
+	<![CDATA[
+	SELECT COUNT(1) FROM th_my_books
+		WHERE user_id = #userId#
+	]]>
+	</select>
+	
+	<!-- 나의 교과서가 이미 설정이 되어있는지 체크한다. -->
+	<select id="isDuplicatedMyBook" resultClass="int">
+	<![CDATA[
+	SELECT COUNT(1) FROM th_my_books
+		WHERE user_id = #userId#
+			AND book_id = #bookId#
+	]]>
+	</select>
+	
+	<!-- 내 교과서로 등록 -->
+	<insert id="insertMyBook">
+	<![CDATA[
+	INSERT INTO th_my_books
+	(
+		user_id ,
+		book_id ,
+		reg_date
+	)
+	VALUES
+	(
+		#userId# ,
+		#bookId# ,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 내 교과서에서 삭제한다. -->
+	<delete id="deleteMyBook">
+	<![CDATA[
+	DELETE FROM th_my_books WHERE user_id = #userId# AND book_id = #bookId#
+	]]>
+	</delete>
+	
+	<!-- 과목/교과 설정 -->
+	<update id="updateSubCategory"> 
+	<![CDATA[ 
+	UPDATE Member SET sub_category = #subCategory# WHERE userid = #userId#
+	]]>
+	</update>
+	
+	
+	<update id="updateMemberInfo">
+	<![CDATA[
+	UPDATE Member SET
+			tel1 = #tel1# ,
+			tel2 = #tel2# ,
+			tel3 = #tel3# ,
+			hp1 = #hp1# ,
+			hp2 = #hp2# ,
+			hp3 = #hp3# ,
+			auth_type = #authType# ,
+			is_finally_auth = #isFinallyAuth# ,
+			finally_auth_date = NOW() ,
+			auth_type_etc = #authTypeEtc#
+		WHERE id = #id# 
+	]]>
+	</update>
+	
+	<!-- SMS를 발송한다. -->
+	<!-- 19.12.11 SDK_SMS_SEND  => SDK_MMS_SEND 장문으로 변경 -->
+	<!-- 컬럼명 SMS_MSG => MMS_MSG로 -->
+	<!-- 컬럼 DEST_TYPE 제외 -->
+	<insert id="sendSms">
+	<![CDATA[
+	INSERT INTO SDK_MMS_SEND
+	(
+		USER_ID ,
+		SCHEDULE_TYPE ,
+		MMS_MSG ,
+		NOW_DATE ,
+		SEND_DATE ,
+		CALLBACK ,
+		DEST_COUNT ,
+		DEST_INFO
+	)
+	VALUES
+	(
+		'kumsung2014' ,
+		'0' ,
+		#message#,
+		DATE_FORMAT(NOW() , '%Y%m%d%H%i%s') ,
+		DATE_FORMAT(NOW() , '%Y%m%d%H%i%s') ,
+		#callback#,
+		#totalCount#,
+		#destInfo#
+	)
+	]]>
+	</insert>
+	
+	<insert id="insertSmsSendInfo">
+	<![CDATA[
+	INSERT INTO th_member_sms_log
+	(
+		subjects ,
+		message ,
+		reg_date ,
+		callback ,
+		total_count,
+		singletype
+	)
+	VALUES
+	(
+		#subjects# ,
+		#message# ,
+		NOW() ,
+		#callback# ,
+		#totalCount#,
+		#singleMsg#
+	)
+	]]>
+	</insert>
+	
+	<!-- SMS 발송 로그 카운트 -->
+	<select id="getSmsSendListCount" resultClass="int">
+	<![CDATA[
+	SELECT COUNT(1) 
+		FROM th_member_sms_log
+	]]>
+	</select>
+	
+	<!-- SMS 발송 로그 내역 -->
+	<select id="getSmsSendList" resultClass="kr.co.kumsung.thub.util.ResultMap">
+	<![CDATA[
+	SELECT 
+			* 
+		FROM th_member_sms_log
+		ORDER BY sms_id DESC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 이메일, 이름으로 조회하기 -->
+	<select id="getFindMemberByInfo" resultMap="MemberMap">
+	<![CDATA[
+	SELECT
+			id , userid , passwd , NAME , teacher , sub_category ,
+			'' AS auth_type , '' AS board_auth , '' AS learning_auth , '' AS smart_auth ,
+			A.auth_type as teacher_auth_type ,
+			is_finally_auth
+		FROM Member A
+		WHERE 1=1
+	]]>
+		<isNotEmpty property="findDupInfo" prepend="AND">
+			A.dupinfo = #findDupInfo#
+		</isNotEmpty>
+		<isNotEmpty property="findUserId" prepend="AND">
+			A.userid = #findUserId#
+		</isNotEmpty>
+		<isNotEmpty property="findName" prepend="AND">
+			A.NAME = #findName#
+		</isNotEmpty>
+		<isNotEmpty property="findEmail" prepend="AND">
+			A.email = #findEmail#
+		</isNotEmpty>
+		<isNotEmpty property="findHp1">
+			<isNotEmpty property="findHp2">
+				<isNotEmpty property="findHp3" prepend="AND">
+				(A.hp1 = #findHp1#
+						AND A.hp2 = #findHp2#
+						AND A.hp3 = #findHp3#)
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+	<![CDATA[
+		LIMIT 1
+	]]>
+	</select>
+	
+	<!-- 비밀번호 갱신 -->
+	<update id="updateMemberPasswd">
+	<![CDATA[
+	UPDATE Member SET 
+		passwd = PASSWORD(#passwd#), 
+		connectdate=NOW() 
+	WHERE userid = #userId#
+	]]>
+	</update>
+	
+	<!-- 저작도구 다운현황 입력 -->	
+	<insert id="insertSdfdown">
+	insert into th_sdf_download(user_id,down_date,year,month,day)
+            values(#userId#,
+            date_format(sysdate(),'%Y%m%d'),
+            date_format(sysdate(),'%Y'),
+            date_format(sysdate(),'%m'),
+            date_format(sysdate(),'%d'))
+	</insert>
+	
+	<!-- 관리자 권한 관리 리스트 개수 -->
+	<select id="getAccessTotalList" resultClass="int">
+	<![CDATA[
+	SELECT	count(1)as cnt
+	FROM	th_admin A, Member B
+	WHERE	A.user_id = B.userid
+	AND		A.auth_TYPE ='S'
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fi">
+			B.userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fn">
+			B.name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fa">
+			A.ip LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	</select>
+	
+	<select id="getAccessList" resultMap="AccessList">
+	<![CDATA[
+	SELECT
+		A.auth_id,
+		A.auth_type,
+		B.userid,
+		B.name,
+		B.writedate ,
+		sub_category ,
+		A.auth_type as teacher_auth_type,
+		A.ip
+	FROM
+		th_admin A,
+		Member B
+	WHERE
+		A.user_id = B.userid
+	 AND
+	 	A.auth_TYPE ='S'
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fi">
+			B.userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fn">
+			B.name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fa">
+			A.ip LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	ORDER BY A.auth_id desc 
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 접근권환 관리 상세 데이타를 가지고 온다. -->
+	<select id="getFindAccessUserInfo" resultMap="AccessList">
+	<![CDATA[
+	SELECT
+		A.auth_id,
+		A.auth_type,
+		B.userid,
+		B.name,
+		B.writedate ,
+		sub_category ,
+		A.auth_type as teacher_auth_type,
+		A.ip
+	FROM
+		th_admin A,
+		Member B
+	WHERE
+		A.user_id = B.userid
+	 AND	A.auth_TYPE ='S'
+	 AND	B.userid = #userId#
+	]]>
+	</select>
+	
+	<!-- 회원 승인 여부 수정 -->
+	<update id="updateAccessMember">
+	<![CDATA[
+	UPDATE 
+		th_admin
+	SET
+		ip = #ip#
+	WHERE
+		user_id = #userId#
+	]]>
+	</update>
+	
+	<!-- 회원 승인 여부 수정 -->
+	<update id="deleteAccessMember">
+	<![CDATA[
+	UPDATE 
+		th_admin
+	SET
+		ip = null
+	WHERE
+		user_id = #userId#
+	]]>
+	</update>
+	
+	<!-- 관리자 회원정보 접속기록 관리 리스트 개수 -->
+	<select id="getMemberAccessTotalList" resultClass="int">
+	<![CDATA[
+	SELECT	count(1)as cnt
+	FROM	admin_access_log
+	WHERE	1=1
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fi">
+			userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fn">
+			name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fa">
+			ip LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fd">
+			action_date LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findAction" prepend="AND">
+			action_mode = #findAction#
+	</isNotEmpty>
+	</select>
+	
+	<!-- 관리자 회원정보 접속기록 관리 리스트  -->
+	<select id="getMemberAccessList" resultMap="MemberAccessList">
+	<![CDATA[
+	SELECT
+		num, site_code, userid, name, action_date,
+		 ip, action_mode, target_name, target_id
+	FROM
+		admin_access_log
+	WHERE 1=1
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="fi">
+			userid LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fn">
+			name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fa">
+			ip LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="fd">
+			action_date LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findAction" prepend="AND">
+			action_mode = #findAction#
+	</isNotEmpty>
+	ORDER BY action_date desc 
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+<!-- 회원정보 접속기록 log 저장 -->
+	<insert id="insertAccessLog">
+	<![CDATA[
+	INSERT INTO admin_access_log
+	(
+		site_code ,
+		userid ,
+		name ,
+		action_date ,
+		ip,
+		action_mode,
+		target_name,
+		target_id
+		
+	)
+	VALUES
+	(
+		#siteCode# ,
+		#userId# ,
+		#name# ,
+		NOW() ,
+		#ip# ,
+		#actionMode# ,
+		#targetName#,
+		#targetId#
+	)
+	]]>
+	</insert>
+	
+	
+	<!-- 회원 상세 보기 -->
+	<select id="getMemberSchoolInfo" resultMap="MemberDetailMap">
+	<![CDATA[
+	SELECT
+		A.id,
+		A.userid,
+		A.name,
+		A.zipcode,
+		A.address1,
+		A.address2,
+		A.isremail,
+		A.is_sms,
+		A.tel1,
+		A.tel2,
+		A.tel3,
+		A.hp1,
+		A.hp2,
+		A.hp3,
+		A.job,
+		A.email,
+		A.schoolInfoCharge,
+		A.teacher,
+		(SELECT codename FROM COMMONCODE WHERE category='JOB' and code=A.job) as jobName,
+		(SELECT codename FROM COMMONCODE WHERE CATEGORY = 'VSR' AND CODE = A.visitreason) as visitreason ,
+		A.sub_category ,
+		(SELECT name FROM th_category WHERE category = A.sub_category) as sub_category_name ,
+		A.auth_type as teacher_auth_type ,
+		A.is_finally_auth ,
+		A.finally_auth_date ,
+		B.SCHOOL_NM as school_nm ,
+		B.TEL as school_tel ,
+		B.FAX as school_fax ,
+		B.ZIPCODE as school_zipcode ,
+		B.ADDRESS as school_address1 ,
+		B.ADDRESS2 as school_address2 ,
+		A.auth_type_etc,
+		B.CATEGORY
+	FROM
+		Member A LEFT OUTER JOIN SCHOOL B
+		ON A.schoolInfoSeq = B.SCHOOL_SEQ
+	WHERE
+		A.userid = #id#
+	]]>	
+	</select>
+
+	
+</sqlMap>

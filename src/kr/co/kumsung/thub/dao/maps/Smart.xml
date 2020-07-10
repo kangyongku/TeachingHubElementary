@@ -1,0 +1,1976 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<!-- 스마트학생백과 -->
+<sqlMap namespace="Smart">
+	
+	<cacheModel id="book-cache" type="LRU">
+		<flushInterval hours="24"/>
+		<flushOnExecute statement="Smart.insertBook"/>
+		<flushOnExecute statement="Smart.updateBook"/>
+		<flushOnExecute statement="Smart.deleteSmartBook"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<cacheModel id="comment-cache" type="LRU">
+		<flushInterval minutes="10"/>
+		<flushOnExecute statement="Smart.insertComment"/>
+		<flushOnExecute statement="Smart.deleteComment"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<cacheModel id="history-cache" type="LRU">
+		<flushInterval hours="6"/>
+		<flushOnExecute statement="Smart.insertHistory"/>
+		<flushOnExecute statement="Smart.deleteHistory"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<cacheModel id="exhibit-cache" type="LRU">
+		<flushInterval hours="6"/>
+		<property name="size" value="1000"/>
+	</cacheModel> 
+	
+	<!-- 도서 맵 -->
+	<resultMap id="BookMap" class="kr.co.kumsung.thub.domain.Book">
+		<result column="book_id" property="bookId" />
+		<result column="category" property="category" />
+		<result column="course" property="course" />
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="reg_date" property="regDate" />
+		<result column="reg_id" property="regId" />
+		<result column="sequence" property="sequence" />				
+		<result column="category_path" property="categoryPath" nullValue=""/>
+		<result column="course_name" property="courseName" nullValue=""/>
+		<result column="user_name" property="userName" nullValue=""/>
+	</resultMap>
+	
+	<!-- 포제어 맵 -->
+	<resultMap id="HeadwordListMap" class="kr.co.kumsung.thub.domain.Headword">
+		<result column="headword_id" property="headwordId" />
+		<result column="flag" property="flag" />
+		<result column="category" property="category" />
+		<result column="category_path" property="categoryPath" />
+		<result column="book_id" property="bookId" />
+		<result column="book_name" property="bookName" />
+		<result column="unit_id" property="unitId" />
+		<result column="unit_path" property="unitPath" />
+		<result column="title" property="title" />
+		<result column="title_eng" property="titleEng" nullValue=""/>
+		<result column="title_chi" property="titleChi" nullValue=""/>
+		<result column="reg_date" property="regDate" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="summary" property="summary" nullValue=""/> 
+		<result column="hits" property="hits" />
+		<result column="is_use" property="isUse" />
+		<result column="is_approve" property="isApprove" />
+		<result column="user_name" property="userName" />
+		<result column="study_count" property="studyCount" />
+	</resultMap>
+	
+	<resultMap id="HeadwordSearchListMap" class="kr.co.kumsung.thub.domain.Headword">
+		<result column="headword_id" property="headwordId" />
+		<result column="flag" property="flag" />
+		<result column="category" property="category" />
+		<result column="category_path" property="categoryPath" />
+		<result column="book_id" property="bookId" />
+		<result column="book_name" property="bookName" />
+		<result column="unit_id" property="unitId" />
+		<result column="unit_path" property="unitPath" />
+		<result column="title" property="title" />
+		<result column="title_eng" property="titleEng" nullValue=""/>
+		<result column="title_chi" property="titleChi" nullValue=""/>
+		<result column="reg_date" property="regDate" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="summary" property="summary" nullValue=""/> 
+		<result column="hits" property="hits" />
+		<result column="is_use" property="isUse" />
+		<result column="is_approve" property="isApprove" />
+		<result column="user_name" property="userName" />
+		<result column="exhibit" property="exhibit" />        
+	</resultMap>
+	
+	<resultMap id="HeadwordMap" class="kr.co.kumsung.thub.domain.Headword">
+		<result column="headword_id" property="headwordId" />
+		<result column="flag" property="flag" />
+		<result column="category" property="category" />
+		<result column="category_path" property="categoryPath" />
+		<result column="exhibit" property="exhibit" />
+		<result column="book_id" property="bookId" />
+		<result column="unit_id" property="unitId" />
+		<result column="unit_ids" property="unitIds" />		
+		<result column="unit_path" property="unitPath" />
+		<result column="title" property="title" nullValue=""/>		
+		<result column="title_eng" property="titleEng" nullValue=""/>
+		<result column="title_chi" property="titleChi" nullValue=""/>
+		<result column="thumbnail" property="thumbnail" nullValue=""/>
+		<result column="summary" property="summary" nullValue=""/>
+		<result column="contents" property="contents" nullValue=""/>
+		<result column="added" property="added" nullValue=""/>
+		<result column="origin_code" property="originCode" nullValue=""/>
+		<result column="origin_txt" property="originTxt" nullValue=""/>
+		<result column="relation_books" property="relationBooks" nullValue=""/>
+		<result column="reg_date" property="regDate" />
+		<result column="modify_date" property="modifyDate" /> 
+		<result column="reg_id" property="regId" /> 
+		<result column="hits" property="hits" />
+		<result column="is_use" property="isUse" />
+		<result column="is_approve" property="isApprove" />  
+		<result column="user_name" property="userName" />
+	</resultMap>
+	
+	<resultMap id="DicHeadwordMap" class="kr.co.kumsung.thub.domain.Headword">
+		<result column="headword_id" property="headwordId" />
+		<result column="flag" property="flag" />
+		<result column="category" property="category" />
+		<result column="category_path" property="categoryPath" />
+		<result column="exhibit" property="exhibit" />
+		<result column="book_id" property="bookId" />
+		<result column="unit_id" property="unitId" />
+		<result column="unit_ids" property="unitIds" />		
+		<result column="unit_path" property="unitPath" />
+		<result column="title" property="title" nullValue=""/>		
+		<result column="title_eng" property="titleEng" nullValue=""/>
+		<result column="title_chi" property="titleChi" nullValue=""/>
+		<result column="thumbnail" property="thumbnail" nullValue=""/>
+		<result column="summary" property="summary" nullValue=""/>
+		<result column="contents" property="contents" nullValue=""/>
+		<result column="added" property="added" nullValue=""/>
+		<result column="origin_code" property="originCode" nullValue=""/>
+		<result column="origin_txt" property="originTxt" nullValue=""/>
+		<result column="relation_books" property="relationBooks" nullValue=""/>
+		<result column="reg_date" property="regDate" />
+		<result column="modify_date" property="modifyDate" /> 
+		<result column="reg_id" property="regId" /> 
+		<result column="hits" property="hits" />
+		<result column="is_use" property="isUse" />
+		<result column="is_approve" property="isApprove" />
+		<result column="user_name" property="userName" />
+		<result column="exhibit_path" property="exhibitPath" />
+	</resultMap>
+	
+	<!-- 인물,사건 캘린더 맵 -->
+	<resultMap id="HistoryMap" class="kr.co.kumsung.thub.domain.History">
+		<result column="history_id" property="historyId" />
+		<result column="headword_id" property="headwordId" />
+		<result column="is_primary" property="isPrimary" />
+		<result column="history_type" property="historyType" />
+		<result column="history_date" property="historyDate" />
+		<result column="history_exp" property="historyExp" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- 문제 맵 -->
+	<resultMap id="PoolMap" class="kr.co.kumsung.thub.domain.Pool">
+		<result column="pool_id" property="poolId" />
+		<result column="headword_id" property="headwordId" />
+		<result column="flag" property="flag" />
+		<result column="question" property="question" />
+		<result column="answer" property="answer" />
+		<result column="explanation" property="explanation" />
+		<result column="reg_date" property="regDate" />  
+	</resultMap>
+	
+	<!-- 관련 표제어 맵 -->
+	<resultMap id="RelationMap" class="kr.co.kumsung.thub.domain.RelationHeadword">
+		<result column="relation_id" property="relationId" />
+		<result column="headword_id" property="headwordId" />
+		<result column="children_id" property="childrenId" />
+		<result column="category" property="category" />
+		<result column="book_id" property="bookId" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="title" property="title" />
+		<result column="title_eng" property="titleEng" />
+		<result column="title_chi" property="titleChi" />
+	</resultMap>
+	
+	<!-- Multimedia ListMapper -->
+	<resultMap id="MultimediaListMap" class="kr.co.kumsung.thub.domain.Multimedia">
+		<result column="mm_id" property="mmId" />
+		<result column="category" property="category" />
+		<result column="title" property="title" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="file_name" property="fileName" />
+		<result column="data_file" property="dataFile" />
+		<result column="contents" property="contents" />
+		<result column="keyword" property="keyword" />
+		<result column="origin_code" property="originCode" />
+		<result column="origin_txt" property="originTxt" />
+		<result column="is_use" property="isUse" />
+		<result column="reg_date" property="regDate" />
+		<result column="reg_id" property="regId" />
+		<result column="category_name" property="categoryName" />
+		<result column="category_path" property="categoryPath" />
+	</resultMap>
+	
+	<!-- 지식나눔 맵 -->
+	<resultMap id="KnowledgeMap" class="kr.co.kumsung.thub.domain.Knowledge">
+		<result column="knowledge_id" property="knowledgeId" />
+		<result column="headword_id" property="headwordId" />
+		<result column="flag" property="flag" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="contents" property="contents" /> 
+		<result column="is_approval" property="isApproval" />
+		<result column="approval_id" property="approvalId" />
+		<result column="approval_name" property="approvalName" />
+		<result column="reg_date" property="regDate" />
+		<result column="approval_date" property="approvalDate" />
+		<result column="origin_code" property="originCode" />
+		<result column="origin_txt" property="originTxt" />
+		<result column="title" property="title" />
+	</resultMap>
+	
+	<!-- Comment Map -->
+	<resultMap id="CommentMap" class="kr.co.kumsung.thub.domain.Comment">
+		<result column="comment_id" property="commentId" />
+		<result column="headword_id" property="headwordId" />
+		<result column="group_id" property="groupId" />
+		<result column="depth" property="depth" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="comment" property="comment" />
+		<result column="reg_date" property="regDate" />
+		<result column="remote_ip" property="remoteIp" />
+		<result column="is_del" property="isDel" />
+	</resultMap>
+	
+	<!-- 카테고리 -->
+	<resultMap id="CategoryMap" class="kr.co.kumsung.thub.domain.Category">
+		<result column="category" property="category" />
+		<result column="name" property="name" />
+		<result column="is_use" property="isUse" />
+		<result column="books" property="books" />
+		<result column="depth" property="depth" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- 인물,사건 캘린더(Front) 맵 -->
+	<resultMap id="HistoryFrontMap" class="kr.co.kumsung.thub.domain.History">
+		<result column="history_id" property="historyId" />
+		<result column="headword_id" property="headwordId" />
+		<result column="is_primary" property="isPrimary" />
+		<result column="history_type" property="historyType" />
+		<result column="history_date" property="historyDate" />
+		<result column="history_exp" property="historyExp" />		
+		<result column="title" property="title" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="summary" property="summary" />
+ 		<result column="weekCount" property="weekCount" />		
+	</resultMap> 
+	
+	<!-- 인물,사건 캘린더 티칭백과 메인(Front) 맵 -->
+	<resultMap id="DicHistoryMap" class="kr.co.kumsung.thub.domain.History">
+		<result column="history_id" property="historyId" />
+		<result column="headword_id" property="headwordId" />
+		<result column="is_primary" property="isPrimary" />
+		<result column="history_type" property="historyType" />
+		<result column="history_date" property="historyDate" />
+		<result column="history_exp" property="historyExp" />
+		<result column="title" property="title" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="category" property="category" />
+		<result column="book_id" property="bookId" />
+		<result column="summary" property="summary" />
+		<result column="question" property="question" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- 등록된 도서의 총 갯수를 가지고 온다. -->
+	<select id="getTotalBooks" resultClass="int">
+	<![CDATA[
+	select count(1) from 
+ 		(   
+		SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_smart_book A
+  		)
+  	B where 1=1
+	]]> 
+	<isNotEmpty property="findCategory"  prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findCourse" prepend="AND">
+		course = #findCourse#
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		is_use = #findIsUse#
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate"  prepend="AND">
+		SUBSTRING(reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="st">
+		name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="su">
+		user_name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findSmartAuth" prepend="AND">
+		SUBSTRING(category , 1 , 7 ) IN ($findSmartAuth$)
+	</isNotEmpty>
+	</select>
+	
+	<!-- 도서 리스트를 가지고 온다. -->
+	<select id="getBookList" resultMap="BookMap">
+	<![CDATA[
+	select * from (
+		SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_smart_book A
+	) B
+		WHERE 1=1
+	]]>
+	<isNotEmpty property="findCategory"  prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findCourse" prepend="AND">
+		course = #findCourse#
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		is_use = #findIsUse#
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate"  prepend="AND">
+		SUBSTRING(reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="st">
+		name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="su">
+		user_name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findSmartAuth" prepend="AND">
+		SUBSTRING(category , 1 , 7 ) IN ($findSmartAuth$)
+	</isNotEmpty>
+	<![CDATA[
+		ORDER BY book_id DESC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 도서의 모든 리스트를 가지고 온다. -->
+	<select id="getTotalBookList" resultMap="BookMap">
+	<![CDATA[
+	SELECT 
+			A.book_id ,
+			SUBSTRING(A.category , 1, 7) AS category ,
+			A.course ,
+			A.name ,
+			A.is_use ,
+			A.reg_date ,
+			A.reg_id ,
+			'' as category_path ,
+			'' as course_name ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name , 
+			sequence
+		FROM th_smart_book A
+		WHERE is_use = 'Y'
+			AND (SELECT COUNT(1) FROM th_smart_headword WHERE book_id = A.book_id) > 0
+		ORDER BY sequence ASC
+	]]>
+	</select>
+	
+	<!-- 카테고리와 맵핑된 도서 목록을 가지고 온다. -->
+	<select id="getBookListByCategory" resultMap="BookMap">
+	<![CDATA[ 
+	SELECT
+			A.* ,
+			get_category_path(category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_smart_book A
+		WHERE category = #category#
+			AND is_use = 'Y'
+		ORDER BY sequence ASC
+	]]>
+	</select>
+	
+	<!-- 도서 정보를 가지고 온다. -->
+	<select id="getBook" resultMap="BookMap">
+	<![CDATA[
+	SELECT
+			* ,
+			get_category_path(category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_smart_book A
+		WHERE book_id = #bookId#
+	]]>
+	</select>
+	
+	<!--  도서를 등록한다. -->
+	<insert id="insertBook">
+	<![CDATA[
+	INSERT INTO th_smart_book
+	(
+		category ,
+		course ,
+		name ,
+		is_use ,
+		reg_date ,
+		reg_id ,
+		sequence
+	)
+	VALUES
+	(
+		#category# ,
+		#course# ,
+		#name# ,
+		#isUse# ,
+		NOW() ,
+		#regId# ,
+		#sequence#
+	)
+	]]>
+	<selectKey resultClass="int" type="post">
+	SELECT last_insert_id() as book_id 
+	</selectKey>
+	</insert>
+	
+	<!-- 도서의 정보를 갱신한다. -->
+	<update id="updateBook">
+	<![CDATA[
+	UPDATE
+			th_smart_book
+		SET
+			category = #category# ,
+			course = #course# ,
+			is_use = #isUse# ,
+			name = #name# ,
+			sequence = #sequence#
+		WHERE
+			book_id = #bookId# 
+	]]>
+	</update>
+	
+	<!-- 표제어의 리스트 카운트를 가지고 온다. -->
+	<select id="getHeadwordListCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1) as cnt
+		FROM th_smart_headword A
+		WHERE 1=1		
+	]]>
+	<isNotEmpty property="findFlag" prepend="AND">
+		flag = #findFlag#
+	</isNotEmpty>
+	<isNotEmpty property="findRegId" prepend="AND">
+		reg_id = #findRegId#
+	</isNotEmpty>
+	<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findExhibit" prepend="AND">
+		exhibit LIKE CONCAT(#findExhibit# , '%')
+	</isNotEmpty>
+	<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+		book_id = #findBookId#
+	</isGreaterThan>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="st">
+		replace(title, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+		or
+		replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sc">
+		replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate" prepend="AND">
+		SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		is_use = #findIsUse#
+	</isNotEmpty>
+	<isNotEmpty property="findUnitIds" prepend="AND">
+		search_unit_ids LIKE CONCAT(#findUnitIds#  , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findSmartAuth" prepend="AND">
+		SUBSTRING(category , 1 , 7 ) IN ($findSmartAuth$)
+	</isNotEmpty>
+	<isNotEmpty property="findFlagType">
+		<isEqual property="findFlagType" compareValue="H" prepend="AND">
+		(SELECT COUNT(1) FROM th_smart_history WHERE headword_id = A.headword_id) > 0
+		</isEqual>
+		<isEqual property="findFlagType" compareValue="E" prepend="AND">
+		exhibit != ''
+		</isEqual>
+	</isNotEmpty>
+	<isNotEmpty property="findPhonemeStart">
+		<isNotEmpty property="findPhonemeEnd" prepend="AND">
+			<isEqual property="findPhonemeStart" compareValue="etc">
+			<![CDATA[
+			title < '가'
+			]]>
+			</isEqual>
+			<isNotEqual property="findPhonemeStart" compareValue="etc">
+			<![CDATA[
+			(title >= #findPhonemeStart# AND title < #findPhonemeEnd# )
+			]]>	
+			</isNotEqual>
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findIsApprove" prepend="AND">
+		is_approve = #findIsApprove#
+	</isNotEmpty>
+	<isNotEmpty property="findSearchMethod" prepend="AND">
+		category LIKE CONCAT(#findSearchMethod# , '%')		
+	</isNotEmpty>
+	<isNotEmpty property="findSearchStr" prepend="AND">	
+			( 
+				replace(title, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')							
+					OR replace(contents, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')       					
+			)
+			AND SUBSTRING(category , 1 , 4 ) NOT IN ('B001','B003')
+	</isNotEmpty>
+	<isNotEmpty property="findUserId">
+		<isEqual property="findStudy" compareValue="none" prepend="AND">
+			(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = A.headword_id AND user_id = #findUserId#) = 0
+		</isEqual>
+		<isEqual property="findStudy" compareValue="studied" prepend="AND">
+			(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = A.headword_id AND user_id = #findUserId#) >= 1
+		</isEqual>
+	</isNotEmpty>
+	</select>
+	
+	<!-- 표제어의 목록을 가지고 온다. -->
+	<select id="getHeadwordList" resultMap="HeadwordListMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_smart_book WHERE book_id = A.book_id) as book_name ,
+			get_unit_path(A.unit_id) as unit_path ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+	FROM
+	(
+		SELECT
+				headword_id ,
+				flag ,
+				category ,				
+				book_id ,
+				unit_id , 
+				title ,
+				title_eng ,
+				title_chi ,
+				hits ,
+				reg_date ,
+				is_use ,
+				is_approve ,
+				thumbnail ,
+				summary ,
+				reg_id
+	]]>
+			<isNotEmpty property="findUserId">
+			 ,(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId# ) as study_count
+			</isNotEmpty>
+			<isEmpty property="findUserId">
+				, 0 as study_count
+			</isEmpty>
+	<![CDATA[				
+			FROM th_smart_headword B
+			WHERE 1=1			
+	]]> 
+		<isNotEmpty property="findFlag" prepend="AND">
+			flag = #findFlag#
+		</isNotEmpty>
+		<isNotEmpty property="findRegId" prepend="AND">
+			reg_id = #findRegId#
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findExhibit" prepend="AND">
+			exhibit LIKE CONCAT(#findExhibit# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			book_id = #findBookId#
+		</isGreaterThan>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="st">
+			replace(title, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			OR
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsUse" prepend="AND">
+			is_use = #findIsUse#
+		</isNotEmpty>
+		<isNotEmpty property="findUnitIds" prepend="AND">
+			search_unit_ids LIKE CONCAT(#findUnitIds#  , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findSmartAuth" prepend="AND">
+			SUBSTRING(category , 1 , 7 ) IN ($findSmartAuth$)
+		</isNotEmpty> 
+		<isNotEmpty property="findFlagType">
+			<isEqual property="findFlagType" compareValue="H" prepend="AND">
+			(SELECT COUNT(1) FROM th_smart_history WHERE headword_id = B.headword_id) > 0
+			</isEqual>
+			<isEqual property="findFlagType" compareValue="E" prepend="AND">
+			exhibit != ''
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findPhonemeStart">
+			<isNotEmpty property="findPhonemeEnd" prepend="AND">
+				<isEqual property="findPhonemeStart" compareValue="etc">
+				<![CDATA[
+				title < '가'
+				]]>
+				</isEqual>
+				<isNotEqual property="findPhonemeStart" compareValue="etc">
+				<![CDATA[
+				(title >= #findPhonemeStart# AND title < #findPhonemeEnd# )
+				]]>	
+				</isNotEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsApprove" prepend="AND">
+			is_approve = #findIsApprove#
+		</isNotEmpty>
+		<isNotEmpty property="findSearchMethod" prepend="AND">
+			category LIKE CONCAT(#findSearchMethod# , '%')			
+		</isNotEmpty>
+		<isNotEmpty property="findSearchStr" prepend="AND">
+			( 
+				replace(title, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')							
+					OR replace(contents, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')       					
+			)
+			AND SUBSTRING(category , 1 , 4 ) NOT IN ('B001','B003')
+		</isNotEmpty>
+		<isNotEmpty property="findUserId">
+			<isEqual property="findStudy" compareValue="none" prepend="AND">
+				(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId#) = 0
+			</isEqual>
+			<isEqual property="findStudy" compareValue="studied" prepend="AND">
+				(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId#) >= 1
+			</isEqual>
+		</isNotEmpty>
+	<![CDATA[
+			ORDER BY headword_id DESC
+			LIMIT #skip# , #pageSize#
+	) as A
+	]]>
+	</select>
+	
+	<!-- 통합검색 표제어의 목록을 가지고 온다.(역사전시관 기준) -->
+	<select id="getHeadwordSearchList" resultMap="HeadwordSearchListMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_smart_book WHERE book_id = A.book_id) as book_name ,
+			get_unit_path(A.unit_id) as unit_path ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+	FROM
+	(
+		SELECT
+				headword_id ,
+				flag ,
+				category ,				
+				book_id ,
+				unit_id , 
+				title ,
+				title_eng ,
+				title_chi ,
+				hits ,
+				reg_date ,
+				is_use ,
+				is_approve ,
+				thumbnail ,
+				summary ,
+				reg_id ,
+				exhibit
+			FROM th_smart_headword
+			WHERE exhibit != ''
+	]]> 
+		<isNotEmpty property="findFlag" prepend="AND">
+			flag = #findFlag#
+		</isNotEmpty>
+		<isNotEmpty property="findRegId" prepend="AND">
+			reg_id = #findRegId#
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			book_id = #findBookId#
+		</isGreaterThan>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="st">
+			replace(title, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsUse" prepend="AND">
+			is_use = #findIsUse#
+		</isNotEmpty>
+		<isNotEmpty property="findSmartAuth" prepend="AND">
+			SUBSTRING(category , 1 , 7 ) IN ($findSmartAuth$)
+		</isNotEmpty>
+		<isNotEmpty property="findPhonemeStart">
+			<isNotEmpty property="findPhonemeEnd" prepend="AND">
+			<![CDATA[
+			title >= #findPhonemeStart# AND title < #findPhonemeEnd#
+			]]>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsApprove" prepend="AND">
+			is_approve = #findIsApprove#
+		</isNotEmpty>
+		<isNotEmpty property="findSearchMethod" prepend="AND">
+			category LIKE CONCAT(#findSearchMethod# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findSearchStr" prepend="AND">
+			( 
+				replace(title, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')	
+					OR replace(contents, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')       			
+			)
+		</isNotEmpty>
+	<![CDATA[
+			ORDER BY headword_id DESC
+			LIMIT #skip# , #pageSize#
+	) as A
+	]]>
+	</select>
+	
+
+	<!-- 표제어를 가지고 온다. -->
+	<select id="getHeadword" resultMap="HeadwordMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_unit_id(A.unit_id) as unit_ids ,
+			get_category_path(A.category) as category_path ,
+			get_unit_path(A.unit_id) as unit_path ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_smart_headword A
+		WHERE headword_id = #headwordId#
+	]]>
+	</select>
+	
+	
+	<!-- 게시글의 이전글를 가지고 온다. -->
+	<select id="getPrevHeadword" resultMap="HeadwordListMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_smart_book WHERE book_id = A.book_id) as book_name ,
+			get_unit_path(A.unit_id) as unit_path ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+	FROM
+	(
+		SELECT
+				headword_id ,
+				flag ,
+				category ,				
+				book_id ,
+				unit_id , 
+				title ,
+				title_eng ,
+				title_chi ,
+				hits ,
+				reg_date ,
+				is_use ,
+				is_approve ,
+				thumbnail ,
+				summary ,
+				reg_id
+	]]>
+			<isNotEmpty property="findUserId">
+			 ,(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId# ) as study_count
+			</isNotEmpty>
+			<isEmpty property="findUserId">
+				, 0 as study_count
+			</isEmpty>
+	<![CDATA[				
+			FROM th_smart_headword B
+			WHERE 1=1
+	]]> 
+		<isNotEmpty property="findFlag" prepend="AND">
+			flag = #findFlag#
+		</isNotEmpty>
+		<isNotEmpty property="findRegId" prepend="AND">
+			reg_id = #findRegId#
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			book_id = #findBookId#
+		</isGreaterThan>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="st">
+			replace(title, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual> 
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsUse" prepend="AND">
+			is_use = #findIsUse#
+		</isNotEmpty>
+		<isNotEmpty property="findUnitIds" prepend="AND">
+			search_unit_ids LIKE CONCAT(#findUnitIds#  , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findSmartAuth" prepend="AND">
+			SUBSTRING(category , 1 , 7 ) IN ($findSmartAuth$)
+		</isNotEmpty> 
+		<isNotEmpty property="findFlagType">
+			<isEqual property="findFlagType" compareValue="H" prepend="AND">
+			(SELECT COUNT(1) FROM th_smart_history WHERE headword_id = B.headword_id) > 0
+			</isEqual>
+			<isEqual property="findFlagType" compareValue="E" prepend="AND">
+			exhibit != ''
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findPhonemeStart">
+			<isNotEmpty property="findPhonemeEnd" prepend="AND">
+				<isEqual property="findPhonemeStart" compareValue="etc">
+				<![CDATA[
+				title < '가'
+				]]>
+				</isEqual>
+				<isNotEqual property="findPhonemeStart" compareValue="etc">
+				<![CDATA[
+				(title >= #findPhonemeStart# AND title < #findPhonemeEnd# )
+				]]>	
+				</isNotEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsApprove" prepend="AND">
+			is_approve = #findIsApprove#
+		</isNotEmpty>
+		<isNotEmpty property="findSearchMethod" prepend="AND">
+			category LIKE CONCAT(#findSearchMethod# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findSearchStr" prepend="AND">
+			( 
+				replace(title, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')							
+					OR replace(contents, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')       					
+			)
+		</isNotEmpty>
+		<isNotEmpty property="findUserId">
+			<isEqual property="findStudy" compareValue="none" prepend="AND">
+				(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId#) = 0
+			</isEqual>
+			<isEqual property="findStudy" compareValue="studied" prepend="AND">
+				(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId#) >= 1
+			</isEqual>
+		</isNotEmpty>
+	<![CDATA[
+			AND exhibit LIKE CONCAT(#findExhibit# , '%')
+			AND headword_id > #headwordId#
+		ORDER BY headword_id 
+		LIMIT 1
+	) as A
+	]]>
+	</select>
+	
+	<!-- 게시글의 다음금을 가지고 온다. -->
+	<select id="getNextHeadword" resultMap="HeadwordListMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_smart_book WHERE book_id = A.book_id) as book_name ,
+			get_unit_path(A.unit_id) as unit_path ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+	FROM
+	(
+		SELECT
+				headword_id ,
+				flag ,
+				category ,				
+				book_id ,
+				unit_id , 
+				title ,
+				title_eng ,
+				title_chi ,
+				hits ,
+				reg_date ,
+				is_use ,
+				is_approve ,
+				thumbnail ,
+				summary ,
+				reg_id
+	]]>
+			<isNotEmpty property="findUserId">
+			 ,(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId# ) as study_count
+			</isNotEmpty>
+			<isEmpty property="findUserId">
+				, 0 as study_count
+			</isEmpty>
+	<![CDATA[				
+			FROM th_smart_headword B
+			WHERE 1=1
+	]]> 
+		<isNotEmpty property="findFlag" prepend="AND">
+			flag = #findFlag#
+		</isNotEmpty>
+		<isNotEmpty property="findRegId" prepend="AND">
+			reg_id = #findRegId#
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			category LIKE CONCAT(#findCategory# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			book_id = #findBookId#
+		</isGreaterThan>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="st">
+			replace(title, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			replace(contents, ' ', '') LIKE CONCAT('%',#findStr#,'%')	
+			</isEqual> 
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsUse" prepend="AND">
+			is_use = #findIsUse#
+		</isNotEmpty>
+		<isNotEmpty property="findUnitIds" prepend="AND">
+			search_unit_ids LIKE CONCAT(#findUnitIds#  , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findSmartAuth" prepend="AND">
+			SUBSTRING(category , 1 , 7 ) IN ($findSmartAuth$)
+		</isNotEmpty> 
+		<isNotEmpty property="findFlagType">
+			<isEqual property="findFlagType" compareValue="H" prepend="AND">
+			(SELECT COUNT(1) FROM th_smart_history WHERE headword_id = B.headword_id) > 0
+			</isEqual>
+			<isEqual property="findFlagType" compareValue="E" prepend="AND">
+			exhibit != ''
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findPhonemeStart">
+			<isNotEmpty property="findPhonemeEnd" prepend="AND">
+				<isEqual property="findPhonemeStart" compareValue="etc">
+				<![CDATA[
+				title < '가'
+				]]>
+				</isEqual>
+				<isNotEqual property="findPhonemeStart" compareValue="etc">
+				<![CDATA[
+				(title >= #findPhonemeStart# AND title < #findPhonemeEnd# )
+				]]>	
+				</isNotEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findIsApprove" prepend="AND">
+			is_approve = #findIsApprove#
+		</isNotEmpty>
+		<isNotEmpty property="findSearchMethod" prepend="AND">
+			category LIKE CONCAT(#findSearchMethod# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findSearchStr" prepend="AND">
+			( 
+				replace(title, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')							
+					OR replace(contents, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')       					
+			)
+		</isNotEmpty>
+		<isNotEmpty property="findUserId">
+			<isEqual property="findStudy" compareValue="none" prepend="AND">
+				(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId#) = 0
+			</isEqual>
+			<isEqual property="findStudy" compareValue="studied" prepend="AND">
+				(SELECT COUNT(1) FROM th_mobile_study WHERE headword_id = B.headword_id AND user_id = #findUserId#) >= 1
+			</isEqual>
+		</isNotEmpty>
+	<![CDATA[
+		AND exhibit LIKE CONCAT(#findExhibit# , '%')	
+			AND headword_id < #headwordId#
+		ORDER BY headword_id desc
+		LIMIT 1
+	) as A
+	]]>
+	</select>
+	
+	
+	
+	<!-- 표제어를 등록한다. -->
+	<insert id="insertHeadword">
+	<![CDATA[
+	INSERT INTO th_smart_headword
+	(
+		flag ,
+		category ,
+		exhibit ,
+		book_id ,
+		unit_id ,
+		title ,
+		title_eng ,
+		title_chi ,
+		thumbnail ,
+		summary ,
+		contents ,
+		added ,
+		origin_code ,
+		origin_txt ,
+		relation_books ,
+		reg_date ,
+		modify_date ,
+		reg_id ,
+		hits ,
+		is_use ,
+		is_approve ,
+		search_unit_ids
+	)
+	VALUES
+	(
+		#flag# ,
+		#category# ,
+		#exhibit# ,
+		#bookId# ,
+		#unitId# ,
+		#title# ,
+		#titleEng# ,
+		#titleChi# ,
+		#thumbnail# ,
+		#summary# ,
+		#contents# ,
+		#added# ,
+		#originCode# ,
+		#originTxt# ,
+		#relationBooks# ,
+		NOW() ,
+		NOW() ,
+		#regId# ,
+		0 ,
+		#isUse# ,
+		#isApprove# ,
+		#unitIds#
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as headword_id
+	</selectKey>
+	</insert>
+	
+	<!-- 표제어를 수정한다. -->
+	<update id="updateHeadword">
+	<![CDATA[
+	UPDATE th_smart_headword
+		SET
+			flag = #flag# ,
+			category = #category# ,
+			exhibit = #exhibit# ,
+			book_id = #bookId# ,
+			unit_id = #unitId# ,
+			title = #title# ,
+			title_eng = #titleEng# ,
+			title_chi = #titleChi# ,
+			thumbnail = #thumbnail# ,
+			summary = #summary# ,
+			contents = #contents# ,
+			added = #added# ,
+			origin_code = #originCode# ,
+			origin_txt = #originTxt# ,
+			relation_books = #relationBooks# ,
+			modify_date = NOW() ,
+			reg_id = #regId# ,
+			is_use = #isUse# ,
+			is_approve = #isApprove# ,
+			search_unit_ids = #unitIds#
+		WHERE
+			headword_id = #headwordId#
+	]]>
+	</update>
+	
+	<!-- 표제어를 삭제한다. -->
+	<delete id="deleteHeadword">
+	<![CDATA[
+	DELETE FROM th_smart_headword
+		WHERE headword_id = #headwordId#
+	]]>
+	</delete>
+	
+
+	
+	
+	<!-- 인물사건 캘린더 관리자용 리스트 가지고 오기 -->
+	<select id="getHistoryList" resultMap="HistoryMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_smart_history
+		WHERE headword_id = #headwordId#
+		ORDER BY is_primary,history_date ASC
+	]]>
+	</select>
+	
+	<!-- 통합검색용 인물사건 캘린더 관리자용 리스트 가지고 오기 -->
+	<select id="getHistorySearchList" resultMap="HistoryMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_smart_history
+		WHERE 1=1
+	]]>
+		<isNotEmpty property="findSearchStr" prepend="AND">
+			replace(history_exp, ' ', '') LIKE CONCAT('%',#findSearchStr#,'%')	
+		</isNotEmpty>
+	<![CDATA[
+		ORDER BY is_primary,history_date ASC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 인물사건 캘린더 입력 -->
+	<insert id="insertHistory">
+	<![CDATA[
+	INSERT INTO th_smart_history
+	(
+		headword_id ,
+		is_primary ,
+		history_type ,
+		history_date ,
+		history_exp ,
+		reg_date
+	)
+	VALUES
+	(
+		#headwordId# ,
+		#isPrimary# ,
+		#historyType# ,
+		#historyDate# ,
+		#historyExp# ,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as history_id
+	</selectKey>
+	</insert>
+	
+	<!-- 같은 날짜에 해당하는 데이타에 대하여 모두 is_primary 를 N으로 초기화 시킨다. -->
+	<insert id="updateHistory">
+	<![CDATA[
+	UPDATE 
+			th_smart_history
+		SET
+			is_primary = 'N'
+		WHERE
+			history_type = #historyType# 
+			AND history_exp = #historyExp#
+	]]>
+	</insert>
+	
+	<!-- 인물사건 캘린더 삭제 -->
+	<delete id="deleteHistory">
+	<![CDATA[
+	DELETE FROM th_smart_history
+		WHERE history_id = #historyId#
+	]]>
+	</delete>
+	
+	<!-- 문제 리스트 가지고 오기 -->
+	<select id="getPoolList" resultMap="PoolMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_smart_pool
+		WHERE headword_id = #headwordId#
+		ORDER BY flag , pool_id
+	]]>
+	</select>
+	
+	<!-- 뮨제를 가지고 온다. -->
+	<select id="getPool" resultMap="PoolMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_smart_pool
+		WHERE pool_id = #poolId#
+	]]>
+	</select>
+	
+	<!-- 문제 저장 -->
+	<insert id="insertPool">
+	<![CDATA[
+	INSERT INTO th_smart_pool
+	(
+		headword_id ,
+		flag ,
+		question ,
+		answer ,
+		explanation ,
+		reg_date
+	)
+	VALUES
+	(
+		#headwordId# ,
+		#flag# ,
+		#question# ,
+		#answer# ,
+		#explanation# ,
+		NOW()		
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id() as pool_id
+	</selectKey>
+	</insert>
+	
+	<!-- 문제 수정 -->
+	<update id="updatePool">
+	<![CDATA[
+	UPDATE th_smart_pool 
+		SET
+			flag = #flag# ,
+			question = #question# ,
+			answer = #answer# ,
+			explanation = #explanation#			
+		WHERE
+			pool_id = #poolId#
+	]]>
+	</update>
+	
+	<!-- 문제 삭제 -->
+	<delete id="deletePool">
+	<![CDATA[
+	DELETE FROM th_smart_pool WHERE pool_id = #poolId#
+	]]>
+	</delete>
+	
+	<!-- 확인문제가 이미 등록이 되어있는지 체크한다. -->
+	<select id="getConfirmedPoolCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_smart_pool
+		WHERE headword_id = #headwordId#
+			AND flag = 'C'
+	]]>
+	</select>
+	
+	<!-- 관련 표제어 리스트를 가지고 온다. -->
+	<select id="getRelationHeadwordList" resultMap="RelationMap">
+	<![CDATA[
+	SELECT
+				A.relation_id ,
+				A.headword_id ,
+				A.children_id ,
+				B.category ,
+				B.book_id ,
+				B.title ,
+				B.title_eng ,
+				B.title_chi ,
+				B.thumbnail
+		FROM th_smart_relation A , th_smart_headword B
+		WHERE	A.headword_id = #headwordId# 
+			AND A.children_id = B.headword_id
+			AND B.is_use = 'Y'
+		ORDER BY relation_id ASC
+	]]>
+	</select>
+
+	<!-- 관련 표제어를 등록한다. -->
+	<insert id="insertRelationHeadword">
+	<![CDATA[
+	INSERT INTO th_smart_relation
+	(
+		headword_id ,
+		children_id
+	)
+	VALUES
+	(
+		#headwordId# ,
+		#childrenId#
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 관련 표제어를 삭제한다. -->
+	<delete id="deleteRelationHeadword">
+	<![CDATA[
+	DELETE FROM th_smart_relation
+		WHERE relation_id = #relationId#
+	]]>
+	</delete>
+	
+	<!-- 관련 표제어를 복사한다. -->
+	<insert id="insertHeadwordCopy">
+	<![CDATA[
+	INSERT INTO th_smart_headword
+	(
+		flag ,
+		category ,
+		exhibit ,
+		book_id ,
+		unit_id ,
+		title ,
+		title_eng ,
+		title_chi ,
+		thumbnail ,
+		summary ,
+		contents ,
+		added ,
+		origin_code ,
+		origin_txt ,
+		relation_books ,
+		reg_date ,
+		modify_date ,
+		reg_id ,
+		hits ,
+		is_use ,
+		is_approve
+	)
+	SELECT
+			flag ,
+			#category# ,
+			exhibit ,
+			#bookId# ,
+			#unitId# ,
+			title ,
+			title_eng ,
+			title_chi ,
+			#thumbnail# ,
+			summary ,
+			contents ,
+			added ,
+			origin_code ,
+			origin_txt ,
+			relation_books ,
+			NOW() ,
+			NOW() ,
+			#regId# ,
+			0 ,
+			is_use ,
+			is_approve
+	FROM
+		th_smart_headword
+	WHERE
+		headword_id = #headwordId#
+	]]>
+	</insert>
+	
+	<!-- 참고자료 리스트를 가지고 온다. -->
+	<select id="getAdditionalList" resultMap="MultimediaListMap">
+	<![CDATA[
+	SELECT
+			B.mm_id,
+			B.category,
+			B.title,
+			B.thumbnail,
+			B.file_name,
+			B.data_file,
+			B.contents,
+			B.keyword,
+			B.origin_code,
+			B.origin_txt,
+			B.is_use,
+			B.reg_id,
+			date_format(A.reg_date, '%Y-%m-%d')as reg_date,
+			C.name as category_name,
+			get_category_path(C.category) as category_path
+		FROM
+			th_smart_additional A ,
+			th_multimedia B ,
+			th_category C
+		WHERE
+			A.headword_id = #headwordId#
+			AND A.mm_id = B.mm_id
+			AND B.category = C.category
+			AND (B.category LIKE 'E001%' OR B.category LIKE 'E002%' OR B.category LIKE 'E004%')
+		ORDER BY A.reg_date ASC
+	]]>
+	</select>
+	
+	<!-- 참고자료 등록 -->
+	<insert id="insertAdditional">
+	<![CDATA[
+	INSERT INTO th_smart_additional
+	(
+		headword_id ,
+		mm_id ,
+		reg_date
+	)
+	VALUES
+	(
+		#headwordId# ,
+		#mmId# ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 참고자료 삭제 -->
+	<delete id="deleteAdditional">
+	<![CDATA[
+	DELETE FROM th_smart_additional
+		WHERE headword_id = #headwordId# 
+			AND mm_id = #mmId#
+	]]>
+	</delete>
+	
+	<!-- 지식나눔 리스트 가지고 오기 -->
+	<select id="getKnowledgeListCount" resultClass="int">
+	<![CDATA[
+	SElECT
+			COUNT(1)
+		FROM th_smart_knowledge A
+		WHERE 1=1
+	]]>
+	<isNotEmpty property="headwordId" prepend="AND">
+		headword_id = #headwordId#
+	</isNotEmpty>
+	<isNotEmpty property="findIsApproval" prepend="AND">
+		is_approval = #findIsApproval#
+	</isNotEmpty>
+	<isNotEmpty property="findUserId" prepend="AND">
+		user_id = #findUserId#
+	</isNotEmpty>
+	<isNotEmpty property="findFlag" prepend="AND">
+		flag = #findFlag#
+	</isNotEmpty> 
+	</select>
+	
+	<select id="getKnowledgeList" resultMap="KnowledgeMap">
+	<![CDATA[
+	SElECT
+			A.* ,
+			(SELECT name FROM Member WHERE userid = A.user_id)  as user_name ,
+			(SELECT name FROM Member WHERE userid = A.approval_id) as approval_name ,
+			(SELECT title FROM th_smart_headword WHERE headword_id = A.headword_id) as title  
+		FROM th_smart_knowledge A
+		WHERE 1=1
+	]]>
+	<isNotEmpty property="headwordId" prepend="AND">
+		headword_id = #headwordId#
+	</isNotEmpty>
+	<isNotEmpty property="findIsApproval" prepend="AND">
+		is_approval = #findIsApproval#
+	</isNotEmpty>
+	<isNotEmpty property="findUserId" prepend="AND">
+		user_id = #findUserId#
+	</isNotEmpty>
+	<isNotEmpty property="findFlag" prepend="AND">
+		flag = #findFlag#
+	</isNotEmpty>
+	<![CDATA[
+		ORDER BY knowledge_id DESC
+	]]>
+	<isNotEmpty property="skip">
+		<isNotEmpty property="pageSize">
+		LIMIT #skip# , #pageSize#
+		</isNotEmpty>
+	</isNotEmpty>
+ 	</select>
+ 	
+ 	<!-- 지식나눔 데이타 가지고 오기 -->
+ 	<select id="getKnowledge" resultMap="KnowledgeMap">
+ 	<![CDATA[
+ 	SElECT
+			A.* ,
+			(SELECT name FROM Member WHERE userid = A.user_id)  as user_name ,
+			(SELECT name FROM Member WHERE userid = A.approval_id) as approval_name ,
+			(SELECT title FROM th_smart_headword WHERE headword_id = A.headword_id) as title
+		FROM th_smart_knowledge A
+		WHERE knowledge_id = #knowledgeId#
+ 	]]>
+ 	</select>
+	
+	<!-- 지식나눔 등록 -->
+	<insert id="insertKnowledge">
+	<![CDATA[
+	INSERT INTO th_smart_knowledge
+	(
+		headword_id ,
+		user_id ,
+		flag ,
+		contents ,
+		origin_code ,
+		origin_txt ,
+		reg_date		
+	)
+	VALUES
+	(
+		#headwordId# ,
+		#userId# ,
+		#flag# ,
+		#contents# ,
+		#originCode# ,
+		#originTxt# ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 지식나눔 갱신 -->
+	<update id="updateKnowledge">
+	<![CDATA[
+	UPDATE th_smart_knowledge
+		SET
+			flag = #flag# ,
+			contents = #contents# ,
+			origin_code = #originCode# ,
+			origin_txt = #originTxt# 
+		WHERE knowledge_id = #knowledgeId#
+	]]>
+	</update>
+	
+	<!-- 지식나눔 삭제 -->
+	<delete id="deleteKnowledge">
+	<![CDATA[
+	DELETE FROM th_smart_knowledge
+		WHERE knowledge_id = #knowledgeId# 
+	]]>
+	</delete>
+	
+	<!-- 댓글의 그룹 아이디를 가지고 온다. -->
+	<select id="getCommentGroupId" resultClass="int">
+	<![CDATA[
+	SELECT
+			IFNULL(MAX(group_id) + 1 , 1)
+		FROM th_smart_comment
+		WHERE headword_id = #headwordId#
+	]]>
+	</select>
+	
+	<!-- 댓글을 리스트업 한다. -->
+	<select id="getCommentList" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			A.* , 
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name
+		FROM th_smart_comment A
+		WHERE headword_id = #headwordId#
+		ORDER BY group_id ASC , depth ASC , comment_id ASC
+	]]>
+	</select>
+	
+	<!-- 댓글의 자식 노드가 있는지 체크한다. -->
+	<select id="getIsChildeNode" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_smart_comment
+		WHERE group_id = (SELECT group_id FROM th_smart_comment WHERE comment_id = #commentId#)
+			AND depth = '2'
+	]]>
+	</select>
+	
+	<!-- 현재 노드의 삭제처리를 한다. -->
+	<update id="updateCommentToDelete">
+	<![CDATA[
+	UPDATE th_smart_comment
+		SET is_del = 'Y'
+		WHERE comment_id = #commentId#
+	]]>
+	</update>
+	
+	<!-- 모든 댓글을 카운트를 가지고 온다. -->
+	<select id="getTotalCommentListCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_smart_comment A
+		WHERE is_del = 'N'
+	]]>
+	</select>
+	
+	<!-- 댓글을 리스트업 한다. -->
+	<select id="getTotalCommentList" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			A.* , 
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name
+		FROM th_smart_comment A
+		WHERE is_del = 'N'
+		ORDER BY group_id ASC , depth ASC , comment_id ASC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 댓글을 가지고 온다. -->
+	<select id="getComment" resultMap="CommentMap">
+	<![CDATA[
+	SELECT
+			 A.* , 
+			 (SELECT name FROM Member WHERE userid = A.user_id) as user_name 
+		FROM th_smart_comment A
+		WHERE comment_id = #commentId#
+	]]>
+	</select>
+	
+	<!-- 댓글을 입력한다. -->
+	<insert id="insertComment">
+	<![CDATA[
+	INSERT INTO th_smart_comment
+	(
+		headword_id ,		
+		group_id ,
+		depth ,
+		user_id ,
+		comment ,
+		reg_date ,
+		remote_ip
+	)
+	VALUES
+	(
+		#headwordId# ,		
+		#groupId# ,
+		#depth# ,
+		#userId# ,
+		#comment# ,
+		NOW() ,
+		#remoteIp#
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 댓글을 삭제한다 -->
+	<delete id="deleteComment">
+	<![CDATA[
+	DELETE FROM th_smart_comment
+		WHERE comment_id = #commentId#
+	]]>
+	</delete>
+	
+	<!-- 카테고리의 과목과 과목에 맵핑된 도서의 카운트를 같이 반환한다. -->
+	<select id="getCategoryWithBooksCount" resultMap="CategoryMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT COUNT(1) FROM th_smart_book WHERE category LIKE CONCAT(A.category , '%')) as books
+		FROM th_category A
+		WHERE
+			category LIKE CONCAT(#category# , '%') 
+			AND depth = #depth#
+			AND is_use = 'Y'
+		ORDER BY category ASC
+	]]>
+	</select>
+
+	<!-- 표제어 조회 로그를 남긴다. -->
+	<insert id="insertLog">
+	<![CDATA[
+	INSERT INTO th_smart_log
+	(
+		headword_id ,
+		reg_stamp
+	)
+	VALUES
+	(
+		#headwordId# ,
+		UNIX_TIMESTAMP(NOW())
+	)
+	]]>
+	</insert>
+	
+	<!-- 표제어 조회수를 갱신한다. -->
+	<update id="updateHeadwordHit">
+	<![CDATA[
+	UPDATE
+			th_smart_headword
+		SET
+			hits = hits + 1
+		WHERE
+			headword_id = #headwordId#
+	]]>
+	</update>
+	
+	<!-- Hot 키원드 -->
+	<select id="getHotKeywords" resultMap="HeadwordListMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_category_path(A.category) AS category_path ,
+			(SELECT NAME FROM th_smart_book WHERE book_id = A.book_id) AS book_name ,
+			get_unit_path(A.unit_id) AS unit_path ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name ,
+			0 as study_count
+		FROM th_smart_headword A ,
+				(
+				SELECT 
+					headword_id ,
+					COUNT(1) AS cnt
+				FROM th_smart_log 
+				WHERE reg_stamp >= (UNIX_TIMESTAMP(NOW()) - 604800)
+					AND headword_id NOT IN(select headword_id from th_smart_headword where SUBSTRING(category , 1 , 4 ) IN ('B001','B003') OR is_use = 'N')	
+				GROUP BY headword_id	
+				ORDER BY cnt DESC	
+				LIMIT 10
+				) AS B
+		WHERE A.headword_id = B.headword_id
+			AND A.is_use = 'Y'
+		ORDER BY B.cnt DESC
+	]]>
+	</select>
+	
+	<!-- 썸네일을 삭제한다. -->
+	<update id="deleteThumbnail">
+	<![CDATA[
+	UPDATE th_smart_headword SET thumbnail = '' WHERE headword_id = #headwordId#
+	]]>
+	</update>
+	
+	<!-- 인물사건 캘린더의 데이타를 가지고 온다. -->
+	<select id="getCalendarHistoryList" resultMap="HistoryFrontMap">
+	<![CDATA[
+	SELECT 
+		A.history_id ,
+		A.headword_id ,
+		A.history_type ,
+		A.history_exp ,
+		A.is_primary ,
+		RIGHT(A.history_date , 4) AS history_date ,
+		B.title ,
+		B.thumbnail ,
+		B.summary,  				
+		(SELECT FLOOR((DATE_FORMAT(concat(LEFT(NOW(),4),'',RIGHT(history_date , 4)),'%d')+(DATE_FORMAT(DATE_FORMAT(concat(LEFT(NOW(),4),'',RIGHT(history_date , 4)),'%Y%m%01'),'%w')-1))/7)+1) as weekCount
+	FROM th_smart_history A , th_smart_headword B
+	WHERE LEFT(RIGHT(history_date , 4), 2) = #findMonth#
+		AND A.headword_id = B.headword_id
+		AND B.is_approve = 'Y'
+	ORDER BY is_primary , A.reg_date DESC
+	]]>
+	</select>
+	
+	<!-- 티칭허브 메인에 보여질 인물사건 캘린더. -->
+	<select id="getMainCalendarHistoryList" resultMap="HistoryFrontMap">
+	<![CDATA[
+		SELECT
+		*
+	FROM
+	(
+		SELECT 
+				A.history_id ,
+				A.headword_id ,
+				A.history_type ,
+				A.history_exp ,
+				A.is_primary , 
+				A.history_date ,
+				B.title ,
+				B.thumbnail ,
+				B.summary,  				
+				(SELECT FLOOR((DATE_FORMAT(concat(LEFT(NOW(),4),'',RIGHT(history_date , 4)),'%d')+(DATE_FORMAT(DATE_FORMAT(concat(LEFT(NOW(),4),'',RIGHT(history_date , 4)),'%Y%m%01'),'%w')-1))/7)+1) as weekCount
+			FROM th_smart_history A , 
+
+			th_smart_headword B
+			WHERE RIGHT(history_date , 4) >= #findDate#
+				AND A.headword_id = B.headword_id				
+			
+			ORDER BY is_primary , A.reg_date ASC
+	) AS TMP
+	GROUP BY RIGHT(history_date , 4)
+	ORDER BY RIGHT(history_date , 4) ASC
+	LIMIT 6
+	]]>
+	</select>
+	
+	
+
+	<!-- 지식나눔의 상태를 변경한다. -->
+	<update id="changeKnowledgeStatus">
+	<![CDATA[
+	UPDATE th_smart_knowledge
+		SET
+			is_approval = #isApproval# , 
+			approval_id = #approvalId# ,
+			approval_date = NOW()
+		WHERE
+			knowledge_id = #knowledgeId#
+	]]>
+	</update>
+	
+	<!-- 현재 그룹의 코멘트 카운트를 가지고 온다. -->
+	<select id="getGroupCommentCount" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1) 
+		FROM th_smart_comment 
+		WHERE headword_id = #headwordId#
+			AND group_id = #groupId#
+	]]>
+	</select>
+	
+	<!-- 마지막 노드의 코멘트를 가지고 온다. -->
+	<select id="getLastCommentData" resultMap="CommentMap">
+	<![CDATA[
+	SELECT 
+			*  ,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name
+		FROM th_smart_comment A
+		WHERE headword_id = #headwordId#
+			AND group_id = #groupId#
+			AND depth = 1
+			AND is_del = 'Y'
+	]]>
+	</select>
+	
+	<!-- 백과의 메인에 나오는 역사 컨텐츠 -->
+	<select id="getDicFrontHistory" resultMap="DicHistoryMap">
+	<![CDATA[
+	SELECT
+			*
+	FROM
+	(
+		SELECT 
+			A.* ,
+			B.title ,
+			B.thumbnail ,
+			B.summary ,
+			B.category , 
+			B.book_id ,
+			(SELECT question FROM th_smart_pool WHERE headword_id = A.headword_id AND flag = 'C' LIMIT 1) AS question
+		FROM th_smart_history A , th_smart_headword B
+		WHERE LEFT(RIGHT(history_date , 4) , 2) = LEFT(RIGHT(REPLACE( DATE(NOW()) , '-' , '') , 4) , 2)
+			AND A.headword_id = B.headword_id
+			AND B.is_use = 'Y'
+			AND B.thumbnail != ''
+	) C
+	WHERE C.question IS NOT NULL
+	ORDER BY RAND()
+	LIMIT 1
+	]]>
+	</select>
+	
+	<!-- 역사 전시관 데이타 랜덤으로 3개 가지고 오기 -->
+	<select id="getDicExhibitList" resultMap="DicHeadwordMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_unit_id(A.unit_id) AS unit_ids ,
+			get_category_path(A.category) AS category_path ,
+			get_unit_path(A.unit_id) AS unit_path ,
+			(SELECT NAME FROM Member WHERE userid = A.reg_id) AS user_name ,
+			get_category_path(A.exhibit) AS exhibit_path
+		FROM th_smart_headword A
+		WHERE
+			exhibit LIKE CONCAT(#findExhibit# , '%')
+			AND thumbnail != ''
+		ORDER BY RAND()
+		LIMIT #limit#
+	]]>
+	</select>
+	
+	<!-- 검색어 저장 -->
+	<insert id="insertSearchWord">
+	<![CDATA[
+	INSERT INTO th_search_words
+	(
+		search_word ,
+		flag ,
+		reg_date
+	)
+	VALUES
+	(
+		#searchWord# ,
+		'SMART' ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 학습을 완료한다. -->
+	<insert id="studyDone">
+	<![CDATA[
+	INSERT INTO th_mobile_study
+	(
+		headword_id , 
+		user_id ,
+		reg_date
+	)
+	VALUES
+	(
+		#headwordId# ,
+		#userId# ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<select id="getUnitPathDataList" resultClass="kr.co.kumsung.thub.util.ResultMap">
+	<![CDATA[
+	SELECT 
+		headword_id ,
+		get_unit_id(unit_id) as unit_ids 
+	FROM th_smart_headword
+	]]>
+	</select>
+	
+	<select id="getStudyCount" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1) 
+		FROM th_mobile_study 
+		WHERE headword_id = #headwordId# 
+			AND user_id = #findUserId#
+	]]>
+	</select>
+
+	<!-- 표제어 삭제 -->
+	<delete id="deleteHeadwordHistory">
+	<![CDATA[
+	DELETE FROM th_smart_history WHERE headword_id = #headwordId#
+	]]>
+	</delete>
+	
+	<delete id="deleteHeadwordKnowledge">
+	<![CDATA[
+	DELETE FROM th_smart_knowledge WHERE headword_id = #headwordId#
+	]]>
+	</delete>
+	
+	<delete id="deleteHeadwordPool">
+	<![CDATA[
+	DELETE FROM th_smart_pool WHERE headword_id = #headwordId#
+	]]>
+	</delete>
+	
+	<delete id="deleteHeadwordComment">
+	<![CDATA[
+	DELETE FROM th_smart_comment WHERE headword_id = #headwordId#
+	]]>
+	</delete>
+	
+	<delete id="deleteSmartBook">
+	DELETE FROM th_smart_book WHERE book_id = #bookId#
+	</delete>
+	
+</sqlMap>

@@ -1,0 +1,15 @@
+@charset "utf-8";
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+/* Common */
+body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,button,select{margin:0;padding:0}
+body,input,textarea,select,button,table{font-size:13px;font-family:'나눔고딕',NanumGothic,'맑은 고딕','Malgun Gothic','돋움',Dotum,'굴림',Gulim,Helvetica,sans-serif;line-height:1.5em;letter-spacing:-0.5px;}
+img,fieldset{border:0}
+table{border-collapse:collapse;border-spacing:0}
+legend,caption{visibility:hidden;overflow:hidden;width:0;height:0;font-size:0;line-height:0}
+address,em,th{font-style:normal;font-weight:normal}
+ul,ol,li{list-style:none}
+em,address{font-style:normal}
+h1,h2,h3,h4,h5,h6{font-size:100%;}
+a{text-decoration:none}
+a:hover,a:active,a:focus{text-decoration:underline}

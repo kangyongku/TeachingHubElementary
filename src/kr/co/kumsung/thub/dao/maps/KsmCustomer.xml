@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KsmCustomer">
+
+	<!-- 문의요청 게시판 관리  -->
+	<resultMap id="CustomerMap" class="kr.co.kumsung.thub.domain.KsmCustomer">
+		<result column="seq" property="seq" />
+		<result column="category_name" property="category_name"/>
+		<result column="category" property="category"/>
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="hitcount" property="hitcount" />
+		<result column="html" property="html" />
+		<result column="linkchk" property="linkchk" />
+		<result column="linkurl" property="linkurl" />
+		<result column="filename" property="filename" />
+		<result column="regdate" property="regdate" />
+		<result column="newDate" property="newDate" />
+	</resultMap>
+	
+	<!-- 문의요청 게시판 관리 -->
+	<select id="getNoticeList" resultMap="CustomerMap">
+	<![CDATA[
+		select														
+				seq													
+				,(select category_name from notice_category where seq = category) as category_name											
+				,category												
+				,title												
+				,content											
+				,hitcount											
+				,html												
+				,linkchk											
+				,linkurl											
+				,filename											
+				,date_format(regdate, '%Y-%m-%d') as regdate		
+				,if(DATE_FORMAT(DATE_ADD(date_format(regdate, '%Y%m%d'),INTERVAL 7 DAY),'%Y%m%d')  >= date_format(now(), '%Y%m%d'),'NEW','OLD') as newDate		
+		 from 														
+		 notice														
+		 where 1 = 1
+		 and linkchk='N'			
+	]]>
+	 order by seq desc	
+	 LIMIT #skip# , #pageSize#
+		
+	</select>
+	
+	<!-- 공지사항 게시판 게시글 수 -->
+	<select id="getNoticeListTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(0)
+	FROM
+		notice
+	WHERE
+		1=1
+	and linkchk='N'	
+	]]>
+	</select>
+	
+	
+	<!-- 공지사항 게시판 상세보기 -->
+	<select id="getNoticeDetail" resultMap="CustomerMap">
+	<![CDATA[
+		select														
+				seq													
+				,(select category_name from notice_category where seq = category) as category_name											
+				,category												
+				,title												
+				,content											
+				,hitcount											
+				,html												
+				,linkchk											
+				,linkurl											
+				,filename											
+				,date_format(regdate, '%Y-%m-%d') as regdate		
+				,if(DATE_FORMAT(DATE_ADD(date_format(regdate, '%Y%m%d'),INTERVAL 7 DAY),'%Y%m%d')  >= date_format(now(), '%Y%m%d'),'NEW','OLD') as newDate		
+		 from 														
+		 notice			
+	WHERE
+		seq = #seq#
+	]]>
+	</select>
+	
+	<!-- 공지사항 게시판 상세보기 이전글-->
+	<select id="getPrevNotice" resultMap="CustomerMap">
+	<![CDATA[
+		select														
+				seq													
+				,(select category_name from notice_category where seq = category) as category_name											
+				,category												
+				,title												
+				,content											
+				,hitcount											
+				,html												
+				,linkchk											
+				,linkurl											
+				,filename											
+				,date_format(regdate, '%Y-%m-%d') as regdate		
+				,if(DATE_FORMAT(DATE_ADD(date_format(regdate, '%Y%m%d'),INTERVAL 7 DAY),'%Y%m%d')  >= date_format(now(), '%Y%m%d'),'NEW','OLD') as newDate		
+		 from 														
+		 notice			
+	WHERE
+		seq > #seq#
+ 	and linkchk='N'		
+	ORDER BY seq
+	LIMIT 1
+	]]>
+	</select>
+	
+	<!-- 공지사항 게시판 상세보기 다음글-->
+	<select id="getNextNotice" resultMap="CustomerMap">
+	<![CDATA[
+		select														
+				seq													
+				,(select category_name from notice_category where seq = category) as category_name											
+				,category												
+				,title												
+				,content											
+				,hitcount											
+				,html												
+				,linkchk											
+				,linkurl											
+				,filename											
+				,date_format(regdate, '%Y-%m-%d') as regdate		
+				,if(DATE_FORMAT(DATE_ADD(date_format(regdate, '%Y%m%d'),INTERVAL 7 DAY),'%Y%m%d')  >= date_format(now(), '%Y%m%d'),'NEW','OLD') as newDate		
+		 from 														
+		 notice
+	WHERE
+		seq < #seq#
+	and linkchk='N'
+	ORDER BY seq desc
+	LIMIT 1		
+	]]>
+	</select>	
+	
+		
+	<!-- 고객문의 등록 -->
+	<insert id="insertQna">
+	<![CDATA[
+	INSERT INTO qna
+	(
+		username,
+		usertel,
+		userhtel,
+		useremail,
+		good_sort,
+		inq_sort,	
+		title,
+		content,	
+		regdate
+	)
+	VALUES
+	(
+		#username#,
+		#usertel#,
+		#userhtel#,
+		#useremail#,
+		#good_sort#,
+		#inq_sort#,
+		#title#,
+		#content#,
+		date_format(now(), '%Y%m%d')
+	)
+	]]>
+	</insert>	
+	
+	<!-- 구매상담 등록 -->
+	<insert id="insertCs">
+	<![CDATA[
+	INSERT INTO cs
+	(
+		username,
+		usertel1,
+		usertel2,
+		usertel3,
+		userhtel1,
+		userhtel2,
+		userhtel3,
+		useremail1,
+		useremail2,
+		zipcode,
+		addr1,
+		addr2,
+		interest1,
+		interest2,
+		content,	
+		regdate
+	)
+	VALUES
+	(
+		#username#,
+		#usertel1#,
+		#usertel2#,
+		#usertel3#,
+		#userhtel1#,
+		#userhtel2#,
+		#userhtel3#,
+		#useremail1#,		
+		#useremail2#,
+		#zipcode#,
+		#addr1#,
+		#addr2#,
+		#interest1#,
+		#interest2#,		
+		#content#,
+		date_format(now(), '%Y%m%d')
+	)
+	]]>
+	</insert>		
+</sqlMap>

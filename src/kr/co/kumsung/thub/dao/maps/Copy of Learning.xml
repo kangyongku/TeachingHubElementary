@@ -1,0 +1,1534 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<!-- 스마트학생백과 -->
+<sqlMap namespace="Learning">
+	 
+	<cacheModel id="book-cache" type="LRU">
+		<flushInterval hours="6"/>
+		<flushOnExecute statement="Learning.insertBook"/>
+		<flushOnExecute statement="Learning.updateBook"/>
+		<flushOnExecute statement="Learning.deleteLearningBook"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<cacheModel id="data-cache" type="LRU">
+		<flushInterval minutes="5"/>
+		<flushOnExecute statement="Learning.insertData"/>
+		<flushOnExecute statement="Learning.updateData"/>
+		<flushOnExecute statement="Learning.deleteLearningData"/>
+		<property name="size" value="1000"/>
+	</cacheModel>
+	
+	<!-- 도서 맵 -->
+	<resultMap id="BookMap" class="kr.co.kumsung.thub.domain.Book">
+		<result column="book_id" property="bookId" />
+		<result column="legacy_id" property="legacyId" />
+		<result column="category" property="category" />
+		<result column="course" property="course" nullValue=""/>
+		<result column="name" property="name" nullValue=""/>
+		<result column="author" property="author" nullValue=""/>
+		<result column="teacher_cd_view" property="teacherCdView" nullValue=""/>
+		<result column="preview_url" property="previewUrl" nullValue=""/>
+		<result column="is_use" property="isUse" />		
+		<result column="reg_date" property="regDate" />
+		<result column="reg_id" property="regId" />
+		<result column="user_name" property="userName" />
+		<result column="img_url" property="imgUrl" />
+		<result column="category_path" property="categoryPath" />
+		<result column="course_name" property="courseName" />
+		<result column="sequence" property="sequence" />
+		<result column="cd_view_width" property="cdViewWidth" />
+		<result column="cd_view_height" property="cdViewHeight" />
+	</resultMap>
+	
+	<!-- 도서 맵 -->
+	<resultMap id="CdBookMap" class="kr.co.kumsung.thub.domain.Book">
+		<result column="book_id" property="bookId" />
+		<result column="legacy_id" property="legacyId" />
+		<result column="category" property="category" />
+		<result column="course" property="course" nullValue=""/>
+		<result column="name" property="name" nullValue=""/>
+		<result column="author" property="author" nullValue=""/>
+		<result column="teacher_cd_view" property="teacherCdView" nullValue=""/>
+		<result column="preview_url" property="previewUrl" nullValue=""/>
+		<result column="is_use" property="isUse" />		
+		<result column="reg_date" property="regDate" />
+		<result column="reg_id" property="regId" />
+		<result column="sequence" property="sequence" />
+		<result column="user_name" property="userName" />
+		<result column="img_url" property="imgUrl" />
+		<result column="category_path" property="categoryPath" />
+		<result column="course_name" property="courseName" />
+		<result column="cd_links" property="cdLinks" />
+		<result column="cd_view_width" property="cdViewWidth" />
+		<result column="cd_view_height" property="cdViewHeight" />
+	</resultMap>
+	
+	<!-- 기간계 도서 맵 -->
+	<resultMap id="LegacyBookMap" class="kr.co.kumsung.thub.domain.LegacyBook">
+		<result column="legacy_id" property="legacyId" />
+		<result column="legacy_code" property="legacyCode" />
+		<result column="name" property="name" />
+		<result column="author" property="author" />
+		<result column="class_name" property="className" />
+		<result column="previewlink" property="previewlink" /> 
+	</resultMap>
+	
+	<!-- CD 맵 -->
+	<resultMap id="CdMap" class="kr.co.kumsung.thub.domain.Cd">
+		<result column="cd_id" property="cdId" />
+		<result column="book_id" property="bookId" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="reg_date" property="regDate" /> 
+	</resultMap>
+	
+	<!-- 자료 맵 -->
+	<resultMap id="DataMap" class="kr.co.kumsung.thub.domain.Data">
+		<result column="data_id" property="dataId" />
+		<result column="category" property="category" />
+		<result column="book_id" property="bookId" />
+		<result column="unit_id" property="unitId" />
+		<result column="data_flag" property="dataFlag" />
+		<result column="data_type" property="dataType" />
+		<result column="title" property="title" />
+		<result column="file_name" property="fileName" nullValue="" />
+		<result column="data_file" property="dataFile" nullValue="" />
+		<result column="keywords" property="keywords" nullValue="" />
+		<result column="mm_id" property="mmId" nullValue="0"/>
+		<result column="sequence" property="sequence" nullValue="0" />
+		<result column="reg_date" property="regDate" />
+		<result column="book_name" property="bookName" />
+		<result column="category_path" property="categoryPath" />
+		<result column="unit_ids" property="unitIds" nullValue="" />
+		<result column="unit_path" property="unitPath" nullValue="" />
+		<result column="data_type_name" property="dataTypeName" />
+		<result column="ext_img" property="extImg" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="hits" property="hits" />
+		<result column="thumbnail" property="thumbnail" nullValue="" />
+		<result column="contents" property="contents" nullValue="" />
+		<result column="scrap_count" property="scrapCount" nullValue="" />
+		<result column="origin_code" property="origin_code" nullValue="" />
+		<result column="origin_name" property="origin_name" nullValue="" />  
+		<result column="dn_url" property="dnUrl" nullValue=""/>
+	</resultMap>
+	
+	<!-- 다운로드용 자료 맵 -->
+	<resultMap id="DataDownloadMap" class="kr.co.kumsung.thub.domain.Data">
+		<result column="data_id" property="dataId" />
+		<result column="category" property="category" />
+		<result column="book_id" property="bookId" />
+		<result column="unit_id" property="unitId" />
+		<result column="data_flag" property="dataFlag" />
+		<result column="data_type" property="dataType" />
+		<result column="title" property="title" />
+		<result column="file_name" property="fileName" nullValue=""/>
+		<result column="data_file" property="dataFile" nullValue=""/>
+		<result column="keywords" property="keywords" nullValue=""/>
+		<result column="mm_id" property="mmId" nullValue="0"/>
+		<result column="sequence" property="sequence" nullValue="0"/>
+		<result column="reg_date" property="regDate" />
+		<result column="book_name" property="bookName" />
+		<result column="category_path" property="categoryPath" />
+		<result column="unit_ids" property="unitIds" />
+		<result column="unit_path" property="unitPath" />
+		<result column="data_type_name" property="dataTypeName" />
+		<result column="ext_img" property="extImg" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="hits" property="hits" />
+		<result column="thumbnail" property="thumbnail" />
+		<result column="contents" property="contents" />
+		<result column="scrap_count" property="scrapCount" />
+		<result column="dn_url" property="dnUrl" nullValue=""/>    
+	</resultMap>
+	
+	<!-- 단원별 자료 리스트 -->
+	<resultMap id="LearningMap" class="kr.co.kumsung.thub.domain.Data">
+		<result column="data_id" property="dataId" />
+		<result column="category" property="category" />
+		<result column="book_id" property="bookId" />
+		<result column="unit_id" property="unitId" />
+		<result column="data_flag" property="dataFlag" />
+		<result column="data_type" property="dataType" />
+		<result column="title" property="title" />
+		<result column="contents" property="contents" />
+		<result column="dn_url" property="dnUrl" nullValue="" />
+		<result column="file_name" property="fileName" nullValue="" />
+		<result column="data_file" property="dataFile" nullValue="" />
+		<result column="mm_id" property="mmId" />
+		<result column="ext_img" property="extImg" />
+		<result column="hits" property="hits" />
+		<result column="thumbnail" property="thumbnail" />
+	</resultMap>
+	
+	<!-- 메인화면 맵 -->
+	<resultMap id="MaindataMap" class="kr.co.kumsung.thub.domain.MainData">
+		<result column="data_id" property="dataId" />
+		<result column="book_id" property="bookId" />
+		<result column="user_id" property="userId" />
+		<result column="category" property="category" />
+		<result column="data_type" property="dataType" />
+		<result column="book_name" property="bookName" nullValue="" />
+		<result column="category_path" property="categoryPath" />
+		<result column="data_type_name" property="dataTypeName" nullValue="" />
+		<result column="unit_id" property="unitIds" />
+		<result column="author" property="author" />
+		<result column="img_url" property="imgurl" />
+		<result column="course_name" property="courseName" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+
+	
+	<!-- 등록된 도서의 총 갯수를 가지고 온다. -->
+	<select id="getTotalBooks" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1) 
+		FROM th_learning_book
+		WHERE 1=1
+	]]>
+	<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findCourse" prepend="AND">
+		course = #findCourse#
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		is_use = #findIsUse#
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate" prepend="AND">
+		SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="st">
+		name like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="su">
+		reg_id IN (SELECT userid FROM Member WHERE name LIKE CONCAT('%' , #findStr# , '%'))
+		</isEqual>
+	</isNotEmpty>
+	</select>
+	
+	<!-- 도서 리스트를 가지고 온다. -->
+	<select id="getBookList" resultMap="BookMap" cacheModel="book-cache">
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT prdimgm FROM Book WHERE id = A.legacy_id) as img_url ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_learning_book A
+		WHERE 1=1
+	]]>
+	<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findCourse" prepend="AND">
+		course = #findCourse#
+	</isNotEmpty>
+	<isNotEmpty property="findIsUse" prepend="AND">
+		is_use = #findIsUse#
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate" prepend="AND">
+		SUBSTRING(reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="st">
+		name like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="su">
+		reg_id IN (SELECT userid FROM Member WHERE name LIKE CONCAT('%' , #findStr# , '%'))
+		</isEqual>
+	</isNotEmpty>
+	<![CDATA[
+		ORDER BY book_id DESC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 카테고리와 맵핑된 도서 목록을 가지고 온다. -->
+	<select id="getBookListByCategory" resultMap="BookMap" cacheModel="book-cache">
+	<![CDATA[ 
+	SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT prdimgm FROM Book WHERE id = A.legacy_id) as img_url ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_learning_book A
+		WHERE is_use = 'Y'
+	]]>
+	<isNotEmpty property="category" prepend="AND">
+		category LIKE CONCAT(#category# , '%')
+	</isNotEmpty>
+	<isEmpty property="course" prepend="AND">
+		course not in ('C001004')
+	</isEmpty>	
+	<![CDATA[
+		ORDER BY sequence ASC 
+	]]>
+	</select>
+	
+	<!-- 도서 정보를 가지고 온다. -->
+	<select id="getBook" resultMap="BookMap">
+	<![CDATA[
+	SELECT 
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT prdimgm FROM Book WHERE id = A.legacy_id) as img_url ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name
+		FROM th_learning_book A
+		WHERE book_id = #bookId#
+	]]>
+	</select>
+	
+	<!--  도서를 등록한다. -->
+	<insert id="insertBook">
+	<![CDATA[
+	INSERT INTO th_learning_book
+	(
+		legacy_id ,
+		category ,
+		course ,
+		name ,
+		author ,
+		teacher_cd_view ,
+		preview_url ,
+		is_use ,
+		reg_date ,
+		reg_id ,
+		sequence ,
+		cd_view_width ,
+		cd_view_height
+	)
+	VALUES
+	(
+		#legacyId# ,
+		#category# , 
+		#course# ,
+		#name# ,
+		#author# ,
+		#teacherCdView# ,
+		#previewUrl# ,
+		#isUse# ,
+		NOW() ,
+		#regId# ,
+		#sequence# ,
+		#cdViewWidth# ,
+		#cdViewHeight#
+	)
+	]]>
+	<selectKey resultClass="int" type="post">
+	SELECT last_insert_id() as book_id 
+	</selectKey>
+	</insert>
+	
+	<!-- 도서의 정보를 갱신한다. -->
+	<update id="updateBook">
+	<![CDATA[
+	UPDATE
+			th_learning_book
+		SET
+			legacy_id = #legacyId# ,
+			category = #category# ,
+			course = #course# ,
+			name = #name# ,
+			author = #author# ,
+			teacher_cd_view = #teacherCdView# ,
+			preview_url = #previewUrl# ,
+			is_use = #isUse# ,
+			sequence = #sequence# ,
+			cd_view_width = #cdViewWidth# ,
+			cd_view_height = #cdViewHeight#
+		WHERE
+			book_id = #bookId# 
+	]]>
+	</update>
+	
+	<!-- 자료관리의 총 카운트를 가지고 온다. -->
+	<select id="getTotalData" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_learning_data
+		WHERE 1=1
+	]]>
+	<isGreaterThan property="findParentUnitId" compareValue="0" prepend="AND">
+		unit_id IN (SELECT unit_id FROM th_unit WHERE category LIKE 'A%' AND parent_id = #findParentUnitId#)
+	</isGreaterThan>
+	<isNotEmpty property="findCategory" prepend="AND">
+		category LIKE CONCAT(#findCategory#, '%')
+	</isNotEmpty>
+	<isNotEmpty property="findTypeCategory" prepend="AND">
+		data_type LIKE CONCAT('%' , #findTypeCategory# , '%')
+	</isNotEmpty>
+	<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+		book_id = #findBookId#
+	</isGreaterThan>
+	<isGreaterThan property="findUnitId" compareValue="0" prepend="AND">
+		unit_id = #findUnitId#
+	</isGreaterThan>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate" prepend="AND">
+		SUBSTRING(reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="ss">
+		(title LIKE CONCAT('%' , #findStr# , '%') or keywords LIKE CONCAT('%' , #findStr# , '%'))
+		</isEqual>
+	</isNotEmpty>
+	</select>
+	
+	<!-- 유형별 데이타의 총 카운트 -->
+	<select id="getDataListCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_learning_data A  
+		LEFT OUTER JOIN  th_unit B		
+			on A.unit_id = B.unit_id
+		where 1=1		
+		AND data_flag != 'C'
+	]]>
+		<isGreaterThan property="findParentUnitId" compareValue="0" prepend="AND">
+			A.unit_id IN (SELECT unit_id FROM th_unit WHERE category LIKE 'A%' AND parent_id = #findParentUnitId#)
+		</isGreaterThan>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.category LIKE CONCAT(left(#findCategory#,7), '%')
+		</isNotEmpty>
+		<isNotEmpty property="findTypeCategory" prepend="AND">
+			A.data_type LIKE CONCAT('%' , #findTypeCategory# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			A.book_id = #findBookId#
+		</isGreaterThan>
+		<isGreaterThan property="findUnitId" compareValue="0" prepend="AND">
+			A.unit_id = #findUnitId#
+		</isGreaterThan>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findDataFlag" prepend="AND">
+			A.data_flag LIKE CONCAT('%' , #findDataFlag# , '%')
+		</isNotEmpty>			
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ss">
+			( 
+				replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')							
+					OR replace(A.keywords, ' ', '') LIKE CONCAT('%',#findStr#,'%')       					
+			)
+			</isEqual>
+		</isNotEmpty>
+	</select>
+	<!-- 자료관리 리스트 -->
+	<select id="getDataList" resultMap="DataMap">
+	<![CDATA[
+	SELECT
+			A.data_id ,
+			A.category ,
+			A.book_id ,
+			A.unit_id ,
+			A.data_flag ,
+			A.data_type ,
+			A.title ,
+			A.file_name ,
+			A.keywords ,
+			A.mm_id ,
+			A.sequence ,
+			A.reg_date ,
+			A.user_id ,
+			A.hits ,
+			get_unit_id(A.unit_id) as unit_ids ,
+			get_unit_path(A.unit_id) as unit_path ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,
+			(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,
+			(SELECT origin_code FROM th_multimedia WHERE mm_id = A.mm_id) as origin_code,
+			(SELECT name FROM th_category WHERE category = origin_code) as origin_name,	
+			(SELECT dn_url FROM th_multimedia WHERE mm_id = A.mm_id) as dn_url,
+			get_ext_img(A.data_file) as ext_img	,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name ,
+			CASE 
+				WHEN A.mm_id > 0 THEN 
+					(SELECT thumbnail FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END AS thumbnail ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT data_file FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					data_file
+			END as data_file ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT contents FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as contents ,
+			(SELECT COUNT(1) FROM th_scrap WHERE relation_id = A.data_id AND scrap_type = 'DATA') as scrap_count ,
+			(SELECT sequence FROM th_unit WHERE unit_id = B.parent_id) AS sequence2 
+		FROM th_learning_data A 
+		LEFT OUTER JOIN  th_unit B		
+			on A.unit_id = B.unit_id
+		where 1=1	
+	]]>
+		<isEmpty property="findStr" prepend="AND">
+			data_flag != 'C'
+		</isEmpty>
+		<isGreaterThan property="findParentUnitId" compareValue="0" prepend="AND">
+			A.unit_id IN (SELECT unit_id FROM th_unit WHERE category LIKE 'A%' AND parent_id = #findParentUnitId#)
+		</isGreaterThan>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.category LIKE CONCAT(left(#findCategory#,7), '%')
+		</isNotEmpty>
+		<isNotEmpty property="findTypeCategory" prepend="AND">
+			A.data_type LIKE CONCAT('%' , #findTypeCategory# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			A.book_id = #findBookId#
+		</isGreaterThan>
+		<isGreaterThan property="findUnitId" compareValue="0" prepend="AND">
+			A.unit_id = #findUnitId#   
+		</isGreaterThan>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findDataFlag" prepend="AND">
+			A.data_flag LIKE CONCAT('%' , #findDataFlag# , '%')
+		</isNotEmpty>			
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ss">
+			( 
+				replace(A.title, ' ', '') LIKE CONCAT('%',#findStr#,'%')							
+					OR replace(A.keywords, ' ', '') LIKE CONCAT('%',#findStr#,'%')       					
+			)
+			</isEqual>
+		</isNotEmpty>		
+		<isEmpty property="order">
+		ORDER BY A.data_id DESC
+		</isEmpty>
+		<isNotEmpty property="order">
+		ORDER BY sequence2 , B.sequence , A.sequence DESC
+		</isNotEmpty>
+	<![CDATA[		
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	
+		<!-- Admin 유형별 데이타의 총 카운트 -->
+	<select id="getDataListCountAdmin" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1)
+		FROM th_learning_data A  
+		LEFT OUTER JOIN  th_unit B		
+			on A.unit_id = B.unit_id
+		where 1=1		
+	]]>
+		<isGreaterThan property="findParentUnitId" compareValue="0" prepend="AND">
+			A.unit_id IN (SELECT unit_id FROM th_unit WHERE category LIKE 'A%' AND parent_id = #findParentUnitId#)
+		</isGreaterThan>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.category LIKE CONCAT(left(#findCategory#,7), '%')
+		</isNotEmpty>
+		<isNotEmpty property="findTypeCategory" prepend="AND">
+			A.data_type LIKE CONCAT('%' , #findTypeCategory# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			A.book_id = #findBookId#
+		</isGreaterThan>
+		<isGreaterThan property="findUnitId" compareValue="0" prepend="AND">
+			A.unit_id = #findUnitId#
+		</isGreaterThan>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findDataFlag" prepend="AND">
+			A.data_flag LIKE CONCAT('%' , #findDataFlag# , '%')
+		</isNotEmpty>			
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ss">
+		(A.title LIKE CONCAT('%' , #findStr# , '%') or A.keywords LIKE CONCAT('%' , #findStr# , '%'))
+			</isEqual>
+		</isNotEmpty>		
+	</select>
+	<!-- Admin자료관리 리스트 -->
+	<select id="getDataListAdmin" resultMap="DataMap">
+	<![CDATA[
+	SELECT
+			A.data_id ,
+			A.category ,
+			A.book_id ,
+			A.unit_id ,
+			A.data_flag ,
+			A.data_type ,
+			A.title ,
+			A.file_name ,
+			A.keywords ,
+			A.mm_id ,
+			A.sequence ,
+			A.reg_date ,
+			A.user_id ,
+			A.hits ,
+			get_unit_id(A.unit_id) as unit_ids ,
+			get_unit_path(A.unit_id) as unit_path ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,
+			(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,
+			(SELECT origin_code FROM th_multimedia WHERE mm_id = A.mm_id) as origin_code,
+			(SELECT name FROM th_category WHERE category = origin_code) as origin_name,	
+			(SELECT dn_url FROM th_multimedia WHERE mm_id = A.mm_id) as dn_url,
+			get_ext_img(A.data_file) as ext_img	,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name ,
+			CASE 
+				WHEN A.mm_id > 0 THEN 
+					(SELECT thumbnail FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END AS thumbnail ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT data_file FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					data_file
+			END as data_file ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT contents FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as contents ,
+			(SELECT COUNT(1) FROM th_scrap WHERE relation_id = A.data_id AND scrap_type = 'DATA') as scrap_count ,
+			(SELECT sequence FROM th_unit WHERE unit_id = B.parent_id) AS sequence2 
+		FROM th_learning_data A 
+		LEFT OUTER JOIN  th_unit B		
+			on A.unit_id = B.unit_id
+		where 1=1	
+	]]>
+		<isGreaterThan property="findParentUnitId" compareValue="0" prepend="AND">
+			A.unit_id IN (SELECT unit_id FROM th_unit WHERE category LIKE 'A%' AND parent_id = #findParentUnitId#)
+		</isGreaterThan>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.category LIKE CONCAT('%' , #findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findTypeCategory" prepend="AND">
+			A.data_type LIKE CONCAT('%' , #findTypeCategory# , '%')
+		</isNotEmpty>
+		<isGreaterThan property="findBookId" compareValue="0" prepend="AND">
+			A.book_id = #findBookId#
+		</isGreaterThan>
+		<isGreaterThan property="findUnitId" compareValue="0" prepend="AND">
+			A.unit_id = #findUnitId#   
+		</isGreaterThan>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(A.reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findDataFlag" prepend="AND">
+			A.data_flag LIKE CONCAT('%' , #findDataFlag# , '%')
+		</isNotEmpty>			
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ss">
+		(A.title LIKE CONCAT('%' , #findStr# , '%') or A.keywords LIKE CONCAT('%' , #findStr# , '%'))
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="order">
+		ORDER BY A.data_id DESC
+		</isEmpty>
+		<isNotEmpty property="order">
+		ORDER BY sequence2 , B.sequence , A.sequence DESC
+		</isNotEmpty>
+	<![CDATA[		
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	
+	<select id="getData" resultMap="DataMap">
+	<![CDATA[
+	SELECT
+			A.data_id ,
+			A.category ,
+			A.book_id ,
+			A.unit_id ,
+			A.data_flag ,
+			A.data_type ,
+			A.title ,
+			A.file_name ,
+			A.keywords ,
+			A.mm_id ,
+			A.sequence ,
+			A.reg_date ,
+			A.user_id ,
+			A.hits ,
+			get_unit_id(A.unit_id) as unit_ids ,
+			get_unit_path(A.unit_id) as unit_path ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,
+			(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,
+			(SELECT origin_code FROM th_multimedia WHERE mm_id = A.mm_id) as origin_code,	
+			(SELECT name FROM th_category WHERE category = origin_code) as origin_name,	
+			(SELECT dn_url FROM th_multimedia WHERE mm_id = A.mm_id) as dn_url,	
+			get_ext_img(A.data_file) as ext_img ,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name ,
+			CASE 
+				WHEN A.mm_id > 0 THEN 
+					(SELECT thumbnail FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END AS thumbnail ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT data_file FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					data_file
+			END as data_file ,			
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT contents FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as contents ,
+			(SELECT COUNT(1) FROM th_scrap WHERE relation_id = A.data_id AND scrap_type = 'DATA') as scrap_count
+		FROM th_learning_data A
+		WHERE data_id = #dataId#
+	]]>
+	</select>
+	
+	<!-- 다운로드를 위한 데이타 가지고 오기 -->
+	<select id="getDataForDownload" resultMap="DataDownloadMap">
+	<![CDATA[
+	SELECT
+			A.data_id ,
+			A.category ,
+			A.book_id ,
+			A.unit_id ,
+			A.data_flag ,
+			A.data_type ,
+			A.title ,
+			CASE
+		        WHEN A.file_name is null OR A.file_name="" then
+		          (select file_name FROM th_multimedia WHERE mm_id = A.mm_id)
+		        ELSE
+		          A.file_name
+		    END as file_name,
+			A.keywords ,
+			A.mm_id ,
+			A.sequence ,
+			A.reg_date ,
+			A.user_id ,
+			A.hits ,
+			get_unit_id(A.unit_id) as unit_ids ,
+			get_unit_path(A.unit_id) as unit_path ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,
+			(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,
+			get_ext_img(A.data_file) as ext_img ,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name ,
+			CASE 
+				WHEN A.mm_id > 0 THEN 
+					(SELECT thumbnail FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END AS thumbnail ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT data_file FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					data_file
+			END as data_file ,			
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT contents FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as contents ,
+			(SELECT COUNT(1) FROM th_scrap WHERE relation_id = A.data_id AND scrap_type = 'DATA') as scrap_count ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT dn_url FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as dn_url
+		FROM th_learning_data A
+		WHERE data_id = #dataId#
+	]]>
+	</select>
+	
+	<!-- 가장 큰 시퀀스 번호를 가지고 온다. -->
+	<select id="getMaxSequence" resultClass="int">
+	<![CDATA[
+	SELECT IFNULL(MAX(sequence) + 1 , 1) 
+		FROM th_learning_data
+		WHERE category = #category#
+			AND book_id = #bookId# 
+			AND unit_id = #unitId#
+			AND data_type = #dataType#
+	]]>
+	</select>
+	
+	<!-- 자료 등록 -->
+	<insert id="insertData">
+	<![CDATA[
+	INSERT INTO th_learning_data
+	(
+		category , 
+		book_id ,
+		unit_id ,
+	]]>
+		<isNotEmpty property="sequence">
+		sequence ,
+		</isNotEmpty>
+	<![CDATA[
+		data_flag ,
+		data_type ,
+		title ,
+		file_name ,
+		data_file ,
+		keywords ,
+		mm_id ,
+		reg_date ,
+		user_id
+	)
+	VALUES
+	(
+		#category# ,
+		#bookId# ,
+		#unitId# ,
+	]]>
+		<isNotEmpty property="sequence">
+		#sequence# ,
+		</isNotEmpty>
+	<![CDATA[
+		#dataFlag# ,
+		#dataType# ,
+		#title# ,
+		#fileName# ,
+		#dataFile# ,
+		#keywords# ,
+		#mmId# ,
+		NOW() ,
+		#userId#
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	 
+	 <!-- 자료 갱신 -->
+	<update id="updateData">
+	<![CDATA[
+	UPDATE th_learning_data
+		SET
+			category = #category# ,
+			book_id = #bookId# ,
+			unit_id = #unitId# ,
+	]]>
+			<isNotEmpty property="sequence">
+			sequence = #sequence#
+			</isNotEmpty>
+	<![CDATA[
+			data_flag = #dataFlag# ,
+			data_type = #dataType# ,
+			title = #title# ,
+			file_name = #fileName# ,
+			data_file = #dataFile# ,
+			keywords = #keywords# ,
+			mm_id = #mmId#
+		WHERE
+			data_id = #dataId#			
+	]]>
+	</update>
+	
+	<!-- 자료 삭제 -->
+	<delete id="deleteData">
+	<![CDATA[
+	DELETE FROM th_learning_data
+		WHERE data_id = #dataId#
+	]]>
+	</delete>
+	
+	<!--  교사용 CD 리스트 가지고 오기 --> 
+	<select id="getCdList" resultMap="CdMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_learning_cd
+		WHERE book_id = #bookId#
+	]]>
+	</select>
+	
+	<!--  교사용 CD 데이타 가지고 오기 --> 
+	<select id="getCd" resultMap="CdMap">
+	<![CDATA[
+	SELECT
+			*
+		FROM th_learning_cd
+		WHERE cd_id = #cdId#
+	]]>
+	</select>
+		 
+	<!-- 교사용 CD 다운로드 데이타 입력 -->
+	<insert id="insertCd">
+	<![CDATA[
+	INSERT INTO th_learning_cd
+	(
+		book_id ,
+		name ,
+		url ,
+		reg_date
+	)
+	VALUES
+	(
+		#bookId# ,
+		#name# ,
+		#url# ,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 교사용 CD 삭제 -->
+	<delete id="deleteCd">
+	<![CDATA[
+	DELETE FROM th_learning_cd
+		WHERE cd_id = #cdId#
+	]]>
+	</delete>
+	
+	<!-- 기존 도서 리스트 카운트를 가지고 온다. -->
+	<select id="getLegacyBookTotalCount" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1)
+		FROM Book A
+		WHERE 1=1
+	]]>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="ss">
+		name LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sc">
+		legacy_code LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	</select>
+	
+	<!-- 기존 도서 리스트를 가지고 온다. -->
+	<select id="getLegacyBookList" resultMap="LegacyBookMap">
+	<![CDATA[
+	SELECT 
+			id as legacy_id ,
+			legacy_code ,
+			NAME ,
+			writer AS author ,
+			(SELECT NAME FROM BookGroupm WHERE id = A.bookgroupm_id) AS class_name ,
+			previewlink
+		FROM Book A
+		WHERE 1=1
+	]]>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ss">
+			name LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc">
+			legacy_code LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>	
+	<![CDATA[
+		ORDER BY id DESC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 기존 도서 리스트를 가지고 온다. -->
+	<select id="getLegacyBook" resultMap="LegacyBookMap">
+	<![CDATA[
+	SELECT 
+			id as legacy_id ,
+			legacy_code ,
+			NAME ,
+			writer AS author ,
+			(SELECT NAME FROM BookGroupm WHERE id = A.bookgroupm_id) AS class_name ,
+			previewlink
+		FROM Book A
+		WHERE id = #legacyId#
+	]]> 
+	</select>
+
+	<!-- 공통 데이타의 총 갯수를 가지고 온다. -->
+	<select id="getCommonDataTotalCount" resultClass="int">
+	<![CDATA[
+	SELECT 
+			COUNT(1) 
+		FROM th_learning_data 
+		WHERE book_id = #bookId# 
+			AND data_flag = 'C'
+	]]>
+	</select>
+
+	<!-- 단원의 공통자료 카테고리 리스트를 가지고 온다. -->
+	<select id="getCommonDataCategoryList" resultClass="kr.co.kumsung.thub.util.ResultMap" cacheModel="data-cache">
+	<![CDATA[
+	SELECT 
+		A.category ,
+		A.name ,
+		(SELECT COUNT(1) FROM th_learning_data WHERE book_id = #bookId# AND data_flag = 'C' AND SUBSTRING(data_type , 1 , 4) = A.category) AS cnt
+	FROM th_category A 
+	WHERE A.category LIKE 'D%'
+		AND A.depth = '2'
+	ORDER BY A.category ASC
+	]]>
+	</select>
+	
+	<!-- 단원의 유형별 자료의 데이타를 가지고 오낟. -->
+	<select id="getTypesDataCategoryList" resultClass="kr.co.kumsung.thub.util.ResultMap" cacheModel="data-cache">
+	<![CDATA[
+	SELECT
+				* ,
+				(SELECT NAME FROM th_category WHERE category = TMP.category) AS name
+		FROM
+		(
+		SELECT
+					SUBSTRING(data_type , 1 , 4) AS category ,
+					COUNT(1) AS cnt
+				FROM th_learning_data A
+				WHERE 1=1
+	]]>
+			<isNotEmpty property="category" prepend="AND">
+			category LIKE CONCAT(#category# , '%')
+			</isNotEmpty>
+	<![CDATA[
+				  AND data_flag != 'C'
+				  AND book_id = #bookId# 
+				GROUP BY SUBSTRING(data_type , 1 , 4)
+		) AS TMP
+	]]>
+	</select>
+	
+	<!-- 단원  -->
+	<select id="getCommonDataSubCategoryList" resultClass="kr.co.kumsung.thub.util.ResultMap" cacheModel="data-cache">
+	<![CDATA[
+	SELECT
+		A.category,
+		B.unit_id,
+		A.name,
+		(
+		SELECT
+			COUNT(1)
+		FROM
+			th_learning_data
+		WHERE
+			book_id = #bookId#
+		AND data_flag = #dataFlag#
+		AND SUBSTRING(data_type , 1 , 4) = A.category
+		AND B.unit_id = unit_id  
+		) AS cnt
+	FROM
+		th_category A
+	LEFT OUTER JOIN
+		th_learning_data B
+	ON
+		A.category = SUBSTRING(B.data_type, 1, 4)
+	WHERE
+		A.category LIKE 'D%'
+	AND
+		A.depth = '2'
+	AND
+		B.book_id = #bookId#
+	AND
+		B.data_flag = #dataFlag#
+	GROUP BY
+		A.category, B.unit_id
+	ORDER BY
+		A.category ASC , B.unit_id asc
+	]]>
+	</select>
+	
+	<!-- 프론트에서 사용하는 자료 리스트 -->
+	<select id="getFrontDataList" resultMap="DataMap" cacheModel="data-cache" >
+	<![CDATA[
+	SELECT
+			A.data_id ,
+			A.category ,
+			A.book_id ,
+			A.unit_id ,
+			A.data_flag ,
+			A.data_type ,
+			A.title ,
+			A.file_name ,
+			A.keywords ,
+			A.mm_id ,
+			A.sequence ,
+			A.reg_date ,
+			A.user_id ,
+			A.hits ,
+			get_unit_id(A.unit_id) as unit_ids ,
+			get_unit_path(A.unit_id) as unit_path ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,
+			(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,
+			(SELECT dn_url FROM th_multimedia WHERE mm_id = A.mm_id) as dn_url,
+			get_ext_img(A.data_file) as ext_img	,
+			(SELECT origin_code FROM th_multimedia WHERE mm_id = A.mm_id) as origin_code,
+			(SELECT name FROM th_category WHERE category = origin_code) as origin_name,		
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name ,
+			CASE 
+				WHEN A.mm_id > 0 THEN 
+					(SELECT thumbnail FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END AS thumbnail ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT data_file FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					data_file
+			END as data_file ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT contents FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as contents ,
+			(SELECT COUNT(1) FROM th_scrap WHERE relation_id = A.data_id AND scrap_type = 'DATA') as scrap_count
+		FROM th_learning_data A
+		WHERE data_type LIKE CONCAT(#dataType# , '%')
+			AND data_flag = #dataFlag#
+			AND book_id = #bookId#
+		ORDER BY A.unit_id asc , A.sequence asc
+	]]>
+	</select>
+	
+	<!-- 도서 명을 가져온다 -->
+	<select id="getBookName" resultClass="String">
+	<![CDATA[
+	SELECT
+		name
+	FROM
+		th_learning_book
+	WHERE
+		book_id = #bookId#
+	]]>
+	</select>
+	
+	<!-- 교수학습자료 단원별 자료(탭) -->
+	<select id="getUnitDataList" resultMap="LearningMap">
+	<![CDATA[
+	SELECT
+		A.data_id,
+		A.category,
+		A.book_id,
+		A.unit_id,
+		A.data_flag,
+		A.data_type,
+		A.title,
+		A.hits,
+		]]>
+		<isNotEmpty property="dataType">
+			<isEqual property="dataType" compareValue="D003">
+				B.file_name as file_name,
+				B.data_file as data_file,
+				get_ext_img(B.data_file) as ext_img	,
+				B.thumbnail ,
+			</isEqual>
+			<isEqual property="dataType" compareValue="D005">
+				B.file_name as file_name,
+				B.data_file as data_file,
+				get_ext_img(B.data_file) as ext_img	,
+				B.thumbnail ,
+			</isEqual>
+			<isNotEqual property="dataType" compareValue="D003">
+			<isNotEqual property="dataType" compareValue="D005">
+				A.file_name, 
+				A.data_file,
+				get_ext_img(A.data_file) as ext_img	,
+				''  as thumbnail ,
+			</isNotEqual>
+			</isNotEqual>
+		</isNotEmpty>
+	<![CDATA[
+		B.dn_url,
+		A.mm_id
+	FROM
+		th_learning_data A
+	LEFT OUTER JOIN
+		th_multimedia B
+	ON
+		A.mm_id = B.mm_id
+	WHERE unit_id in(
+				SELECT 
+					unit_id 
+				FROM th_unit 
+				WHERE book_id = #bookId#
+					AND parent_id = #unitId# 
+					AND depth = #depth#
+					AND is_use = 'Y')
+	AND
+		data_type LIKE CONCAT(#dataType# , '%')
+		AND category LIKE CONCAT(#category# , '%')
+		AND book_id = #bookId#
+	ORDER BY
+		A.unit_id asc , A.sequence asc
+	]]>
+	</select> 
+	
+	<!-- 교수학습자료 단원별 자료 (공통)-->
+	<select id="getUnitSubDataList" resultMap="LearningMap">
+	<![CDATA[
+	SELECT
+		A.data_id,
+		A.category,
+		A.book_id,
+		A.unit_id,
+		A.data_flag,
+		A.data_type,
+		A.title,
+		CASE
+			WHEN A.mm_id > 0 THEN
+				(SELECT contents FROM th_multimedia WHERE mm_id = A.mm_id)
+			ELSE
+				''
+		END as contents ,
+		A.hits,
+	]]>
+		<isNotEmpty property="dataType">
+			<isEqual property="dataType" compareValue="D003">
+				B.file_name as file_name,
+				B.data_file as data_file,
+				get_ext_img(B.data_file) as ext_img	,
+				B.thumbnail ,
+			</isEqual>
+			<isEqual property="dataType" compareValue="D005">
+				B.file_name as file_name,
+				B.data_file as data_file,
+				get_ext_img(B.data_file) as ext_img	,
+				B.thumbnail ,
+			</isEqual>
+			<isNotEqual property="dataType" compareValue="D003">
+			<isNotEqual property="dataType" compareValue="D005">
+				A.file_name,
+				A.data_file,
+				get_ext_img(A.data_file) as ext_img	,
+				''  as thumbnail ,
+			</isNotEqual>
+			</isNotEqual>
+		</isNotEmpty>
+	<![CDATA[
+		B.dn_url,
+		A.mm_id
+	FROM
+		th_learning_data A
+	LEFT OUTER JOIN
+		th_multimedia B
+	ON
+		A.mm_id = B.mm_id
+	WHERE unit_id = #unitId#
+	AND
+		data_type LIKE CONCAT(#dataType# , '%')
+		AND A.category LIKE CONCAT(left(#category#,7), '%')
+		AND A.book_id = #bookId#
+		AND data_flag = 'U'
+	ORDER BY
+		A.unit_id asc , A.sequence asc
+	]]>
+	</select>
+	
+	<!-- 교수학습자료 정렬 기준 수정 -->
+	<update id="updateUnitDataSeq">
+	<![CDATA[
+	UPDATE
+		th_learning_data
+	SET
+		sequence = #sequence#
+	WHERE
+		data_id = #dataId#
+	]]>
+	</update>
+	
+	<!-- 교수학습자료 파일 다운로드 Hits 증가 -->
+	<update id="updateFileHits">
+	<![CDATA[
+	UPDATE
+		th_learning_data
+	SET
+		hits = hits + 1
+	WHERE
+		data_id = #dataId#
+	]]>
+	</update>
+	
+	
+	<!-- 교사용 CD 데이타를 포함한 도서 목록을 가지고 온다. --> 
+	<select id="getBookListWithCd" resultMap="CdBookMap">	
+	<![CDATA[
+	SELECT
+			A.* ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_category WHERE category = A.course) as course_name ,
+			(SELECT prdimgm FROM Book WHERE id = A.legacy_id) as img_url ,
+			(SELECT name FROM Member WHERE userid = A.reg_id) as user_name ,
+			(SELECT GROUP_CONCAT(cd_id , '^' , NAME , '|') FROM th_learning_cd WHERE book_id = A.book_id) AS cd_links
+		FROM th_learning_book A
+		WHERE is_use = 'Y'
+			AND category LIKE CONCAT(#findCategory# , '%')
+		ORDER BY book_id DESC
+	]]>
+	</select>
+	
+	<!-- 다운로드 데이타 리스트 -->
+	<select id="getDownloadDataList" resultMap="DataDownloadMap" cacheModel="data-cache">
+	<![CDATA[
+	SELECT
+			A.data_id ,
+			A.category ,
+			A.book_id ,
+			A.unit_id ,
+			A.data_flag ,
+			A.data_type ,
+			A.title ,
+			A.keywords ,
+			A.mm_id ,
+			A.sequence ,
+			A.reg_date ,
+			A.user_id ,
+			A.hits ,
+			get_unit_id(A.unit_id) as unit_ids ,
+			get_unit_path(A.unit_id) as unit_path ,
+			get_category_path(A.category) as category_path ,
+			(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,
+			(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,
+			get_ext_img(A.data_file) as ext_img	,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name ,
+			CASE
+				WHEN A.file_name IS NULL THEN
+					(SELECT file_name FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					A.file_name
+			END AS file_name ,
+			CASE 
+				WHEN A.mm_id > 0 THEN 
+					(SELECT thumbnail FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END AS thumbnail ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT data_file FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					data_file
+			END as data_file ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT contents FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as contents ,
+			(SELECT COUNT(1) FROM th_scrap WHERE relation_id = A.data_id AND scrap_type = 'DATA') as scrap_count ,
+			CASE
+				WHEN A.mm_id > 0 THEN
+					(SELECT dn_url FROM th_multimedia WHERE mm_id = A.mm_id)
+				ELSE
+					''
+			END as dn_url
+		FROM th_learning_data A
+		WHERE data_id IN ($dataIds$)
+	]]>
+	</select>
+	
+	<!-- 검색어 저장 -->
+	<insert id="insertSearchWord">
+	<![CDATA[
+	INSERT INTO th_search_words
+	(
+		search_word ,
+		flag ,
+		reg_date
+	)
+	VALUES
+	(
+		#searchWord# ,
+		'THUB' ,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!--  자료를 삭제한다. -->
+	<delete id="deleteLearningData">
+	DELETE FROM th_learning_data WHERE data_id = #dataId#
+	</delete>
+	
+	<delete id="deleteLearningBook">
+	DELETE FROM th_learning_book WHERE book_id = #bookId#
+	</delete>
+	
+	<!-- 등록된 메인의 총 갯수를 가지고 온다. -->
+	<select id="getTotalMainData" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1) 
+		FROM  th_main_data A, th_learning_book B   
+		WHERE  A.book_id=B.book_id  
+	]]>
+	<isNotEmpty property="findCategory" prepend="AND">
+		A.category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate" prepend="AND">
+		SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="st">
+		(SELECT name FROM th_learning_book WHERE book_id = A.book_id) like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sc">
+		A.user_id LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sa">
+		((SELECT name FROM th_learning_book WHERE book_id = A.book_id) like CONCAT('%' , #findStr# , '%') OR A.user_id LIKE CONCAT('%' , #findStr# , '%'))
+		</isEqual>
+	</isNotEmpty>
+	<![CDATA[
+		ORDER BY data_id DESC
+	]]>
+	</select>
+	
+	<select id="getMainDataList" resultMap="MaindataMap">	
+	<![CDATA[
+	SELECT    
+		A.data_id ,    
+		A.category ,   
+		A.book_id ,        
+		A.user_id,    
+		A.unit_id,    
+		A.data_type,    
+		get_category_path(A.category) as category_path ,    
+		(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,    
+		(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,         
+		B.author,    
+		(SELECT name FROM th_category WHERE category = B.course) as course_name ,    
+		(SELECT prdimgm FROM Book WHERE id = B.legacy_id) as img_url,
+		date_format(A.reg_date, '%Y-%m-%d') as reg_date
+	FROM th_main_data A, th_learning_book B   
+	where 1=1    
+		and A.book_id=B.book_id  
+	]]>
+	<isNotEmpty property="findCategory" prepend="AND">
+		A.category LIKE CONCAT(#findCategory# , '%')
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate" prepend="AND">
+		SUBSTRING(A.reg_date , 1 , 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr" prepend="AND">
+		<isEqual property="findMethod" compareValue="st">
+		(SELECT name FROM th_learning_book WHERE book_id = A.book_id) like CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sc">
+		A.user_id LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sa">
+		((SELECT name FROM th_learning_book WHERE book_id = A.book_id) like CONCAT('%' , #findStr# , '%') OR A.user_id LIKE CONCAT('%' , #findStr# , '%'))
+		</isEqual>
+	</isNotEmpty>
+	<![CDATA[                     
+	ORDER BY A.data_id DESC 
+	LIMIT #skip# , #pageSize#  
+	]]>
+	</select>
+	
+	<!-- 메인자료 수정 -->
+	<update id="updateMainData">
+	<![CDATA[
+	UPDATE
+		th_main_data
+	SET
+		category=#category# ,
+		book_id=#bookId# ,
+		unit_id=#unitId# ,
+		data_type=#dataType# ,
+		user_id=#userId#  
+	WHERE
+		data_id = #dataId#
+	]]>
+	</update>
+	
+	<!-- 메인자료 입력 -->
+	<insert id="insertMainData">
+	<![CDATA[
+	INSERT INTO th_main_data 
+	(   
+		category ,
+		book_id ,
+		unit_id ,
+		data_type ,
+		reg_date ,
+		user_id  
+	)
+	VALUES
+	(	#category# ,
+	   	#bookId# ,
+		#unitId# ,
+		#dataType# ,
+		NOW() ,   
+		#userId#  ) 
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<delete id="deleteMainData">
+	DELETE FROM th_main_data WHERE data_id = #dataId#
+	</delete>
+	
+	<select id="getMainData" resultMap="MaindataMap">	
+	<![CDATA[
+	SELECT    
+		A.data_id ,    
+		A.category ,   
+		A.book_id ,        
+		A.user_id,    
+		A.unit_id,    
+		A.data_type,    
+		get_category_path(A.category) as category_path ,    
+		(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,    
+		(SELECT name FROM th_category WHERE category = SUBSTR(A.data_type , 1 , 4)) as data_type_name,         
+		B.author,    
+		(SELECT name FROM th_category WHERE category = B.course) as course_name ,    
+		(SELECT prdimgm FROM Book WHERE id = B.legacy_id) as img_url,
+		date_format(A.reg_date, '%Y-%m-%d') as reg_date   
+	FROM th_main_data A, th_learning_book B   
+	WHERE  data_id = #dataId#   
+	and A.book_id=B.book_id    
+	]]>
+	</select>
+</sqlMap>

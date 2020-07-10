@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Training">
+	<!-- 교사 연수 지원 리스트 Mapper -->
+	<resultMap id="TrainingListMap" class="kr.co.kumsung.thub.domain.Training">
+		<result column="training_id" property="trainingId" />
+		<result column="title" property="title" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="contents" property="contents" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="modify_id" property="modifyId" />
+		<result column="hits" property="hits" />
+		<result column="postCnt" property="postCnt" />
+		<result column="reqCnt" property="reqCnt" />
+		<result column="post_id" property="postId" />
+		<result column="progress" property="progress" />
+	</resultMap>
+	<!-- 교사 연수 지원  Mapper -->
+	<resultMap id="TrainingDetailMap" class="kr.co.kumsung.thub.domain.Training">
+		<result column="training_id" property="trainingId" />
+		<result column="title" property="title" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="contents" property="contents" />
+		<result column="postCnt" property="postCnt" />
+		<result column="post_id" property="postId" />
+	</resultMap>
+	
+	<!-- 교사 연수 지원 신청자 Mapper -->
+	<resultMap id="TrainingReqList" class="kr.co.kumsung.thub.domain.TrainingRequest">
+		<result column="request_id" property="requestId" />
+		<result column="training_id" property="trainingId" />
+		<result column="contents" property="contents" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- 현장스케치 Mapper -->
+	<resultMap id="TrainingPostscriptMap" class="kr.co.kumsung.thub.domain.TrainingPostscript">
+		<result column="post_id" property="postId" />
+		<result column="training_id" property="trainingId" />
+		<result column="title" property="title" />
+		<result column="contents" property="contents" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="modify_id" property="modifyId" />
+		<result column="hits" property="hits" />
+	</resultMap>
+	
+	<!-- 현장스케치 교사연수지원 연수명 리스트 -->
+	<resultMap id="TrainingTitleList" class="kr.co.kumsung.thub.domain.Training">
+		<result column="title" property="title" />
+		<result column="training_id" property="trainingId" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<!-- 현장스케치 입력시 교사연수지원 중복 체크 -->
+	<resultMap id="TrainingDupMap" class="kr.co.kumsung.thub.domain.TrainingPostscript">
+		<result column="postCnt" property="postCnt" />
+		<result column="post_id" property="postId" />
+	</resultMap>
+	
+	<!-- 교사 연수 지원 리스트 -->
+	<select id="getTrainingList" resultMap="TrainingListMap">
+	SELECT
+		*
+	FROM
+		(SELECT
+			A.training_id,
+			A.title,
+			A.start_date,
+			A.end_date,
+			A.contents,
+			A.reg_id,
+			A.reg_date,
+			A.modify_id,
+			A.hits,
+			(SELECT count(training_id) FROM th_training_postscript WHERE training_id = A.training_id) AS postCnt,
+			IFNULL((SELECT post_id FROM th_training_postscript WHERE training_id = A.training_id),0) AS post_id,
+			(SELECT count(training_id) FROM th_training_request WHERE training_id = A.training_id) AS reqCnt,
+			if( cast(end_date as datetime) >= date_format(NOW(), '%Y-%m-%d'),"Y","N" )as progress
+		FROM
+			th_training A
+		WHERE
+			1=1
+		<isNotEmpty property="findStartDate" prepend="AND">
+		(
+		date_format(A.start_date, '%Y-%m-%d') <![CDATA[>=]]> #findStartDate#
+		AND
+		date_format(A.end_date, '%Y-%m-%d') <![CDATA[<=]]> #findEndDate#
+		)
+		</isNotEmpty>
+		<isNotEmpty property="findStatusDate" prepend="AND">
+			<isEqual property="findStatusDate" compareValue="Y">
+				cast(A.end_date as datetime) <![CDATA[>=]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+			<isEqual property="findStatusDate" compareValue="N">
+				cast(A.end_date as datetime) <![CDATA[<]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				A.title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				A.modify_id LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fc">
+				A.contents LIKE CONCAT('%', #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+		)B
+	WHERE
+		1=1
+		<isNotEmpty property="findStatusSketch" prepend="AND">
+			<isEqual property="findStatusSketch" compareValue="Y">
+				B.postCnt <![CDATA[>]]> 0
+			</isEqual>
+			<isEqual property="findStatusSketch" compareValue="N">
+				B.postCnt <![CDATA[<]]> 1
+			</isEqual>
+		</isNotEmpty>
+	ORDER BY
+		B.reg_date desc
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 교사 연수 지원 리스트 게시글 수 -->
+	<select id="getTrainingTotalList" resultClass="int">
+	SELECT
+		count(1)
+	FROM
+		(SELECT
+			A.training_id,
+			A.title,
+			A.start_date,
+			A.end_date,
+			A.reg_date,
+			A.modify_id,
+			(SELECT count(training_id) FROM th_training_postscript WHERE training_id = A.training_id) AS postCnt,
+			(SELECT count(training_id) FROM th_training_request WHERE training_id = A.training_id) AS reqCnt
+		FROM
+			th_training A
+		WHERE
+			1=1
+		<isNotEmpty property="findStartDate" prepend="AND">
+		(
+		date_format(A.start_date, '%Y-%m-%d') <![CDATA[>=]]> #findStartDate#
+		AND
+		date_format(A.end_date, '%Y-%m-%d') <![CDATA[<=]]> #findEndDate#
+		)
+		</isNotEmpty>
+		<isNotEmpty property="findStatusDate" prepend="AND">
+			<isEqual property="findStatusDate" compareValue="Y">
+				cast(A.end_date as datetime) <![CDATA[>=]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+			<isEqual property="findStatusDate" compareValue="N">
+				cast(A.end_date as datetime) <![CDATA[<]]> date_format(NOW(), '%Y-%m-%d')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				A.title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				A.modify_id LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fc">
+				A.contents LIKE CONCAT('%', #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+		)B
+	WHERE
+		1=1
+		<isNotEmpty property="findStatusSketch" prepend="AND">
+			<isEqual property="findStatusSketch" compareValue="Y">
+				B.postCnt <![CDATA[>]]> 0
+			</isEqual>
+			<isEqual property="findStatusSketch" compareValue="N">
+				B.postCnt <![CDATA[<]]> 1
+			</isEqual>
+		</isNotEmpty>
+	</select>
+
+	<!-- 교사 연수 지원 입력 -->
+	<insert id="insertTraining">
+	<![CDATA[
+	INSERT INTO th_training
+	(
+		title,
+		start_date,
+		end_date,
+		contents,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date
+	)
+	VALUES
+	(
+		#title#,
+		#startDate#,
+		#endDate#,
+		#contents#,
+		#regId#,
+		NOW(),
+		#modifyId#,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 교사 연수 지원 상세 보기 -->
+	<select id="getTrainingDetail" resultMap="TrainingDetailMap">
+	<![CDATA[
+	SELECT
+		A.training_id,
+		A.title,
+		A.start_date,
+		A.end_date,
+		A.contents,
+		(SELECT count(training_id) FROM th_training_postscript WHERE training_id = A.training_id) AS postCnt,
+		IFNULL((SELECT post_id FROM th_training_postscript WHERE training_id = A.training_id),0) AS post_id
+	FROM
+		th_training A
+	WHERE
+		A.training_id = #trainingId#
+	]]>
+	</select>
+	
+	<!--  교사 연수 지원 수정 -->
+	<update id="updateTraining">
+	<![CDATA[
+	UPDATE
+		th_training
+	SET
+		title = #title#,
+		start_date = #startDate#,
+		end_date = #endDate#,
+		contents = #contents#,
+		modify_id = #modifyId#,
+		modify_date = NOW()
+	WHERE
+		training_id = #trainingId#
+	]]>
+	</update>
+	
+	<!-- 교사 연수 지원 신청자 리스트 -->
+	<select id="getTrainingReqList" resultMap="TrainingReqList">
+	<![CDATA[
+	SELECT
+		request_id,
+		training_id,
+		concat(
+		substr(contents,1,20),
+		if(length(contents)>20,'...','')
+		)as contents,
+		reg_id,
+		date_format(reg_date, '%Y-%m-%d')as reg_date
+	FROM
+		th_training_request
+	WHERE
+		training_id = #trainingId#
+	ORDER BY
+		reg_id desc
+	]]>
+	<isNotEmpty property="skip">
+	LIMIT
+		#skip# , #pageSize#
+	</isNotEmpty>
+	</select>
+	
+	<!-- 교사 연수지원 신청자 리스트 개수 -->
+	<select id="getRequestTrainingTotal" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1)
+	FROM
+		th_training_request
+	WHERE
+		training_id = #trainingId#
+	]]>
+	</select>
+	
+	<!-- 교사 연수 지원 Excel 다운로드 제목 가져오기 -->
+	<select id="getTitleName" resultClass="String">
+	<![CDATA[
+	SELECT
+		title
+	FROM
+		th_training
+	WHERE
+		training_id = #trainingId#
+	]]>
+	</select>
+	
+	<!-- 교사 연수 지원 글 삭제 -->
+	<delete id="deleteTraining">
+	DELETE FROM
+		th_training
+	WHERE
+		training_id = #trainingId#
+	</delete>
+	
+	<!-- 현장스케치 리스트 -->
+	<select id="getTrainingPostscriptList" resultMap="TrainingPostscriptMap">
+	<![CDATA[
+	SELECT
+		post_id,
+		training_id,
+		title,
+		contents,
+		reg_id,
+		date_format(reg_date, '%Y-%m-%d')as reg_date,
+		modify_id,
+		date_format(modify_date, '%Y-%m-%d')as modify_date,
+		hits
+	FROM
+		th_training_postscript
+	]]>
+		<isNotEmpty property="findStr" prepend="WHERE">
+			<isEqual property="findMethod" compareValue="ft">
+				title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fc">
+				contents LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				reg_id LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+	ORDER BY
+		reg_date desc
+	LIMIT #skip# , #pageSize#
+	</select>
+	
+	<!-- 현장스케치 리스트 수 -->
+	<select id="getTrainingPostscriptTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(1)
+	FROM
+		th_training_postscript
+	]]>
+		<isNotEmpty property="findStr" prepend="WHERE">
+			<isEqual property="findMethod" compareValue="ft">
+				title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fc">
+				contents LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				reg_id LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+	</select>
+	
+	<!-- 현장스케치 상세 보기 -->
+	<select id="getTrainingPostscriptDetail" resultMap="TrainingPostscriptMap">
+	<![CDATA[
+	SELECT
+		post_id,
+		training_id,
+		title,
+		contents,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date,
+		hits
+	FROM
+		th_training_postscript
+	WHERE
+		post_id = #postId#
+	]]>
+	</select>
+	
+	<!-- 현장스케치  -->
+	<select id="getTrainingIdList" resultMap="TrainingTitleList">
+	SELECT
+		concat(
+		substr(title,1,40),
+		if(length(title)>40,'...','')
+		)as title,
+		training_id,
+		date_format(reg_date, '%Y-%m-%d')as reg_date
+	FROM
+		th_training
+	ORDER BY
+		reg_date desc
+	</select>
+	
+	<!-- 현장스케치 입력 -->
+	<insert id="insertTrainingPostscript">
+	<![CDATA[
+	INSERT INTO th_training_postscript
+	(
+		title,
+		training_id,
+		contents,
+		reg_id,
+		reg_date,
+		modify_id,
+		modify_date
+	)
+	VALUES
+	(
+		#title#,
+		#trainingId#,
+		#contents#,
+		#regId#,
+		NOW(),
+		#modifyId#,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 현장스케치 수정 -->
+	<update id="updateTrainingPostscript">
+	<![CDATA[
+	UPDATE
+		th_training_postscript
+	SET
+		title = #title#,
+		training_id = #trainingId#,
+		contents = #contents#,
+		modify_id = #modifyId#,
+		modify_date = NOW()
+	WHERE
+		post_id = #postId#
+	]]>
+	</update>
+	
+	<!-- 현장스케치 보기 팝업창 -->
+	<select id="getTraiingRequestContents" resultClass="String">
+	<![CDATA[
+	SELECT
+		contents
+	FROM
+		th_training_request
+	WHERE
+		request_id = #request#
+	]]>
+	</select>
+	
+	<!-- 현장스케치 입력시 교사연수 중복 체크 -->
+	<select id="getTrainingPostscriptDup" resultMap="TrainingDupMap">
+	SELECT
+		count(1) as postCnt,
+		COALESCE(post_id,0) as post_id
+	FROM
+		th_training_postscript
+	WHERE
+		training_id = #trainingId#;
+	</select>
+	
+	<!-- 현장스케치 삭제 -->
+	<delete id="deleteTrainingPostscript">
+	DELETE FROM
+		th_training_postscript
+	WHERE
+		post_id = #postId#
+	</delete>
+	
+	<!-- 교사연수지원 신청 아이디 중복 체크 -->
+	<select id="getTrainingReqDup" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(0)as cnt
+	FROM
+		th_training_request
+	WHERE
+		training_id = #trainingId#
+	AND
+		user_id = #userId#
+	]]>
+	</select>
+	
+	<insert id="insertTrainingReq">
+	<![CDATA[
+	INSERT INTO th_training_request		
+	(
+		training_id,
+		contents,
+		user_id,
+		reg_date,
+		phone_num,
+		email
+	)
+	VALUES
+	(
+		#trainingId#,
+		#contents#,
+		#userId#,
+		NOW(),
+		#phoneNum#,
+		#email#
+	)
+	]]>
+	</insert>
+</sqlMap>

@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Customer">
+
+	<!-- 문의요청 게시판 관리 Admin -->
+	<resultMap id="CustomerListMap" class="kr.co.kumsung.thub.domain.Customer">
+		<result column="customer_id" property="customerId" />
+		<result column="category" property="category" nullValue=""/>
+		<result column="title" property="title" />
+		<result column="name" property="name" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="board_category" property="boardCategory" />
+		<result column="customer_cnt" property="customerCnt" />
+		<result column="category_path" property="categoryPath" />
+		<result column="category_name" property="categoryName" />
+		<result column="book_id" property="bookId" nullValue="0"/>
+		<result column="book_name" property="bookName" nullValue=""/>
+	</resultMap>
+	
+	<!-- 문의요청 게시판 관리 Admin -->
+	<resultMap id="CustomerDetailMap" class="kr.co.kumsung.thub.domain.Customer">
+		<result column="customer_id" property="customerId" />
+		<result column="category" property="category" />
+		<result column="title" property="title" />
+		<result column="name" property="name" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+		<result column="board_category" property="boardCategory" />
+		<result column="customer_cnt" property="customerCnt" />
+		<result column="phone_num" property="phoneNum" />
+		<result column="contents" property="contents" />
+		<result column="category_name" property="categoryName" />
+		<result column="category_path" property="categoryPath" />
+		<result column="email" property="email" />
+		<result column="file_name1" property="fileName1" />
+		<result column="data_file1" property="dataFile1" />
+		<result column="file_name2" property="fileName2" />
+		<result column="data_file2" property="dataFile2" />
+		<result column="file_name3" property="fileName3" />
+		<result column="data_file3" property="dataFile3" />
+		<result column="book_id" property="bookId" nullValue="0"/>
+		<result column="book_name" property="bookName" nullValue=""/>
+		<result column="is_sns" property="isSns" />
+	</resultMap>
+	
+	<!-- 문의사항 답변 -->
+	<resultMap id="CustomerAnswerMap" class="kr.co.kumsung.thub.domain.Customer">
+		<result column="answer_id" property="answerId" />
+		<result column="customer_id" property="customerId" />
+		<result column="title" property="title" />
+		<result column="contents" property="contents" />
+		<result column="reg_id" property="regId" />
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+	
+	<resultMap id="SendMap" class="kr.co.kumsung.thub.domain.Send">
+		<result column="send_id" property="sendId" />
+		<result column="board_id" property="boardId"/>
+		<result column="board_name" property="boardName"/>
+		<result column="category_id" property="categoryId"/>
+		<result column="category_name" property="categoryName"/>
+		<result column="title" property="title"/>
+		<result column="contents" property="contents"/>
+		<result column="file_name1" property="fileName1"/>
+		<result column="file_name2" property="fileName2"/>
+		<result column="file_name3" property="fileName3"/>
+		<result column="data_file1" property="dataFile1"/>
+		<result column="data_file2" property="dataFile2"/>
+		<result column="data_file3" property="dataFile3"/>
+		<result column="user_id" property="userId"/>
+		<result column="user_name" property="userName"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="is_accept" property="isAccept"/>
+	</resultMap>
+
+	<!-- 고객문의 등록 -->
+	<insert id="insertCustomer">
+	<![CDATA[
+	INSERT INTO th_customer
+	(
+		email,
+		phone_num,
+		title,
+		contents,
+		file_name1,
+		data_file1,	
+		file_name2,
+		data_file2,	
+		file_name3,
+		data_file3,
+		reg_id,
+		reg_date,
+		board_category,
+		is_sns,
+		category ,
+		book_id 
+	)
+	VALUES
+	(
+		#email#,
+		#phoneNum#,
+		#title#,
+		#contents#,
+		#fileName1#,
+		#dataFile1#,
+		#fileName2#,
+		#dataFile2#,
+		#fileName3#,
+		#dataFile3#,
+		#regId#,
+		NOW(),
+		#boardCategory#,
+		#isSns#,
+		#category# ,
+		#bookId#
+	)
+	]]>
+	</insert>
+	
+	<!-- 문의요청 게시판 관리 -->
+	<select id="getCustomerList" resultMap="CustomerListMap">
+	<![CDATA[
+	SELECT
+		A.customer_id,
+		get_category_path(A.category) as category_path,
+		A.category,		
+		A.title,
+		(SELECT name FROM Member where userid = A.reg_id) as name,
+		A.reg_id,
+		date_format(A.reg_date, '%Y-%m-%d') as reg_date,
+		A.board_category,
+		(SELECT count(customer_id) FROM th_customer_answer WHERE customer_id = A.customer_id) AS customer_cnt,
+		(SELECT name FROM th_category WHERE category = A.category)as category_name ,
+		book_id ,
+		(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name
+	FROM
+		th_customer A
+	WHERE
+		1=1
+	]]>
+		<isNotEmpty property="findUserId" prepend="AND">
+			A.reg_id = #findUserId#
+		</isNotEmpty>
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				A.title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				A.reg_id in (SELECT userid FROM Member WHERE userid = A.reg_id AND name LIKE CONCAT('%' , #findStr# , '%'))
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fc">
+				A.contents LIKE CONCAT('%', #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="">
+			A.title LIKE CONCAT('%' , #findStr# , '%') OR A.reg_id in (SELECT userid FROM Member WHERE userid = A.reg_id AND name LIKE CONCAT('%' , #findStr# , '%'))
+			OR  A.contents LIKE CONCAT('%', #findStr# , '%')
+			</isEqual>
+			
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.category LIKE CONCAT('%', #findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findBoardCategory" prepend="AND">
+			A.board_category LIKE CONCAT('%', #findBoardCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findAnswerStatus" prepend="AND">
+			<isEqual property="findAnswerStatus" compareValue='Y'>
+				(SELECT count(customer_id) FROM th_customer_answer WHERE customer_id = A.customer_id) > 0
+			</isEqual>
+			<isEqual property="findAnswerStatus" compareValue='N'>
+				(SELECT count(customer_id) FROM th_customer_answer WHERE customer_id = A.customer_id) <![CDATA[<]]> 1
+			</isEqual>
+		</isNotEmpty>
+	ORDER BY
+		A.REG_DATE desc
+	LIMIT #skip# , #pageSize#
+		
+	</select>
+	
+	<!-- 문의요청 게시판 게시글 수 -->
+	<select id="getCustomerTotalList" resultClass="int">
+	<![CDATA[
+	SELECT
+		count(0)
+	FROM
+		th_customer A
+	WHERE
+		1=1
+	]]>
+		<isNotEmpty property="findUserId" prepend="AND">
+			A.reg_id = #findUserId#
+		</isNotEmpty> 
+		<isNotEmpty property="findStr" prepend="AND">
+			<isEqual property="findMethod" compareValue="ft">
+				A.title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fi">
+				A.reg_id in (SELECT userid FROM Member WHERE userid = A.reg_id AND name LIKE CONCAT('%' , #findStr# , '%'))
+			</isEqual>
+			<isEqual property="findMethod" compareValue="fc">
+				A.contents LIKE CONCAT('%', #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="findCategory" prepend="AND">
+			A.category LIKE CONCAT('%', #findCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findBoardCategory" prepend="AND">
+			A.board_category LIKE CONCAT('%', #findBoardCategory# , '%')
+		</isNotEmpty>
+		<isNotEmpty property="findAnswerStatus" prepend="AND">
+			<isEqual property="findAnswerStatus" compareValue='Y'>
+				(SELECT count(customer_id) FROM th_customer_answer WHERE customer_id = A.customer_id) > 0
+			</isEqual>
+			<isEqual property="findAnswerStatus" compareValue='N'>
+				(SELECT count(customer_id) FROM th_customer_answer WHERE customer_id = A.customer_id) <![CDATA[<]]> 1
+			</isEqual>
+		</isNotEmpty>
+	</select>
+	
+	
+	<!-- 문의요청 게시판 문의사항 상세보기 -->
+	<select id="getCustomerDetail" resultMap="CustomerDetailMap">
+	<![CDATA[
+	SELECT
+		A.customer_id,
+		A.category,
+		get_category_path(A.category) as category_path,
+		A.title,
+		(SELECT name FROM Member where userid = A.reg_id) as name,
+		A.reg_id,
+		date_format(A.reg_date, '%Y-%m-%d') as reg_date,
+		A.board_category,
+		(SELECT count(customer_id) FROM th_customer_answer WHERE customer_id = A.customer_id) AS customer_cnt,
+		(SELECT email FROM Member WHERE userid = A.reg_id) as email,
+		A.phone_num,
+		A.contents,
+		A.file_name1,
+		A.data_file1,
+		A.file_name2,
+		A.data_file2,
+		A.file_name3,
+		A.data_file3,
+		(SELECT name FROM th_category WHERE category = A.category)as category_name ,
+		book_id ,
+		(SELECT name FROM th_learning_book WHERE book_id = A.book_id) as book_name ,
+		is_sns
+	FROM
+		th_customer A
+	WHERE
+		customer_id = #customerId#
+	]]>
+	</select>
+	
+	<!-- 문의요청 게시판 문의사항 답변 가져오기 -->
+	<select id="getCustomerAnswer" resultMap="CustomerAnswerMap">
+	<![CDATA[
+	SELECT
+		answer_id,
+		customer_id,
+		title,
+		contents,
+		reg_id,
+		date_format('reg_date', '%Y-%m-%d')as reg_date
+	FROM
+		th_customer_answer
+	WHERE
+		customer_id = #customerId#;
+	]]>
+	</select>
+	
+	<!-- 문의요청 답변 작성 -->
+	<insert id="insertCustomerAnswer">
+	<![CDATA[
+	INSERT INTO th_customer_answer
+	(
+		customer_id,
+		title,
+		contents,
+		reg_id,
+		reg_date
+	)
+	VALUES
+	(
+		#customerId#,
+		#title#,
+		#contents#,
+		#regId#,
+		NOW()
+	)
+	]]>
+	</insert>
+	
+	<!-- 문의요청 답변 수정 -->
+	<update id="updateCustomerAnswer">
+	<![CDATA[
+	UPDATE
+		th_customer_answer
+	SET
+		customer_id = #customerId#,
+		title = #title#,
+		contents = #contents#,
+		modify_id = #regId#,
+		modify_date = NOW()
+	WHERE
+		answer_id = #answerId#
+	]]>
+	</update>
+	
+	<!-- 자료 원고 보내기의 카운트 -->
+	<select id="getBoardSendListCount" resultClass="int">
+	<![CDATA[
+	SELECT
+			COUNT(1) as cnt
+		FROM th_board_send A
+		WHERE 1=1
+	]]>
+	<isNotEmpty property="findBoardId">
+		<isGreaterThan property="findBoardId" compareValue="0" prepend="AND">
+		board_id = #findBoardId#
+		</isGreaterThan>
+	</isNotEmpty>
+	<isNotEmpty property="findIsAccept" prepend="AND">
+	is_accept = #findIsAccept#
+	</isNotEmpty>
+	<isNotEmpty property="findStartDate">
+		<isNotEmpty property="findEndDate" prepend="AND">
+		SUBSTRING(reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+		</isNotEmpty>
+	</isNotEmpty>
+	<isNotEmpty property="findStr">
+		<isEqual property="findMethod" compareValue="st" prepend="AND">
+		title LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+		<isEqual property="findMethod" compareValue="sc" prepend="AND">
+		contents LIKE CONCAT('%' , #findStr# , '%')
+		</isEqual>
+	</isNotEmpty>
+	</select>
+	
+	<!-- 자료 원고 보내기 -->
+	<select id="getBoardSendList" resultMap="SendMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT board_name FROM th_board_config WHERE board_id = A.board_id) as board_name ,
+			(SELECT name FROM th_board_category WHERE board_id = A.board_id AND category_id = A.category_id) as category_name ,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name 
+		FROM th_board_send A
+		WHERE 1=1
+	]]>
+		<isNotEmpty property="findBoardId">
+			<isGreaterThan property="findBoardId" compareValue="0" prepend="AND">
+			board_id = #findBoardId#
+			</isGreaterThan>
+		</isNotEmpty>
+		<isNotEmpty property="findIsAccept" prepend="AND">
+		is_accept = #findIsAccept#
+		</isNotEmpty>
+		<isNotEmpty property="findStartDate">
+			<isNotEmpty property="findEndDate" prepend="AND">
+			SUBSTRING(reg_date , 1, 10) BETWEEN #findStartDate# AND #findEndDate#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="findStr">
+			<isEqual property="findMethod" compareValue="st" prepend="AND">
+			title LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+			<isEqual property="findMethod" compareValue="sc" prepend="AND">
+			contents LIKE CONCAT('%' , #findStr# , '%')
+			</isEqual>
+		</isNotEmpty>
+	<![CDATA[
+		ORDER BY send_id DESC
+		LIMIT #skip# , #pageSize#
+	]]>
+	</select>
+	
+	<!-- 자료 원고 보내기의 상세 데이타 -->
+	<select id="getBoardSend" resultMap="SendMap">
+	<![CDATA[
+	SELECT
+			A.* ,
+			(SELECT board_name FROM th_board_config WHERE board_id = A.board_id) as board_name ,
+			(SELECT name FROM th_board_category WHERE board_id = A.board_id AND category_id = A.category_id) as category_name ,
+			(SELECT name FROM Member WHERE userid = A.user_id) as user_name 
+		FROM th_board_send A
+		WHERE send_id = #sendId#
+	]]> 
+	</select>
+	
+	<!-- 자료 원고 보내기 등록 -->
+	<insert id="insertSend">
+	<![CDATA[
+	INSERT INTO th_board_send
+	(	
+		title,
+		board_id ,
+		category_id ,
+		contents,
+		file_name1,
+		data_file1,	
+		file_name2,
+		data_file2,	
+		file_name3,
+		data_file3,
+		user_id,
+		reg_date
+	)
+	VALUES
+	(	
+		#title#,
+		#boardId#,
+		#categoryId#,
+		#contents#,
+		#fileName1#,
+		#dataFile1#,
+		#fileName2#,
+		#dataFile2#,
+		#fileName3#,
+		#dataFile3#,
+		#userId#,
+		NOW()
+	)
+	]]>
+	<selectKey resultClass="int">
+	SELECT last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<!-- 원고관리 삭제 -->
+	<delete id="deleteSend">
+	<![CDATA[
+	DELETE FROM th_board_send
+		WHERE send_id = #sendId#
+	]]>
+	</delete>
+	
+	<!-- 원고관리 상태변경 -->
+	<update id="updateSendAccept">
+	<![CDATA[
+	UPDATE th_board_send
+		SET is_accept = #isAccept#
+		WHERE send_id = #sendId#
+	]]>
+	</update>
+	
+</sqlMap>

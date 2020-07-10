@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:context="http://www.springframework.org/schema/context"
+	 xsi:schemaLocation="http://www.springframework.org/schema/beans
+	     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	     http://www.springframework.org/schema/context
+	     http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	
+<bean id="fileDao" class="kr.co.kumsung.thub.dao.impl.FileDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="categoryDao" class="kr.co.kumsung.thub.dao.impl.CategoryDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	 
+	<bean id="boardDao" class="kr.co.kumsung.thub.dao.impl.BoardDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="smartDao" class="kr.co.kumsung.thub.dao.impl.SmartDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+
+	<bean id="unitDao" class="kr.co.kumsung.thub.dao.impl.UnitDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+
+	<bean id="pollDao" class="kr.co.kumsung.thub.dao.impl.PollDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="multimediaDao" class="kr.co.kumsung.thub.dao.impl.MultimediaDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+ 
+	<bean id="trainingDao" class="kr.co.kumsung.thub.dao.impl.TrainingDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="eventDao" class="kr.co.kumsung.thub.dao.impl.EventDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="eduEventDao" class="kr.co.kumsung.thub.dao.impl.EduEventDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+
+	<bean id="quizEventDao" class="kr.co.kumsung.thub.dao.impl.QuizEventDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="lectureDao" class="kr.co.kumsung.thub.dao.impl.LectureDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="learningDao" class="kr.co.kumsung.thub.dao.impl.LearningDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="memberDao" class="kr.co.kumsung.thub.dao.impl.MemberDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="popupDao" class="kr.co.kumsung.thub.dao.impl.PopupDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="curriculumContactDao" class="kr.co.kumsung.thub.dao.impl.CurriculumContactDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+
+	<bean id="scrapDao" class="kr.co.kumsung.thub.dao.impl.ScrapDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+
+	<bean id="customerDao" class="kr.co.kumsung.thub.dao.impl.CustomerDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="statsDao" class="kr.co.kumsung.thub.dao.impl.StatsDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="maindisplayDao" class="kr.co.kumsung.thub.dao.impl.MainDisplayDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>	
+	
+</beans>
