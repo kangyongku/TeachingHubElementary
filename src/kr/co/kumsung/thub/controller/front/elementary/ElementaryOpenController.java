@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import kr.co.kumsung.thub.domain.Category;
 import kr.co.kumsung.thub.domain.Event;
+import kr.co.kumsung.thub.domain.EventWin;
 import kr.co.kumsung.thub.domain.Multimedia;
 import kr.co.kumsung.thub.domain.Poll;
 import kr.co.kumsung.thub.service.BoardService;
@@ -61,6 +62,13 @@ public class ElementaryOpenController {
 		// assign
 		model.addAttribute("beforePath", "정보 &middot; 소통");
 		model.addAttribute("currentPath", "티칭허브&#8314;자료");
+		System.out.println("utilize.do---------");
+		int td = 4;
+		for(int i=0; i< td; i++){
+			System.out.print("*");
+		}
+		
+		
 		
 		return "front/elementary/open/utilize";
 	}
@@ -233,6 +241,63 @@ public class ElementaryOpenController {
 	}
 	
 	/**
+	 * 쉼터 > 당첨자 보기 > 리스트
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/eventWinList.do")
+	public String eventWinList(HttpServletRequest request , Model model) throws Exception
+	{
+		// page specificant variables
+		int pageSize = 4;
+		int blockSize = 10;
+		
+		// get parameters
+		int pg = Common.getParameter(request, "pg", 1);
+		int skip = (pg - 1) * pageSize;
+		
+		String findMethod = Common.getParameter(request, "findMethod", "");
+		String findStr = Common.getParameter(request, "findStr", "");
+		
+		// make query parameters
+		Map<String,Object> params = new HashMap<String,Object>();
+		
+		params.put("findMethod" , findMethod);
+		params.put("findStr" , findStr);
+		params.put("findIsUse" , "Y");
+		params.put("skip" , skip);
+		params.put("pageSize" , pageSize);
+		
+		// get data
+		int totalCount = eventService.getEventWinTotalList(params);
+		int articleNum = totalCount - skip;
+		
+		List<EventWin> list = eventService.getEventWinList(params);
+		
+		FrontPagination pagination = new FrontPagination(pg, pageSize, blockSize, totalCount);
+		pagination.initialize();
+		
+		// assign
+		model.addAttribute("beforePath", "선생님 행복마당 &gt; 쉼터");
+		model.addAttribute("currentPath", "당첨자 발표");
+		model.addAttribute("pathName", "테스트");
+		
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("articleNum", articleNum);
+		model.addAttribute("list", list);
+		model.addAttribute("paging", pagination.print());
+		
+		model.addAttribute("pg", pg);
+		
+		model.addAttribute("findMethod", findMethod);
+		model.addAttribute("findStr", findStr);
+		
+		return "front/elementary/open/eventWinList";
+	}
+	
+	/**
 	 * 정보 * 소통 > 리스트
 	 * @param request
 	 * @param model
@@ -259,6 +324,7 @@ public class ElementaryOpenController {
 		params.put("findMethod" , findMethod);
 		params.put("findStr" , findStr);
 		params.put("findIsUse" , "Y");
+		params.put("elementary","Y");
 		params.put("skip" , skip);
 		params.put("pageSize" , pageSize);
 		
@@ -272,9 +338,8 @@ public class ElementaryOpenController {
 		pagination.initialize();
 		
 		// assign
-		model.addAttribute("beforePath", "나눔 &middot; 소통");
+		model.addAttribute("beforePath", "정보 &middot; 소통");
 		model.addAttribute("currentPath", "설문조사");
-		model.addAttribute("pathName", "테스트");
 		
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("articleNum", articleNum);

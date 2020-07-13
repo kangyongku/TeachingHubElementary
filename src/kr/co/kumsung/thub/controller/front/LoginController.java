@@ -74,6 +74,7 @@ public class LoginController {
 			return "redirect:/main.do";
 		}
 */
+		System.out.println("getAuthType : "+ member.getAuthType());
 		if( member.getAuthType().equals("S") || member.getAuthType().equals("N"))
 		{
 			// 관리자는 무조건 인증된 선생님 권한을 준다.
@@ -91,10 +92,10 @@ public class LoginController {
 		// 회원의 인증 구분을 가지고 온다.
 		if( !Validate.isEmpty(member.getAuthType())){
 			member.setIp(request.getRemoteAddr());
-			//logger.info("22222222");
+			logger.info("22222222 getIp "+member.getIp());
 			session.setAttribute("adminMember", member);
 		}
-		//logger.info("3333333");
+		logger.info("3333333");
 		//return "redirect:https://thub.kumsung.co.kr/main.do";
 		
 		//회원 로그인정보 누적.

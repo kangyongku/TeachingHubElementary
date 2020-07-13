@@ -671,7 +671,7 @@ function mainLogin()
 	}
 	//f.action = 'https://cs.kumsung.co.kr:444/loginForm.do';	//운영
 	//f.action = 'http://localhost/loginForm.do';		//개발
-	f.action = "http://localhost:8081/loginProc.do?userId="+$('input[name=userId]').val()+"&passWd="+encodeURIComponent($('input[name=passWd]').val());
+	f.action = "http://localhost:"+location.port+"/loginProc.do?userId="+$('input[name=userId]').val()+"&passWd="+encodeURIComponent($('input[name=passWd]').val());
 	//f.action = "/loginProc.do?userId="+$('input[name=userId]').val()+"&passWd="+encodeURIComponent($('input[name=passWd]').val())+"&returnUrl="+encodeURIComponent(cur_url);
 	f.target = '_self';
 	f.submit();

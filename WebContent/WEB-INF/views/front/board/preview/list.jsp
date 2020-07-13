@@ -22,30 +22,80 @@
 	Member member = (Member) session.getAttribute("member");
 %>
 <%-- <%=boardConfig.getHeaderSection() %> --%>
-
 <% 
 	if( boardConfig.getUseCategory().equals("Y")){
 %>
 	<div class="class_tab_wrap4">
-    	<ul>
-			<li class="none <% if( findCategory == 0 ){ %>on<% } %>"><a href="javascript:goCategorySearch('0');">전체</a><span class="stem"></span></li>
-			<%
-				int idx = 1;
-	
-				for(BoardCategory category : categories){ 
-					if( category.getArticleCount() > 0){
-			%>
-			<li class="<% if( idx < 5 ){ %>none<% } %> 
-				<% if( category.getCategoryId() == findCategory){ %>on<% } %>">
-				<a href="javascript:goCategorySearch('<%=category.getCategoryId()%>');"><%=category.getName() %></a>
-				<span class="stem"></span>
-			</li>
-			<%  
-				idx++;
+		<style>
+		      table, th, td {
+		        border: 1px solid #bcbcbc;
+		      }
+		      td{ 
+		      	width: 25%;
+			    height: 50px;
+			    text-align: center;
+			    font-weight: 400;
+			    font-size: 18px;
+			    color: #888888;
+			    background: #f8f8f8;
+			    box-sizing: border-box;
+			    border-left: 1px solid #dddddd;
+			    border-top: 1px solid #dddddd;
+			    border-bottom: 1px solid #dddddd;
+			    
+		      }
+		      td:first-child{width: 12.5%;}
+		      td.on{
+		      	background: #fb391e;
+							border: none;
+		      }
+		      td a{
+				display: table-cell;
+				vertical-align: middle;
+				height: 49px;
+				margin: 0 auto;
+				width: 25%;
+		      }
+		      td.on a{
+		      	color : #fff;
+		      }
+		    </style>
+			<table style="width: 100%;">
+            	<% 
+            		int rowSpan = categories.size();
+            		int mok = (rowSpan % 5)+1;
+            		System.out.println("mok : "+mok);
+            		int enterMok = rowSpan % 5;
+            		int tdIdx = 0;
+            		for(int tri=0; tri < mok; tri++	){
+            	%>
+				<tr>
+				<%
+					if(tri == 0){
+				%>
+					<td rowspan="<%= mok%>" width="25%" <% if( findCategory == 0 ){ %>class="on"<% } %>>
+						<a href="javascript:goCategorySearch('0');">전체</a>
+					</td>
+					<%
 					}
-				} 
-			%>
-		</ul>
+					for(int i=tdIdx; i<categories.size(); i++){
+						if(i == ((tri+1) * 5)){
+							break;
+						}else if(categories.get(tdIdx).getArticleCount() > 0){
+					%>
+							<td  class="<% if( categories.get(tdIdx).getCategoryId() == findCategory){ %>on<% } %>">
+								<a href="javascript:goCategorySearch('<%=categories.get(tdIdx).getCategoryId()%>');"><%=categories.get(tdIdx).getName() %></a>
+							</td>
+					<%
+					}
+				tdIdx++;
+			}
+		 %>
+		</tr>
+		<%
+		}
+		%>
+		</table>
     </div>
     <%
 	}

@@ -105,13 +105,13 @@
 	</bean>
 	
 	<!-- Interceptor --> 
-	<!-- <mvc:interceptors>
+	<mvc:interceptors>
 	 	<mvc:interceptor>
 	 		<mvc:mapping path="/admin/*/*.do"/>
 	 		<mvc:mapping path="/admin/*/*/*.do"/>	 		 		
 	 		<bean class="kr.co.kumsung.thub.interceptor.AdminInterceptor"/>
 	 	</mvc:interceptor>
-	 </mvc:interceptors> -->
+	 </mvc:interceptors>
 	 
 	 <mvc:interceptors>
 	 	<mvc:interceptor>

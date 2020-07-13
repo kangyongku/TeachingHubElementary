@@ -36,6 +36,9 @@
 	List<BoardCategory> categories = (List<BoardCategory>) request.getAttribute("categories");
 	String paging = (String) request.getAttribute("paging");
 	Member member = (Member) session.getAttribute("member");
+	for(int i = 0; i< categories.size(); i++){
+		System.out.println("dddd : "+categories.get(i).getName());
+	}
 	
 %>
 <%//=boardConfig.getHeaderSection() %>
@@ -48,27 +51,12 @@
 		<%if(boardConfig.getBoardId()==49 || boardConfig.getBoardId()==55 || boardConfig.getBoardId()==54  || boardConfig.getBoardId()==64){//체험활동만. %>
                             <!-- tab menu -->
                             <div class="class_tab_wrap2 activity">
-                                <ul>
-											<li <% if( findCategory == 0 ){ %>class="on"<% } %>><a href="javascript:goCategorySearch('0');">전체</a><span class="stem"></span></li>
-											<%
-												int idx = 1;
-											
-												for(BoardCategory category : categories){ 
-													if( category.getArticleCount() > 0){
-											%>
-											<li class="<% if( category.getCategoryId() == findCategory){ %>on<% } %>"><a href="javascript:goCategorySearch('<%=category.getCategoryId()%>');"><%=category.getName() %></a><span class="stem"></span></li>
-											<% 
-														idx++;
-													}
-												} 
-											%>
-                                </ul>
                                  <style>
 								      table, th, td {
 								        border: 1px solid #bcbcbc;
 								      }
 								      td{ 
-								      	width: 50%;
+								      	width: 25%;
 									    height: 50px;
 									    text-align: center;
 									    font-weight: 400;
@@ -79,25 +67,58 @@
 									    border-left: 1px solid #dddddd;
 									    border-top: 1px solid #dddddd;
 									    border-bottom: 1px solid #dddddd;
-									    border-right: none
+									    
+								      }
+								      td:first-child{width: 12.5%;}
+								      td.on{
+								      	background: #fb391e;
+    									border: none;
+								      }
+								      td a{
+										display: table-cell;
+										vertical-align: middle;
+										height: 49px;
+										margin: 0 auto;
+										width: 25%;
+								      }
+								      td.on a{
+								      	color : #fff;
 								      }
 								    </style>
                                 <table style="width: 100%;">
+                                	<% 
+                                		int rowSpan = categories.size();
+                                		int mok = (rowSpan % 3)+1;
+                                		int enterMok = rowSpan % 3;
+                                		int tdIdx = 0;
+                                		for(int tri=0; tri < mok; tri++	){
+                                	%>
 									<tr>
-									    <td rowspan="3" width="25%">전체</td>
-									    <td width="25%">111</td>
-									    <td width="25%">111</td>
-									    <td width="25%">111</td>
+										<%
+											if(tri == 0){
+										%>
+												<td rowspan="<%= mok%>" width="25%" <% if( findCategory == 0 ){ %>class="on"<% } %>>
+												<a href="javascript:goCategorySearch('0');">전체</a>
+												</td>
+										<%
+											}
+											for(int i=tdIdx; i<categories.size(); i++){
+												if(i == ((tri+1) * 3)){
+													break;
+												}else if(categories.get(tdIdx).getArticleCount() > 0){
+										    %>
+										    		<td  class="<% if( categories.get(tdIdx).getCategoryId() == findCategory){ %>on<% } %>">
+										    			<a href="javascript:goCategorySearch('<%=categories.get(tdIdx).getCategoryId()%>');"><%=categories.get(tdIdx).getName() %></a>
+										   			</td>
+										    <%
+												}
+												tdIdx++;
+	                                		}
+										  %>
 									  </tr>
-									  <tr>
-									  	<td width="25%">222</td>
-									  	<td width="25%">222</td>
-									  	<td width="25%">222</td>
-									  </tr>
-									  <tr>
-									  	<td width="25%">3333</td>
-									  	<td width="25%">3333</td>
-									  </tr>
+									  <%
+                                		}
+									  %>
 								</table>
 							</div>
                             <!--// tab menu -->	

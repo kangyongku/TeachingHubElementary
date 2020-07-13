@@ -290,6 +290,10 @@
          	<isNotEmpty property="findIsUse" prepend="AND">
          		is_use = #findIsUse#
          	</isNotEmpty>
+         	<!-- KYK 추가해야됨 -->
+         	<isNotEmpty property="elementary" prepend="AND">
+         		target IN ('A','B')
+         	</isNotEmpty>
            ORDER BY reg_date desc 
            LIMIT #skip# , #pageSize#
 	</select>
@@ -323,6 +327,10 @@
 		<isNotEmpty property="findIsUse" prepend="AND">
 			is_use = #findIsUse#
 		</isNotEmpty>
+		<!-- KYK 추가해야됨 -->
+       	<isNotEmpty property="elementary" prepend="AND">
+       		target IN ('A','B')
+       	</isNotEmpty>
 	</select>
 	
 	<!-- 게시글을 삭제한다. -->
